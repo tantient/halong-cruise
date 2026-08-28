@@ -29,6 +29,7 @@ import img27 from "@/assets/gallery/chronos-exterior-03.webp";
 import img28 from "@/assets/gallery/chronos-exterior-04.webp";
 import img29 from "@/assets/gallery/chronos-exterior-05.webp";
 import img30 from "@/assets/gallery/chronos-exterior-06.webp";
+import img49 from "@/assets/gallery/chronos-exterior-07.webp";
 import img31 from "@/assets/gallery/chronos-public-jacuzzi.webp";
 import img32 from "@/assets/gallery/chronos-public-lobby-01.webp";
 import img33 from "@/assets/gallery/chronos-public-lobby-02.webp";
