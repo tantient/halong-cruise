@@ -88,7 +88,7 @@ export function HeroMedia({ slides, video, intervalMs = 6000 }: HeroMediaProps) 
             key={slide.url}
             src={slide.url}
             alt={slide.alt}
-            loading={i === 0 ? "eager" : "lazy"}
+            loading="eager"
             fetchPriority={i === 0 ? "high" : "low"}
             decoding="async"
             aria-hidden={i !== index}
