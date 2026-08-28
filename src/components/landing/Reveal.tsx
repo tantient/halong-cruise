@@ -4,10 +4,12 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ElementType,
   type FormEventHandler,
   type ReactNode,
 } from "react";
+
 
 interface RevealProps {
   children: ReactNode;
