@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageSeo } from "@/lib/seo";
 
 import { ContactPage } from "@/components/contact/ContactPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-01.webp";
+import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
 
 const TITLE = "Liên hệ Chronos Cruise | Hotline, Zalo & bản đồ bến tàu Hạ Long";
 const DESC =

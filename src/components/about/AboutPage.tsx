@@ -6,7 +6,7 @@ import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
-import exteriorImg from "@/assets/gallery/chronos-exterior-01.webp";
+import exteriorImg from "@/assets/gallery/chronos-exterior-01-v2.webp";
 import lobbyImg from "@/assets/gallery/chronos-public-lobby-01.webp";
 import diningImg from "@/assets/gallery/chronos-dining-panorama-01.webp";
 

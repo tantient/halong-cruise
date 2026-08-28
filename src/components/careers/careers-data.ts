@@ -1,5 +1,5 @@
 import type { Lang } from "@/lib/translations";
-import heroImg from "@/assets/gallery/chronos-exterior-01.webp";
+import heroImg from "@/assets/gallery/chronos-exterior-01-v2.webp";
 
 export interface JobPosition {
   id: string;
