@@ -1,5 +1,5 @@
-import imgExterior1 from "@/assets/gallery/chronos-exterior-01.webp";
-import imgExterior2 from "@/assets/gallery/chronos-exterior-02.webp";
+import imgExterior1 from "@/assets/gallery/chronos-exterior-01-v2.webp";
+import imgExterior2 from "@/assets/gallery/chronos-exterior-02-v2.webp";
 import imgDeck from "@/assets/gallery/chronos-deck-sunset-01.webp";
 import imgDining from "@/assets/gallery/chronos-dining-panorama-01.webp";
 import imgSpa from "@/assets/gallery/chronos-spa-room-01.webp";

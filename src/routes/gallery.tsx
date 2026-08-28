@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageSeo } from "@/lib/seo";
 
 import { GalleryPage } from "@/components/gallery/GalleryPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-01.webp";
+import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
 
 const TITLE = "Thư viện ảnh Chronos Cruise | Không gian du thuyền 6 sao";
 const DESC =

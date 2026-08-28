@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageSeo } from "@/lib/seo";
 
 import { AboutPage } from "@/components/about/AboutPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-01.webp";
+import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
 
 const TITLE = "Giới thiệu Chronos Cruise | Du thuyền 6 sao Hạ Long - Lan Hạ";
 const DESC =

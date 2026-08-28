@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { pageSeo } from "@/lib/seo";
 
 import { ItinerariesPage } from "@/components/itineraries/ItinerariesPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-02.webp";
+import heroAsset from "@/assets/gallery/chronos-exterior-02-v2.webp";
 
 const TITLE = "Hải trình Chronos Cruise | 2N1Đ & 3N2Đ Hạ Long - Lan Hạ";
 const DESC =
