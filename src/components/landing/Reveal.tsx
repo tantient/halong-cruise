@@ -45,6 +45,12 @@ export function Reveal({
       setVisible(true);
       return;
     }
+    // Hiện ngay nếu phần tử đã nằm trong khung nhìn khi tải trang
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -54,11 +60,18 @@ export function Reveal({
           }
         }
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0 },
     );
     io.observe(el);
-    return () => io.disconnect();
+    // Dự phòng: nếu observer không kích hoạt (iframe, trình duyệt tiết kiệm),
+    // vẫn hiển thị nội dung sau 1.2s
+    const fallback = window.setTimeout(() => setVisible(true), 1200);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, [immediate]);
+
 
   return (
     <Tag
