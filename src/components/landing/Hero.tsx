@@ -36,9 +36,9 @@ interface HeroProps {
 }
 
 const SLIDES: HeroSlide[] = [
-  { url: slide1, alt: "Chronos Cruise trên vịnh Hạ Long lúc hoàng hôn" },
-  { url: slide2, alt: "Toàn cảnh du thuyền Chronos Cruise giữa vịnh" },
-  { url: slide3, alt: "Chronos Cruise nhìn từ trên cao" },
+  { url: slide1, alt: "Chronos Cruise on Ha Long Bay at sunset" },
+  { url: slide2, alt: "Panoramic view of Chronos Cruise in the bay" },
+  { url: slide3, alt: "Chronos Cruise seen from above" },
   { url: slide4, alt: "Welcome lobby and infinity pool aboard Chronos Cruise" },
   { url: slide5, alt: "Aerial view of Chronos Cruise at golden hour" },
   { url: slide6, alt: "Chronos Cruise sailing across the bay at sunset" },
