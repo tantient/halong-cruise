@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /dev/sync
+
+Sitemap: https://project--136d6298-bd5e-486e-a143-b02705fbbca5.lovable.app/sitemap.xml

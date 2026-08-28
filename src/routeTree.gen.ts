@@ -10,33 +10,214 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CareersRouteImport } from './routes/careers'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as ItinerariesRouteImport } from './routes/itineraries'
+import { Route as OffersRouteImport } from './routes/offers'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as CabinsIndexRouteImport } from './routes/cabins.index'
+import { Route as CabinsCabinIdRouteImport } from './routes/cabins.$cabinId'
+import { Route as DevSyncRouteImport } from './routes/dev.sync'
+import { Route as ServicesServiceIdRouteImport } from './routes/services.$serviceId'
+import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_authenticated/admin.applications'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ItinerariesRoute = ItinerariesRouteImport.update({
+  id: '/itineraries',
+  path: '/itineraries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OffersRoute = OffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CabinsIndexRoute = CabinsIndexRouteImport.update({
+  id: '/cabins/',
+  path: '/cabins/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CabinsCabinIdRoute = CabinsCabinIdRouteImport.update({
+  id: '/cabins/$cabinId',
+  path: '/cabins/$cabinId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevSyncRoute = DevSyncRouteImport.update({
+  id: '/dev/sync',
+  path: '/dev/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesServiceIdRoute = ServicesServiceIdRouteImport.update({
+  id: '/services/$serviceId',
+  path: '/services/$serviceId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminApplicationsRoute =
+  AuthenticatedAdminApplicationsRouteImport.update({
+    id: '/admin/applications',
+    path: '/admin/applications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/itineraries': typeof ItinerariesRoute
+  '/offers': typeof OffersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/cabins/$cabinId': typeof CabinsCabinIdRoute
+  '/dev/sync': typeof DevSyncRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/cabins/': typeof CabinsIndexRoute
+  '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/itineraries': typeof ItinerariesRoute
+  '/offers': typeof OffersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/cabins/$cabinId': typeof CabinsCabinIdRoute
+  '/dev/sync': typeof DevSyncRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/cabins': typeof CabinsIndexRoute
+  '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/itineraries': typeof ItinerariesRoute
+  '/offers': typeof OffersRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/cabins/$cabinId': typeof CabinsCabinIdRoute
+  '/dev/sync': typeof DevSyncRoute
+  '/services/$serviceId': typeof ServicesServiceIdRoute
+  '/cabins/': typeof CabinsIndexRoute
+  '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/gallery'
+    | '/itineraries'
+    | '/offers'
+    | '/sitemap.xml'
+    | '/cabins/$cabinId'
+    | '/dev/sync'
+    | '/services/$serviceId'
+    | '/cabins/'
+    | '/admin/applications'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/gallery'
+    | '/itineraries'
+    | '/offers'
+    | '/sitemap.xml'
+    | '/cabins/$cabinId'
+    | '/dev/sync'
+    | '/services/$serviceId'
+    | '/cabins'
+    | '/admin/applications'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/gallery'
+    | '/itineraries'
+    | '/offers'
+    | '/sitemap.xml'
+    | '/cabins/$cabinId'
+    | '/dev/sync'
+    | '/services/$serviceId'
+    | '/cabins/'
+    | '/_authenticated/admin/applications'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  CareersRoute: typeof CareersRoute
+  ContactRoute: typeof ContactRoute
+  GalleryRoute: typeof GalleryRoute
+  ItinerariesRoute: typeof ItinerariesRoute
+  OffersRoute: typeof OffersRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  CabinsCabinIdRoute: typeof CabinsCabinIdRoute
+  DevSyncRoute: typeof DevSyncRoute
+  ServicesServiceIdRoute: typeof ServicesServiceIdRoute
+  CabinsIndexRoute: typeof CabinsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +229,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/itineraries': {
+      id: '/itineraries'
+      path: '/itineraries'
+      fullPath: '/itineraries'
+      preLoaderRoute: typeof ItinerariesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offers': {
+      id: '/offers'
+      path: '/offers'
+      fullPath: '/offers'
+      preLoaderRoute: typeof OffersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cabins/': {
+      id: '/cabins/'
+      path: '/cabins'
+      fullPath: '/cabins/'
+      preLoaderRoute: typeof CabinsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cabins/$cabinId': {
+      id: '/cabins/$cabinId'
+      path: '/cabins/$cabinId'
+      fullPath: '/cabins/$cabinId'
+      preLoaderRoute: typeof CabinsCabinIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/sync': {
+      id: '/dev/sync'
+      path: '/dev/sync'
+      fullPath: '/dev/sync'
+      preLoaderRoute: typeof DevSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/$serviceId': {
+      id: '/services/$serviceId'
+      path: '/services/$serviceId'
+      fullPath: '/services/$serviceId'
+      preLoaderRoute: typeof ServicesServiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/applications': {
+      id: '/_authenticated/admin/applications'
+      path: '/admin/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AuthenticatedAdminApplicationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminApplicationsRoute: typeof AuthenticatedAdminApplicationsRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  CareersRoute: CareersRoute,
+  ContactRoute: ContactRoute,
+  GalleryRoute: GalleryRoute,
+  ItinerariesRoute: ItinerariesRoute,
+  OffersRoute: OffersRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  CabinsCabinIdRoute: CabinsCabinIdRoute,
+  DevSyncRoute: DevSyncRoute,
+  ServicesServiceIdRoute: ServicesServiceIdRoute,
+  CabinsIndexRoute: CabinsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

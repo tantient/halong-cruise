@@ -1,24 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { LandingPage } from "@/components/landing/LandingPage";
+import { pageSeo } from "@/lib/seo";
+import heroAsset from "@/assets/chronos-hero.webp";
+import slide1 from "@/assets/chronos-slide-1.webp";
+
+const TITLE = "Chronos Cruise | Sắp ra mắt - Du thuyền 6 sao Hạ Long - Lan Hạ";
+const DESC =
+  "Chronos Cruise sắp ra mắt. Đăng ký để là người đầu tiên nhận thông tin về trải nghiệm du thuyền 6 sao tại vịnh Hạ Long và Lan Hạ.";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => {
+    const seo = pageSeo({ title: TITLE, description: DESC, path: "/", image: heroAsset });
+    return {
+      ...seo,
+      links: [
+        ...seo.links,
+        { rel: "preload", as: "image", href: slide1, fetchPriority: "high" },
+      ],
+    };
+  },
+  component: LandingPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
