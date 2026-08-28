@@ -6,7 +6,7 @@ import { getT, type Lang } from "@/lib/translations";
 const STORAGE_KEY = "chronos-lang";
 
 export function useLanguage() {
-  const [lang, setLangState] = useState<Lang>("vi");
+  const [lang, setLangState] = useState<Lang>("en");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
