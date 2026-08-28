@@ -4,10 +4,12 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ElementType,
   type FormEventHandler,
   type ReactNode,
 } from "react";
+
 
 interface RevealProps {
   children: ReactNode;
@@ -79,7 +81,12 @@ export function Reveal({
       id={id}
       onSubmit={onSubmit}
       className={`reveal ${visible ? "reveal-in" : ""} ${className}`}
-      style={delay ? { animationDelay: `${delay}ms` } : undefined}
+      style={
+        delay
+          ? ({ "--reveal-delay": `${delay}ms` } as CSSProperties)
+          : undefined
+      }
+
     >
       {children}
     </Tag>
