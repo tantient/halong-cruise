@@ -63,6 +63,7 @@ function AuthPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-chronos-ivory px-6 py-16">
       <div className="w-full max-w-md border border-chronos-ink/10 bg-card p-8 shadow-sm">
+        <ChronosLogo variant="stacked" size="sm" tone="auto" className="mx-auto mb-8" />
         <h1 className="mb-2 text-2xl tracking-[0.02em] text-chronos-ink">Quản trị Chronos</h1>
         <p className="mb-8 text-sm text-chronos-stone/80">
           {mode === "signin" ? "Đăng nhập để xem hồ sơ ứng tuyển." : "Tạo tài khoản quản trị."}
