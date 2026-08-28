@@ -13,7 +13,7 @@ export interface JobPosition {
   descEn: string;
 }
 
-export const ZALO_PHONE = "0979768969";
+export const ZALO_PHONE = "0902952356";
 export const RECRUIT_EMAIL = "hr@chronoscruise.com";
 export const CAREER_HERO = heroImg;
 

@@ -14,9 +14,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
 
-const PHONE = "+84 902 000 000";
-const PHONE_TEL = "+84902000000";
-const ZALO_LINK = "https://zalo.me/84902000000";
+const PHONE = "+84 902 952 356";
+const PHONE_TEL = "+84902952356";
+const ZALO_LINK = "https://zalo.me/84902952356";
 const EMAIL = "booking@chronoscruise.com";
 const MAP_EMBED =
   "https://www.openstreetmap.org/export/embed.html?bbox=107.0430%2C20.9420%2C107.0930%2C20.9720&layer=mapnik&marker=20.9570%2C107.0680";

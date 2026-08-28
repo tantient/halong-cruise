@@ -326,7 +326,7 @@ const translations: Record<Lang, Translations> = {
       rights: "© 2026 Chronos Cruise. All rights reserved.",
       tagline: "HA LONG BAY · LAN HA BAY",
       quickLinks: "Liên kết nhanh",
-      contact: ["+84 902 000 000", "booking@chronoscruise.com", "Vịnh Hạ Long · Lan Hạ, Việt Nam"],
+      contact: ["+84 902 952 356", "booking@chronoscruise.com", "Vịnh Hạ Long · Lan Hạ, Việt Nam"],
     },
   },
   en: {
@@ -495,7 +495,7 @@ const translations: Record<Lang, Translations> = {
       rights: "© 2026 Chronos Cruise. All rights reserved.",
       tagline: "HA LONG BAY · LAN HA BAY",
       quickLinks: "Quick links",
-      contact: ["+84 902 000 000", "booking@chronoscruise.com", "Ha Long Bay · Lan Ha, Vietnam"],
+      contact: ["+84 902 952 356", "booking@chronoscruise.com", "Ha Long Bay · Lan Ha, Vietnam"],
     },
   },
 };
