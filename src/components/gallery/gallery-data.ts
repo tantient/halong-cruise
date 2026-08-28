@@ -98,6 +98,7 @@ export const galleryImages: GalleryImage[] = [
   { id: "chronos-exterior-04", src: img28, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-exterior-05", src: img29, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-exterior-06", src: img30, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
+  { id: "chronos-exterior-07", src: img49, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-public-jacuzzi", src: img31, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
   { id: "chronos-public-lobby-01", src: img32, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
   { id: "chronos-public-lobby-02", src: img33, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
