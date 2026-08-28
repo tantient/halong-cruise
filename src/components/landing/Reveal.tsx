@@ -83,7 +83,7 @@ export function Reveal({
       className={`reveal ${visible ? "reveal-in" : ""} ${className}`}
       style={
         delay
-          ? ({ "--reveal-delay": `${delay}ms` } as React.CSSProperties)
+          ? ({ "--reveal-delay": `${delay}ms` } as CSSProperties)
           : undefined
       }
 
