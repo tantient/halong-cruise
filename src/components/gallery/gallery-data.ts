@@ -29,6 +29,7 @@ import img27 from "@/assets/gallery/chronos-exterior-03.webp";
 import img28 from "@/assets/gallery/chronos-exterior-04.webp";
 import img29 from "@/assets/gallery/chronos-exterior-05.webp";
 import img30 from "@/assets/gallery/chronos-exterior-06.webp";
+import img49 from "@/assets/gallery/chronos-exterior-07.webp";
 import img31 from "@/assets/gallery/chronos-public-jacuzzi.webp";
 import img32 from "@/assets/gallery/chronos-public-lobby-01.webp";
 import img33 from "@/assets/gallery/chronos-public-lobby-02.webp";
@@ -97,6 +98,7 @@ export const galleryImages: GalleryImage[] = [
   { id: "chronos-exterior-04", src: img28, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-exterior-05", src: img29, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-exterior-06", src: img30, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
+  { id: "chronos-exterior-07", src: img49, category: "exterior", titleVi: "Ngoại thất du thuyền", titleEn: "Cruise exterior" },
   { id: "chronos-public-jacuzzi", src: img31, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
   { id: "chronos-public-lobby-01", src: img32, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
   { id: "chronos-public-lobby-02", src: img33, category: "public", titleVi: "Không gian chung", titleEn: "Public spaces" },
