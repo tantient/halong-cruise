@@ -56,7 +56,7 @@ function prepare(raw: string, viewBox?: string): string {
     .replace(/<\?xml[^>]*\?>/i, "")
     .replace(
       /<svg\b/i,
-      '<svg preserveAspectRatio="xMidYMid meet" height="100%" width="auto" focusable="false" aria-hidden="true"',
+      '<svg preserveAspectRatio="xMidYMid meet" height="100%" focusable="false" aria-hidden="true"',
     )
     .trim();
   if (viewBox) out = out.replace(/viewBox="[^"]*"/i, `viewBox="${viewBox}"`);
