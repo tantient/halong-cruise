@@ -79,7 +79,12 @@ export function Reveal({
       id={id}
       onSubmit={onSubmit}
       className={`reveal ${visible ? "reveal-in" : ""} ${className}`}
-      style={delay ? { animationDelay: `${delay}ms` } : undefined}
+      style={
+        delay
+          ? ({ "--reveal-delay": `${delay}ms` } as React.CSSProperties)
+          : undefined
+      }
+
     >
       {children}
     </Tag>
