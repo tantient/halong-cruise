@@ -11,6 +11,10 @@ import slide1 from "@/assets/chronos-slide-1.webp";
 import slide2 from "@/assets/chronos-slide-2.webp";
 import slide3 from "@/assets/chronos-slide-3.webp";
 import slide4 from "@/assets/chronos-slide-4.webp";
+import slide5 from "@/assets/gallery/chronos-exterior-01-v2.webp";
+import slide6 from "@/assets/gallery/chronos-exterior-02-v2.webp";
+import slide7 from "@/assets/gallery/chronos-exterior-07.webp";
+import slide8 from "@/assets/gallery/chronos-exterior-05.webp";
 
 interface HeroProps {
   t: {
@@ -32,10 +36,14 @@ interface HeroProps {
 }
 
 const SLIDES: HeroSlide[] = [
-  { url: slide1, alt: "Chronos Cruise trên vịnh Hạ Long lúc hoàng hôn" },
-  { url: slide2, alt: "Toàn cảnh du thuyền Chronos Cruise giữa vịnh" },
-  { url: slide3, alt: "Chronos Cruise nhìn từ trên cao" },
-  { url: slide4, alt: "Sảnh đón khách và hồ bơi vô cực trên tàu" },
+  { url: slide1, alt: "Chronos Cruise on Ha Long Bay at sunset" },
+  { url: slide2, alt: "Panoramic view of Chronos Cruise in the bay" },
+  { url: slide3, alt: "Chronos Cruise seen from above" },
+  { url: slide4, alt: "Welcome lobby and infinity pool aboard Chronos Cruise" },
+  { url: slide5, alt: "Aerial view of Chronos Cruise at golden hour" },
+  { url: slide6, alt: "Chronos Cruise sailing across the bay at sunset" },
+  { url: slide7, alt: "Bow of Chronos Cruise cutting through calm water" },
+  { url: slide8, alt: "Stern view of Chronos Cruise with the ship name" },
 ];
 
 export function Hero({ t }: HeroProps) {
