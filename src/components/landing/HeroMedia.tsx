@@ -26,18 +26,26 @@ function usePrefersReducedMotion() {
 
 export function HeroMedia({ slides, video, intervalMs = 6000 }: HeroMediaProps) {
   const [index, setIndex] = useState(0);
+  // Chỉ tải ảnh đầu tiên ngay; các ảnh còn lại tải sau khi trang đã hiện xong.
+  const [deferredReady, setDeferredReady] = useState(false);
   const reduced = usePrefersReducedMotion();
   const touchStartX = useRef<number | null>(null);
   const count = slides.length;
 
   useEffect(() => {
-    if (video || reduced || count < 2) return;
+    const id = window.setTimeout(() => setDeferredReady(true), 1500);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    if (video || reduced || count < 2 || !deferredReady) return;
     const id = window.setInterval(
       () => setIndex((i) => (i + 1) % count),
       intervalMs,
     );
     return () => window.clearInterval(id);
-  }, [video, reduced, count, intervalMs]);
+  }, [video, reduced, count, intervalMs, deferredReady]);
+
 
   if (video) {
     return (
