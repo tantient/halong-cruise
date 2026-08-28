@@ -5,6 +5,25 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { execSync } from "node:child_process";
+
+function git(cmd: string, fallback = "") {
+  try {
+    return execSync(`git ${cmd}`, { encoding: "utf8" }).trim();
+  } catch {
+    return fallback;
+  }
+}
+
+const gitInfo = {
+  sha: git("rev-parse HEAD", "unknown"),
+  shortSha: git("rev-parse --short HEAD", "unknown"),
+  subject: git("log -1 --pretty=%s", "unknown"),
+  author: git("log -1 --pretty=%an", "unknown"),
+  committedAt: git("log -1 --pretty=%cI", ""),
+  branch: git("rev-parse --abbrev-ref HEAD", "unknown"),
+  buildTime: new Date().toISOString(),
+};
 
 export default defineConfig({
   tanstackStart: {
@@ -12,4 +31,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    define: {
+      __GIT_SYNC_INFO__: JSON.stringify(gitInfo),
+    },
+  },
 });
+
