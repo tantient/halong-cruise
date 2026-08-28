@@ -81,20 +81,24 @@ export function HeroMedia({ slides, video, intervalMs = 6000 }: HeroMediaProps) 
         if (Math.abs(dx) > 50) goTo(index + (dx < 0 ? 1 : -1));
       }}
     >
-      {slides.map((slide, i) => (
-        <img
-          key={slide.url}
-          src={slide.url}
-          alt={slide.alt}
-          loading={i === 0 ? "eager" : "lazy"}
-          fetchPriority={i === 0 ? "high" : "low"}
-          decoding="async"
-          aria-hidden={i !== index}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1600ms] ease-in-out ${
-            i === index ? "opacity-100" : "opacity-0"
-          } ${reduced ? "" : "hero-kenburns"} ${i === index && !reduced ? "hero-kenburns-active" : ""}`}
-        />
-      ))}
+      {slides.map((slide, i) => {
+        if (i !== 0 && i !== index && !deferredReady) return null;
+        return (
+          <img
+            key={slide.url}
+            src={slide.url}
+            alt={slide.alt}
+            loading={i === 0 ? "eager" : "lazy"}
+            fetchPriority={i === 0 ? "high" : "low"}
+            decoding="async"
+            aria-hidden={i !== index}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1600ms] ease-in-out ${
+              i === index ? "opacity-100" : "opacity-0"
+            } ${i === index && !reduced ? "hero-kenburns hero-kenburns-active" : ""}`}
+          />
+        );
+      })}
+
 
       {!reduced && count > 1 && (
         <div className="absolute bottom-9 left-0 right-0 z-20 mx-auto flex w-full max-w-7xl justify-start gap-4 px-6 lg:px-8">
