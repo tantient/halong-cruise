@@ -35,8 +35,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     { href: "/itineraries", label: t.nav.itineraries },
     { href: "/cabins", label: t.nav.cabins },
     { href: "/gallery", label: t.nav.gallery },
-    { href: "/offers", label: t.nav.offers },
-    { href: "/about", label: t.nav.about },
+    { href: "/careers", label: t.nav.careers },
     { href: "/contact", label: t.nav.contact },
   ];
 
