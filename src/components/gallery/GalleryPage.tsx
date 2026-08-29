@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
@@ -24,6 +24,13 @@ export function GalleryPage() {
   const { lang, setLang, t } = useLanguage();
   const [filter, setFilter] = useState<GalleryCategory | "all">("all");
   const [active, setActive] = useState<number | null>(null);
+  // Fallback: sau khi trang ổn định, ép tải hết ảnh để không có ô trống khi cuộn nhanh
+  const [loadAll, setLoadAll] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setLoadAll(true), 1200);
+    return () => window.clearTimeout(id);
+  }, []);
 
   const images = useMemo(
     () => (filter === "all" ? galleryImages : galleryImages.filter((i) => i.category === filter)),
