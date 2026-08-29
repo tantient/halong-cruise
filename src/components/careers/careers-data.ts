@@ -14,7 +14,7 @@ export interface JobPosition {
 }
 
 export const ZALO_PHONE = "0902952356";
-export const RECRUIT_EMAIL = "hr@chronoscruise.com";
+export const RECRUIT_EMAIL = "info@chronoscruise.com";
 export const CAREER_HERO = heroImg;
 
 export const jobPositions: JobPosition[] = [
