@@ -221,7 +221,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
       {mobileOpen && (
         <div className="border-t border-chronos-ink/10 bg-chronos-ivory/98 px-6 pb-6 xl:hidden">
           <nav className="flex flex-col gap-4 pt-4">
-            {navLinks.slice(0, 4).map((link) => (
+            {navLinks.slice(0, 2).map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
@@ -255,7 +255,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                 </div>
               </div>
             ))}
-            {navLinks.slice(4).map((link) => (
+            {navLinks.slice(2).map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
