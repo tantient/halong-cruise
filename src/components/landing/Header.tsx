@@ -139,16 +139,10 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             {t.nav.gallery}
           </Link>
           <Link
-            to="/offers"
+            to="/careers"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
-            {t.nav.offers}
-          </Link>
-          <Link
-            to="/about"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
-          >
-            {t.nav.about}
+            {t.nav.careers}
           </Link>
           <Link
             to="/contact"
