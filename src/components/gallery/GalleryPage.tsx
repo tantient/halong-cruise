@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
@@ -24,6 +24,13 @@ export function GalleryPage() {
   const { lang, setLang, t } = useLanguage();
   const [filter, setFilter] = useState<GalleryCategory | "all">("all");
   const [active, setActive] = useState<number | null>(null);
+  // Fallback: sau khi trang ổn định, ép tải hết ảnh để không có ô trống khi cuộn nhanh
+  const [loadAll, setLoadAll] = useState(false);
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setLoadAll(true), 1200);
+    return () => window.clearTimeout(id);
+  }, []);
 
   const images = useMemo(
     () => (filter === "all" ? galleryImages : galleryImages.filter((i) => i.category === filter)),
@@ -79,7 +86,8 @@ export function GalleryPage() {
                 <img
                   src={img.src}
                   alt={lang === "vi" ? img.titleVi : img.titleEn}
-                  loading="lazy"
+                  loading={i < 9 || loadAll ? "eager" : "lazy"}
+                  decoding="async"
                   className="aspect-[16/10] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-chronos-ink/70 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
