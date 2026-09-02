@@ -117,6 +117,16 @@ export function ContactPage() {
                 variant="outline"
                 className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
               >
+                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppIcon className="mr-2 h-4 w-4" />
+                  {t.contact.chatWhatsApp}
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
+              >
                 <a href={`tel:${PHONE_TEL}`}>{t.contact.call}</a>
               </Button>
             </div>
