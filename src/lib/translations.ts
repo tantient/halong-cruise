@@ -134,12 +134,14 @@ export interface Translations {
     subtitle: string;
     phone: string;
     zalo: string;
+    whatsapp: string;
     email: string;
     address: string;
     addressValue: string;
     hours: string;
     hoursValue: string;
     chatZalo: string;
+    chatWhatsApp: string;
     call: string;
     mapTitle: string;
     formTitle: string;
