@@ -47,6 +47,7 @@ export function ContactPage() {
   const details = [
     { icon: Phone, label: t.contact.phone, value: PHONE, href: `tel:${PHONE_TEL}` },
     { icon: MessageCircle, label: t.contact.zalo, value: PHONE, href: ZALO_LINK },
+    { icon: WhatsAppIcon, label: t.contact.whatsapp, value: PHONE, href: WHATSAPP_LINK },
     { icon: Mail, label: t.contact.email, value: EMAIL, href: `mailto:${EMAIL}` },
     { icon: MapPin, label: t.contact.address, value: t.contact.addressValue, href: MAP_LINK },
     { icon: Clock, label: t.contact.hours, value: t.contact.hoursValue },
