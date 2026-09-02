@@ -134,12 +134,14 @@ export interface Translations {
     subtitle: string;
     phone: string;
     zalo: string;
+    whatsapp: string;
     email: string;
     address: string;
     addressValue: string;
     hours: string;
     hoursValue: string;
     chatZalo: string;
+    chatWhatsApp: string;
     call: string;
     mapTitle: string;
     formTitle: string;
@@ -302,15 +304,17 @@ const translations: Record<Lang, Translations> = {
     contact: {
       label: "LIÊN HỆ",
       title: "Kết nối cùng Chronos",
-      subtitle: "Đội ngũ tư vấn sẵn sàng hỗ trợ bạn 24/7 qua điện thoại, Zalo hoặc email.",
+      subtitle: "Đội ngũ tư vấn sẵn sàng hỗ trợ bạn 24/7 qua điện thoại, Zalo, WhatsApp hoặc email.",
       phone: "Hotline",
       zalo: "Zalo",
+      whatsapp: "WhatsApp",
       email: "Email",
       address: "Địa chỉ",
       addressValue: "Cảng tàu khách quốc tế Hạ Long, TP. Hạ Long, Quảng Ninh",
       hours: "Giờ làm việc",
       hoursValue: "Hàng ngày · 08:00 – 21:00",
       chatZalo: "Nhắn tin Zalo",
+      chatWhatsApp: "Nhắn tin WhatsApp",
       call: "Gọi ngay",
       mapTitle: "Vị trí bến tàu",
       formTitle: "Gửi tin nhắn cho chúng tôi",
@@ -471,15 +475,17 @@ const translations: Record<Lang, Translations> = {
     contact: {
       label: "CONTACT",
       title: "Get in touch with Chronos",
-      subtitle: "Our concierge team is available 24/7 by phone, Zalo or email.",
+      subtitle: "Our concierge team is available 24/7 by phone, Zalo, WhatsApp or email.",
       phone: "Hotline",
       zalo: "Zalo",
+      whatsapp: "WhatsApp",
       email: "Email",
       address: "Address",
       addressValue: "Ha Long International Cruise Port, Ha Long City, Quang Ninh",
       hours: "Opening hours",
       hoursValue: "Daily · 08:00 – 21:00",
       chatZalo: "Chat on Zalo",
+      chatWhatsApp: "Chat on WhatsApp",
       call: "Call now",
       mapTitle: "Port location",
       formTitle: "Send us a message",
