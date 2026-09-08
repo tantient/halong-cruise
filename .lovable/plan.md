@@ -37,6 +37,20 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 
 Nền tảng web **không phải PMS**. Web giữ: nội dung marketing, thông tin phòng/hải trình công khai, ưu đãi, khách hỏi giá, tuyển dụng, SEO, ảnh. PMS giữ: tồn phòng, đặt phòng, giá, khách, thanh toán, vận hành. Sau này web lấy tình trạng phòng/giá từ PMS qua API.
 
+## Để ngỏ đường cho AI (v1 KHÔNG làm AI)
+
+v1 không gọi bất kỳ dịch vụ AI nào, không chatbot, không automation, không prompt. Chỉ đảm bảo kiến trúc sau này gắn AI vào được mà không viết lại CMS hay cơ sở dữ liệu. Nếu bỏ AI vĩnh viễn, nền tảng vẫn hoạt động bình thường.
+
+Bốn điều chuẩn bị sẵn trong v1:
+
+1. **Trạng thái nội dung** `draft → review → published → archived` trên mọi bảng nội dung, thay cho cờ đúng/sai. Sau này AI chỉ tạo bản nháp; người quản trị xem, sửa rồi mới xuất bản — AI không tự xuất bản.
+2. **Nguồn nội dung**: mỗi bản ghi ghi lại do người tạo, do máy tạo, hay người sửa từ bản máy tạo, cùng thời điểm và người thao tác. Đủ để sau này bổ sung lịch sử phiên bản mà không phải đổi cấu trúc.
+3. **Giọng thương hiệu từng tàu**: bảng lưu sẵn giọng điệu, đối tượng khách, lối viết, từ nên dùng / tránh dùng, hướng dẫn SEO và dịch thuật. v1 chỉ lưu, chưa dùng.
+4. **Mọi thao tác nội dung là một service riêng**, không nằm trong component giao diện: tạo bản nháp, cập nhật trang, tạo ưu đãi, cập nhật SEO, tạo bản dịch, gắn ảnh… Quản trị gọi service; sau này AI hoặc n8n gọi cùng service qua API đã xác thực. Mọi thao tác luôn kiểm tra tàu và quyền.
+
+Nguyên tắc bất di bất dịch: **AI chỉ được đọc và ghi trong phạm vi một tàu** — thông tin tàu, giọng thương hiệu, phòng, hải trình, dịch vụ, ưu đãi, trang, ảnh, SEO, nội dung đã xuất bản của chính tàu đó. Không trộn dữ liệu giữa các tàu.
+
+
 ## Bốn mẫu bố cục (làm dần)
 
 1. **Heritage** — nền tảng của giao diện Chronos hiện tại: hero ảnh lớn chạy slide, chữ serif, tông ấm.
@@ -102,21 +116,30 @@ v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
 - `ship_settings` — `ship_id` UNIQUE (1–1): hotline, whatsapp, zalo, email, recruit_email, facebook, instagram, tiktok, tripadvisor, google_maps, booking_url, checkin_point, address.
 - `ship_seo` — `ship_id` UNIQUE (1–1): `title_template`, `default_description`, `og_image`, `schema_type`, `schema_name`.
 - `homepage_sections` — `ship_id`, `section_type` **text** (validate ở tầng ứng dụng, không dùng enum Postgres — thêm kiểu section mới như spa, activities, video, testimonial, destination, transport không cần migration), `position`, `enabled`, `configuration jsonb`.
-- `ship_pages` — `ship_id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `published`, `sort_order`, UNIQUE(`ship_id`, `slug`).
-- Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `published`, `sort_order`.
-- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`.
+- `ship_pages` — `ship_id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `status`, `sort_order`, UNIQUE(`ship_id`, `slug`).
+- Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `sort_order`.
+- **Workflow chung cho mọi bảng nội dung** (`ship_pages`, `cabins`, `itineraries`, `services`, `offers`, `job_positions`, `homepage_sections`): cột `status` text với 4 giá trị `draft` / `review` / `published` / `archived` (validate ở tầng ứng dụng), `published_at`. Không dùng cờ boolean `published`. Public chỉ đọc `status = 'published'`.
+- **Nguồn nội dung** trên cùng các bảng đó: `origin` text (`human` / `machine` / `machine_edited`), `created_by`, `updated_by`, `origin_meta jsonb`. v1 luôn ghi `human`; đủ chỗ để sau này bổ sung bảng phiên bản/audit log mà không đổi cấu trúc.
+- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`, `origin`.
 - `entity_media` — `ship_id`, `media_id`, `entity_type`, `entity_id`, `usage` (cover / gallery / floorplan / hero), `sort_order`. Đây là cách gắn ảnh vào nội dung, cho phép một nội dung có nhiều ảnh nhiều vai trò (ví dụ phòng: ảnh bìa + thư viện + sơ đồ mặt bằng) và một ảnh dùng lại ở nhiều chỗ.
 - `leads` — `ship_id`, `type` (`quote` / `contact` / `booking_request` / `agent` / `group` — dùng `booking_request` vì web chỉ ghi nhận yêu cầu, booking thật thuộc PMS), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
 - `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
 - `user_ship_access` — `user_id`, `ship_id`, `role` (enum: platform_owner, ship_admin, editor, recruitment, sales), unique (user_id, ship_id, role). Chưa có UI, nhưng RLS đã dựa vào nó.
+- `ship_ai_profiles` — `ship_id` UNIQUE: `brand_voice`, `target_audience`, `writing_style`, `preferred_terms`, `forbidden_terms`, `seo_guidelines`, `translation_guidelines`, `additional_instructions`, `updated_at`. Chỉ lưu dữ liệu; v1 không có sinh nội dung tự động.
 
 Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ ở bảng nội dung công khai, full cho `authenticated`, `ALL` cho `service_role`; RLS bật.
 
+
 ### RLS
 
-- Public: `SELECT TO anon` chỉ hàng `published = true` của tàu `status = 'live'`.
+- Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`.
 - Admin: security-definer `has_ship_access(_user_id, _ship_id, _role)` đọc `user_ship_access`; `platform_owner` (qua `has_role(admin)`) thấy mọi tàu. Mọi policy trên `leads`, `job_applications`, nội dung đều đi qua `ship_id` — không có đường nào để admin tàu A đọc dữ liệu tàu B.
 - `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
+
+### Lớp service (chuẩn bị cho AI/n8n sau này)
+
+Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, tự kiểm `has_ship_access`, và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`), không cần logic mới. `setStatus` là con đường duy nhất để xuất bản — không service nào tự chuyển sang `published`.
+
 
 ### Runtime
 
