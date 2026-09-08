@@ -115,14 +115,13 @@ v1 chỉ được coi là xong khi tất cả các điều sau đúng:
 - `homepage_sections` — `ship_id`, `section_type` **text** (validate ở tầng ứng dụng, không dùng enum Postgres — thêm kiểu section mới như spa, activities, video, testimonial, destination, transport không cần migration), `position`, `enabled`, `configuration jsonb`.
 - `ship_pages` — `ship_id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `status`, `sort_order`, UNIQUE(`ship_id`, `slug`).
 - Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `sort_order`.
-- **Workflow chung cho mọi bảng nội dung** (`ship_pages`, `cabins`, `itineraries`, `services`, `offers`, `job_positions`, `homepage_sections`): cột `status` text với 4 giá trị `draft` / `review` / `published` / `archived` (validate ở tầng ứng dụng), `published_at`. Không dùng cờ boolean `published`. Public chỉ đọc `status = 'published'`.
-- **Nguồn nội dung** trên cùng các bảng đó: `origin` text (`human` / `machine` / `machine_edited`), `created_by`, `updated_by`, `origin_meta jsonb`. v1 luôn ghi `human`; đủ chỗ để sau này bổ sung bảng phiên bản/audit log mà không đổi cấu trúc.
-- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`, `origin`.
+- **Trạng thái nội dung** trên mọi bảng nội dung (`ship_pages`, `cabins`, `itineraries`, `services`, `offers`, `job_positions`, `homepage_sections`): cột `status` text với đúng 2 giá trị `draft` / `published` (validate ở tầng ứng dụng), thêm `published_at`, `created_by`, `updated_by`. Public chỉ đọc `status = 'published'`. Chưa có `review`/`archived` — thêm sau nếu cần, chỉ là thêm giá trị hợp lệ.
+- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`.
 - `entity_media` — `ship_id`, `media_id`, `entity_type`, `entity_id`, `usage` (cover / gallery / floorplan / hero), `sort_order`. Đây là cách gắn ảnh vào nội dung, cho phép một nội dung có nhiều ảnh nhiều vai trò (ví dụ phòng: ảnh bìa + thư viện + sơ đồ mặt bằng) và một ảnh dùng lại ở nhiều chỗ.
 - `leads` — `ship_id`, `type` (`quote` / `contact` / `booking_request` / `agent` / `group` — dùng `booking_request` vì web chỉ ghi nhận yêu cầu, booking thật thuộc PMS), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
 - `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
 - Quyền: dùng lại `user_roles` + `has_role` đã có, chỉ hai vai trò `owner` và `admin`, cả hai quản toàn bộ tàu. **v1 không tạo `user_ship_access`** — khi nào cần giao tàu riêng cho từng người mới thêm bảng đó và đổi điều kiện policy.
-- `ship_ai_profiles` — `ship_id` UNIQUE: `brand_voice`, `target_audience`, `writing_style`, `preferred_terms`, `forbidden_terms`, `seo_guidelines`, `translation_guidelines`, `additional_instructions`, `updated_at`. Chỉ lưu dữ liệu; v1 không có sinh nội dung tự động.
+
 
 Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ ở bảng nội dung công khai, full cho `authenticated`, `ALL` cho `service_role`; RLS bật.
 
