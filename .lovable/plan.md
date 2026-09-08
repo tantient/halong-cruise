@@ -132,9 +132,14 @@ Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ
 
 ### RLS
 
-- Public: `SELECT TO anon` chỉ hàng `published = true` của tàu `status = 'live'`.
+- Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`.
 - Admin: security-definer `has_ship_access(_user_id, _ship_id, _role)` đọc `user_ship_access`; `platform_owner` (qua `has_role(admin)`) thấy mọi tàu. Mọi policy trên `leads`, `job_applications`, nội dung đều đi qua `ship_id` — không có đường nào để admin tàu A đọc dữ liệu tàu B.
 - `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
+
+### Lớp service (chuẩn bị cho AI/n8n sau này)
+
+Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, tự kiểm `has_ship_access`, và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`), không cần logic mới. `setStatus` là con đường duy nhất để xuất bản — không service nào tự chuyển sang `published`.
+
 
 ### Runtime
 
