@@ -30,7 +30,7 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 2. **Bỏ mọi tên gọi "chronos" khỏi phần lõi** — dùng token dùng chung (màu chính, màu nền, phông tiêu đề…); Chronos chỉ là một bộ giá trị nạp vào.
 3. **Trang nội dung tự do + thứ tự khối trang chủ** — thêm trang mới (Nhà hàng, Spa, Chính sách…) và bật/tắt, sắp lại thứ tự các khối trang chủ ngay trong quản trị, không cần lập trình.
 4. **Lưu khách hỏi giá (leads)** — mọi form liên hệ / hỏi giá / đặt phòng vào cơ sở dữ liệu theo tàu, không chỉ gửi email rồi mất dấu.
-5. **Chuẩn bị phân quyền theo tàu** — có sẵn bảng gán người dùng ↔ tàu ↔ vai trò để sau này giao tàu cho từng đội.
+5. **Chuẩn bị phân quyền theo tàu** — v1 để admin quản toàn bộ 8 tàu cho đơn giản, nhưng bảng gán người dùng ↔ tàu ↔ vai trò và cột "thuộc tàu nào" đã có sẵn để sau này giao tàu cho từng đội.
 6. **Chỉ hoàn thiện một mẫu trước** — Heritage chạy trọn vẹn, Chronos chuyển sang nền tảng, quản trị xong, tàu số 2 chạy được **không sửa code**; sau đó mới xây các mẫu còn lại.
 
 ## Nguyên tắc ranh giới
@@ -93,7 +93,7 @@ v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
 3. Quản trị tạo được một tàu mới mà không đụng code.
 4. Tàu mới cấu hình được: tên miền, logo, màu, phông, nội dung, phòng, hải trình, dịch vụ, ưu đãi, trang nội dung, thứ tự khối trang chủ, SEO, tuyển dụng, khách hỏi giá.
 5. Hai tên miền cùng trỏ về một bản triển khai nhưng trả ra đúng hai thương hiệu khác nhau.
-6. Dữ liệu từng tàu được cô lập bằng RLS.
+6. Dữ liệu mỗi tàu luôn ghi rõ thuộc tàu nào, và RLS chặn mọi truy cập công khai vào bản nháp, leads, hồ sơ ứng viên.
 7. Form công khai không nhận `ship_id` từ phía client.
 8. Trang xem thử không bị Google lập chỉ mục.
 9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
