@@ -53,11 +53,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "cabin_details_cabin_id_fkey"
-            columns: ["cabin_id"]
+            foreignKeyName: "cabin_details_cabin_ship_fkey"
+            columns: ["cabin_id", "ship_id"]
             isOneToOne: false
             referencedRelation: "cabins"
-            referencedColumns: ["id"]
+            referencedColumns: ["id", "ship_id"]
           },
           {
             foreignKeyName: "cabin_details_ship_id_fkey"
@@ -141,6 +141,57 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "cabins_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      entity_media: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          media_id: string
+          ship_id: string
+          sort_order: number
+          updated_at: string
+          usage: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          media_id: string
+          ship_id: string
+          sort_order?: number
+          updated_at?: string
+          usage?: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          media_id?: string
+          ship_id?: string
+          sort_order?: number
+          updated_at?: string
+          usage?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entity_media_media_ship_fkey"
+            columns: ["media_id", "ship_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["id", "ship_id"]
+          },
+          {
+            foreignKeyName: "entity_media_ship_fkey"
             columns: ["ship_id"]
             isOneToOne: false
             referencedRelation: "ships"
@@ -317,11 +368,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "itinerary_days_itinerary_id_fkey"
-            columns: ["itinerary_id"]
+            foreignKeyName: "itinerary_days_itinerary_ship_fkey"
+            columns: ["itinerary_id", "ship_id"]
             isOneToOne: false
             referencedRelation: "itineraries"
-            referencedColumns: ["id"]
+            referencedColumns: ["id", "ship_id"]
           },
           {
             foreignKeyName: "itinerary_days_ship_id_fkey"
@@ -339,7 +390,9 @@ export type Database = {
           full_name: string
           id: string
           position_id: string
+          ship_id: string | null
           status: string
+          updated_at: string
         }
         Insert: {
           contact: string
@@ -347,7 +400,9 @@ export type Database = {
           full_name: string
           id?: string
           position_id: string
+          ship_id?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
           contact?: string
@@ -355,9 +410,19 @@ export type Database = {
           full_name?: string
           id?: string
           position_id?: string
+          ship_id?: string | null
           status?: string
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       job_positions: {
         Row: {
@@ -423,6 +488,127 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "job_positions_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          nationality: string | null
+          phone: string | null
+          ship_id: string
+          source: string | null
+          status: string
+          type: string
+          updated_at: string
+          utm_campaign: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          nationality?: string | null
+          phone?: string | null
+          ship_id: string
+          source?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          nationality?: string | null
+          phone?: string | null
+          ship_id?: string
+          source?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media: {
+        Row: {
+          alt: string | null
+          caption: string | null
+          category: string
+          created_at: string
+          created_by: string | null
+          height: number | null
+          id: string
+          is_featured: boolean
+          mime_type: string | null
+          ship_id: string
+          sort_order: number
+          storage_path: string
+          updated_at: string
+          updated_by: string | null
+          width: number | null
+        }
+        Insert: {
+          alt?: string | null
+          caption?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          height?: number | null
+          id?: string
+          is_featured?: boolean
+          mime_type?: string | null
+          ship_id: string
+          sort_order?: number
+          storage_path: string
+          updated_at?: string
+          updated_by?: string | null
+          width?: number | null
+        }
+        Update: {
+          alt?: string | null
+          caption?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          height?: number | null
+          id?: string
+          is_featured?: boolean
+          mime_type?: string | null
+          ship_id?: string
+          sort_order?: number
+          storage_path?: string
+          updated_at?: string
+          updated_by?: string | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_ship_id_fkey"
             columns: ["ship_id"]
             isOneToOne: false
             referencedRelation: "ships"
