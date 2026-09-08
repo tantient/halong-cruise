@@ -8,7 +8,6 @@
  * add, rename or remove services without a code change.
  */
 
-import type { GalleryImage } from "@/components/gallery/gallery-data";
 import type { MediaItem, PublicService } from "@/lib/platform";
 
 export interface ServiceHighlight {
@@ -79,15 +78,3 @@ export function toServiceView(service: PublicService): ServiceView {
 }
 
 /** Media items rendered by the shared lightbox component. */
-export function toGalleryImages(items: MediaItem[], fallbackTitle: string): GalleryImage[] {
-  return items.map((item) => {
-    const title = item.caption ?? item.alt ?? fallbackTitle;
-    return {
-      id: item.id,
-      src: item.url,
-      category: (item.category ?? "ship") as GalleryImage["category"],
-      titleVi: title,
-      titleEn: title,
-    };
-  });
-}

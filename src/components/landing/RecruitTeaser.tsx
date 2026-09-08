@@ -6,12 +6,12 @@ import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { supabase } from "@/integrations/supabase/client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Lang } from "@/lib/translations";
+import { formUi } from "@/lib/i18n/ui-forms";
+import { submitJobApplication } from "@/lib/platform";
 
 import { Reveal } from "./Reveal";
 
@@ -49,7 +49,7 @@ const applicationSchema = z.object({
 
 export function RecruitTeaser({ lang, content, image, jobs, t }: RecruitTeaserProps) {
   const tr = t.recruitTeaser;
-  const vi = lang === "vi";
+  const ui = formUi(lang);
   const [values, setValues] = useState({ name: "", contact: "", position: "" });
   const [submitting, setSubmitting] = useState(false);
 
@@ -57,18 +57,23 @@ export function RecruitTeaser({ lang, content, image, jobs, t }: RecruitTeaserPr
     e.preventDefault();
     const parsed = applicationSchema.safeParse(values);
     if (!parsed.success) {
-      toast.error(vi ? "Vui lòng điền đầy đủ thông tin hợp lệ." : "Please fill in all fields.");
+      toast.error(ui.error);
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from("job_applications").insert({
-      full_name: parsed.data.name,
-      contact: parsed.data.contact,
-      position_id: parsed.data.position,
-    });
+    // Only the position slug leaves the browser; the server resolves the ship
+    // from the hostname and verifies the position is published for that ship.
+    const res = await submitJobApplication({
+      data: {
+        pathname: window.location.pathname,
+        fullName: parsed.data.name,
+        contact: parsed.data.contact,
+        position: parsed.data.position,
+      },
+    }).catch(() => ({ ok: false }));
     setSubmitting(false);
-    if (error) {
-      toast.error(vi ? "Gửi hồ sơ thất bại, vui lòng thử lại." : "Submission failed, please try again.");
+    if (!res.ok) {
+      toast.error(ui.error);
       return;
     }
     toast.success(tr.success);

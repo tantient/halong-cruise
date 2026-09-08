@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { formUi } from "@/lib/i18n/ui-forms";
 import { publicQueries, submitPublicLead, type PublicPage, type PublicPageBundle } from "@/lib/platform";
 
 function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -47,6 +48,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
   const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
 
   const settings = b.ship.settings;
+  const fu = formUi(lang);
   const sendLead = useServerFn(submitPublicLead);
   const [values, setValues] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
@@ -61,10 +63,10 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
         toast.success(t.contact.success);
         setValues({ name: "", phone: "", email: "", subject: "", message: "" });
       } else {
-        toast.error(t.contact.error);
+        toast.error(fu.error);
       }
     } catch {
-      toast.error(t.contact.error);
+      toast.error(fu.error);
     } finally {
       setSending(false);
     }

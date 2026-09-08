@@ -3,9 +3,8 @@
  *
  *   hostname → ship → enabled languages → published URLs
  *
- * A domain only ever sees the URLs of its own ship. These helpers are not yet
- * wired to the `/sitemap.xml` and `/robots.txt` routes (that switch happens
- * when the site moves to database content).
+ * A domain only ever sees the URLs of its own ship. They back the
+ * `/sitemap.xml` and `/robots.txt` routes.
  */
 
 import { localizedPath } from "@/lib/i18n/paths";
@@ -20,14 +19,19 @@ export interface SitemapUrl {
   alternates: Array<{ hrefLang: string; href: string }>;
 }
 
-/** Static section paths every ship template exposes (unprefixed). */
+/**
+ * Section paths the platform route tree exposes for every ship (unprefixed).
+ * Section *copy* lives in `ship_pages`, but the URLs are route-tree paths, so
+ * page slugs are not turned into extra URLs.
+ */
 export const STATIC_PUBLIC_PATHS: Array<{ path: string; changefreq: SitemapUrl["changefreq"]; priority: string }> = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/cabins", changefreq: "weekly", priority: "0.9" },
   { path: "/itineraries", changefreq: "weekly", priority: "0.9" },
-  { path: "/services", changefreq: "monthly", priority: "0.8" },
   { path: "/offers", changefreq: "weekly", priority: "0.8" },
   { path: "/gallery", changefreq: "monthly", priority: "0.8" },
+  { path: "/about", changefreq: "monthly", priority: "0.7" },
+  { path: "/contact", changefreq: "monthly", priority: "0.7" },
   { path: "/careers", changefreq: "weekly", priority: "0.6" },
 ];
 
@@ -38,11 +42,9 @@ export async function buildSitemapUrls(ctx: ShipContext): Promise<SitemapUrl[]> 
 
   const paths: Array<{ path: string; changefreq: SitemapUrl["changefreq"]; priority: string }> = [
     ...STATIC_PUBLIC_PATHS,
-    ...slugs.pages.map((s) => ({ path: `/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
     ...slugs.cabins.map((s) => ({ path: `/cabins/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
     ...slugs.itineraries.map((s) => ({ path: `/itineraries/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
     ...slugs.services.map((s) => ({ path: `/services/${s}`, changefreq: "monthly" as const, priority: "0.6" })),
-    ...slugs.offers.map((s) => ({ path: `/offers/${s}`, changefreq: "weekly" as const, priority: "0.6" })),
   ];
 
   const abs = (p: string) => `${ctx.origin}${p}`;
@@ -88,6 +90,7 @@ export function renderRobotsTxt(ctx: ShipContext | null, opts: { isPublicHost: b
     "Allow: /",
     "Disallow: /auth",
     "Disallow: /admin",
+    "Disallow: /dev/sync",
     "Disallow: /preview/",
     "",
     `Sitemap: ${ctx.origin}/sitemap.xml`,

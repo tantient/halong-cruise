@@ -3,17 +3,17 @@
 import { useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
-import type { GalleryImage } from "./gallery-data";
+import type { MediaItem } from "@/lib/platform";
 
 interface LightboxProps {
-  images: GalleryImage[];
+  /** Media items already resolved by the platform media layer. */
+  images: MediaItem[];
   index: number | null;
   setIndex: (updater: (i: number | null) => number | null) => void;
   close: () => void;
-  lang: "vi" | "en";
 }
 
-export function Lightbox({ images, index, setIndex, close, lang }: LightboxProps) {
+export function Lightbox({ images, index, setIndex, close }: LightboxProps) {
   const count = images.length;
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function Lightbox({ images, index, setIndex, close, lang }: LightboxProps
   const current = images[index];
   if (!current) return null;
 
-  const label = lang === "vi" ? current.titleVi : current.titleEn;
+  const label = current.caption ?? current.alt ?? "";
 
   return (
     <div
@@ -57,7 +57,7 @@ export function Lightbox({ images, index, setIndex, close, lang }: LightboxProps
       </button>
       <figure onClick={(e) => e.stopPropagation()} className="max-h-full">
         <img
-          src={current.src}
+          src={current.url}
           alt={label}
           className="max-h-[80vh] w-auto rounded-sm object-contain"
         />
