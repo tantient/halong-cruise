@@ -37,18 +37,11 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 
 Nền tảng web **không phải PMS**. Web giữ: nội dung marketing, thông tin phòng/hải trình công khai, ưu đãi, khách hỏi giá, tuyển dụng, SEO, ảnh. PMS giữ: tồn phòng, đặt phòng, giá, khách, thanh toán, vận hành. Sau này web lấy tình trạng phòng/giá từ PMS qua API.
 
-## Để ngỏ đường cho AI (v1 KHÔNG làm AI)
+## AI: để sau, không chuẩn bị gì trong v1
 
-v1 không gọi bất kỳ dịch vụ AI nào, không chatbot, không automation, không prompt. Chỉ đảm bảo kiến trúc sau này gắn AI vào được mà không viết lại CMS hay cơ sở dữ liệu. Nếu bỏ AI vĩnh viễn, nền tảng vẫn hoạt động bình thường.
+v1 không có AI: không viết bài tự động, không dịch tự động, không chatbot, không automation. Cũng **không** thêm bảng giọng thương hiệu, không thêm cột "nội dung do máy tạo", không thêm trạng thái phục vụ AI. Khi nào cần AI sẽ bổ sung khi đó. Điều duy nhất giữ lại vì bản thân nó đã đúng: **thao tác nội dung nằm ở lớp service riêng, không nằm trong component giao diện** — quản trị gọi service, mọi service đều kiểm tra tàu và quyền.
 
-Bốn điều chuẩn bị sẵn trong v1:
 
-1. **Trạng thái nội dung** `draft → review → published → archived` trên mọi bảng nội dung, thay cho cờ đúng/sai. Sau này AI chỉ tạo bản nháp; người quản trị xem, sửa rồi mới xuất bản — AI không tự xuất bản.
-2. **Nguồn nội dung**: mỗi bản ghi ghi lại do người tạo, do máy tạo, hay người sửa từ bản máy tạo, cùng thời điểm và người thao tác. Đủ để sau này bổ sung lịch sử phiên bản mà không phải đổi cấu trúc.
-3. **Giọng thương hiệu từng tàu**: bảng lưu sẵn giọng điệu, đối tượng khách, lối viết, từ nên dùng / tránh dùng, hướng dẫn SEO và dịch thuật. v1 chỉ lưu, chưa dùng.
-4. **Mọi thao tác nội dung là một service riêng**, không nằm trong component giao diện: tạo bản nháp, cập nhật trang, tạo ưu đãi, cập nhật SEO, tạo bản dịch, gắn ảnh… Quản trị gọi service; sau này AI hoặc n8n gọi cùng service qua API đã xác thực. Mọi thao tác luôn kiểm tra tàu và quyền.
-
-Nguyên tắc bất di bất dịch: **AI chỉ được đọc và ghi trong phạm vi một tàu** — thông tin tàu, giọng thương hiệu, phòng, hải trình, dịch vụ, ưu đãi, trang, ảnh, SEO, nội dung đã xuất bản của chính tàu đó. Không trộn dữ liệu giữa các tàu.
 
 
 ## Bốn mẫu bố cục (làm dần)
@@ -96,7 +89,7 @@ v1 chỉ được coi là xong khi tất cả các điều sau đúng:
 4. Tàu mới cấu hình được: tên miền, logo, màu, phông, nội dung, phòng, hải trình, dịch vụ, ưu đãi, trang nội dung, thứ tự khối trang chủ, SEO, tuyển dụng, khách hỏi giá.
 5. Hai tên miền cùng trỏ về một bản triển khai nhưng trả ra đúng hai thương hiệu khác nhau.
 6. Dữ liệu mỗi tàu luôn ghi rõ thuộc tàu nào, và RLS chặn mọi truy cập công khai vào bản nháp, leads, hồ sơ ứng viên.
-7. Form công khai không nhận `ship_id` từ phía client.
+7. Form công khai không ghi trực tiếp vào cơ sở dữ liệu; máy chủ tự xác định tàu từ tên miền và client không gửi `ship_id`.
 8. Trang xem thử không bị Google lập chỉ mục.
 9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
 10. Tàu số 2 chạy production mà không cần thêm route hay component riêng.
@@ -122,14 +115,13 @@ v1 chỉ được coi là xong khi tất cả các điều sau đúng:
 - `homepage_sections` — `ship_id`, `section_type` **text** (validate ở tầng ứng dụng, không dùng enum Postgres — thêm kiểu section mới như spa, activities, video, testimonial, destination, transport không cần migration), `position`, `enabled`, `configuration jsonb`.
 - `ship_pages` — `ship_id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `status`, `sort_order`, UNIQUE(`ship_id`, `slug`).
 - Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `sort_order`.
-- **Workflow chung cho mọi bảng nội dung** (`ship_pages`, `cabins`, `itineraries`, `services`, `offers`, `job_positions`, `homepage_sections`): cột `status` text với 4 giá trị `draft` / `review` / `published` / `archived` (validate ở tầng ứng dụng), `published_at`. Không dùng cờ boolean `published`. Public chỉ đọc `status = 'published'`.
-- **Nguồn nội dung** trên cùng các bảng đó: `origin` text (`human` / `machine` / `machine_edited`), `created_by`, `updated_by`, `origin_meta jsonb`. v1 luôn ghi `human`; đủ chỗ để sau này bổ sung bảng phiên bản/audit log mà không đổi cấu trúc.
-- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`, `origin`.
+- **Trạng thái nội dung** trên mọi bảng nội dung (`ship_pages`, `cabins`, `itineraries`, `services`, `offers`, `job_positions`, `homepage_sections`): cột `status` text với đúng 2 giá trị `draft` / `published` (validate ở tầng ứng dụng), thêm `published_at`, `created_by`, `updated_by`. Public chỉ đọc `status = 'published'`. Chưa có `review`/`archived` — thêm sau nếu cần, chỉ là thêm giá trị hợp lệ.
+- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`.
 - `entity_media` — `ship_id`, `media_id`, `entity_type`, `entity_id`, `usage` (cover / gallery / floorplan / hero), `sort_order`. Đây là cách gắn ảnh vào nội dung, cho phép một nội dung có nhiều ảnh nhiều vai trò (ví dụ phòng: ảnh bìa + thư viện + sơ đồ mặt bằng) và một ảnh dùng lại ở nhiều chỗ.
 - `leads` — `ship_id`, `type` (`quote` / `contact` / `booking_request` / `agent` / `group` — dùng `booking_request` vì web chỉ ghi nhận yêu cầu, booking thật thuộc PMS), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
 - `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
 - Quyền: dùng lại `user_roles` + `has_role` đã có, chỉ hai vai trò `owner` và `admin`, cả hai quản toàn bộ tàu. **v1 không tạo `user_ship_access`** — khi nào cần giao tàu riêng cho từng người mới thêm bảng đó và đổi điều kiện policy.
-- `ship_ai_profiles` — `ship_id` UNIQUE: `brand_voice`, `target_audience`, `writing_style`, `preferred_terms`, `forbidden_terms`, `seo_guidelines`, `translation_guidelines`, `additional_instructions`, `updated_at`. Chỉ lưu dữ liệu; v1 không có sinh nội dung tự động.
+
 
 Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ ở bảng nội dung công khai, full cho `authenticated`, `ALL` cho `service_role`; RLS bật.
 
@@ -139,13 +131,14 @@ Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ
 Thực tế vận hành: 1 tài khoản admin quản cả 8 tàu, cùng lắm thêm 1–2 nhân viên cũng truy cập toàn bộ. Nên v1 làm gọn:
 
 - Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`. Bản nháp, `staging`, `disabled`, leads và hồ sơ ứng viên không lộ ra ngoài.
-- Admin: mọi policy quản trị chỉ cần `has_role(auth.uid(), 'admin')` — admin đọc/ghi được toàn bộ tàu. Không bắt buộc lọc qua `user_ship_access` ở v1.
-- `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
-- Mọi bảng nội dung, `leads`, `job_applications` vẫn luôn có `ship_id` NOT NULL. Sau này muốn giới hạn người A chỉ quản vài tàu, chỉ cần đổi điều kiện policy sang `has_ship_access(...)` — dữ liệu đã sẵn sàng, không phải chuyển đổi lại.
+- Admin: mọi policy quản trị chỉ cần `has_role(auth.uid(), 'owner')` hoặc `has_role(auth.uid(), 'admin')` — cả hai đọc/ghi được toàn bộ tàu.
+- **Không có `INSERT TO anon`.** Form khách hỏi giá và form ứng tuyển đi qua server function: trình duyệt gửi nội dung form → server đọc hostname → tìm tàu → validate (Zod) → tự gắn `ship_id` → ghi vào cơ sở dữ liệu bằng quyền server. Client không gửi và không quyết định `ship_id`. `leads` và `job_applications` chỉ cấp quyền cho `service_role` và cho admin đọc.
+- Mọi bảng nội dung, `leads`, `job_applications` vẫn luôn có `ship_id` NOT NULL. Sau này muốn giới hạn người A chỉ quản vài tàu, chỉ cần đổi điều kiện policy — dữ liệu đã sẵn sàng, không phải chuyển đổi lại.
 
-### Lớp service (chuẩn bị cho AI/n8n sau này)
+### Lớp service
 
-Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, kiểm quyền một chỗ duy nhất (v1: `has_role(admin)`; sau này đổi thành kiểm theo tàu mà không sửa call site), và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`). `setStatus` là con đường duy nhất để xuất bản.
+Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/published), `updateSeo`, `attachMedia`, `reorderSections`, `submitLead`, `submitApplication`. Mỗi service nhận `shipId` (hoặc tự suy ra từ hostname với form công khai), kiểm quyền một chỗ duy nhất, và ghi `updated_by`. Quản trị chỉ là giao diện gọi các service này. `setStatus` là con đường duy nhất để xuất bản.
+
 
 
 
@@ -178,7 +171,7 @@ Bucket public `ship-media`, đường dẫn `<ship-slug>/<category>/<file>`. Ass
 
 Làm lần lượt, mỗi task tự đứng được và website Chronos vẫn chạy sau từng task — không đập cả site cùng lúc.
 
-1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo`, `ship_ai_profiles` + GRANT/RLS theo `has_role(admin)`. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
+1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo` + GRANT/RLS theo `has_role(owner/admin)`. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
 2. **1b — Schema nội dung**: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions`, `ship_pages`, `homepage_sections`.
 3. **1c — Schema media & leads**: bucket `ship-media`, `media`, `entity_media`, `leads`, thêm `ship_id` vào `job_applications`.
 4. **1d — Chuyển ảnh**: upload asset Chronos vào bucket, tạo hàng `media` + `entity_media`. Web vẫn dùng import cũ.
