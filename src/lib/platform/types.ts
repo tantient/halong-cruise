@@ -215,6 +215,8 @@ export interface PublicPage {
   content: string | null;
   seoTitle: string | null;
   seoDescription: string | null;
+  /** Extra per-page editorial copy from `translations` (requested language, default-language fallback). */
+  text: Record<string, Json>;
   media: EntityMedia;
 }
 

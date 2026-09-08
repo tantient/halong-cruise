@@ -13,7 +13,14 @@ import { z } from "zod";
 
 import { shipLanguageConfig, type LanguageCode } from "@/lib/i18n/languages";
 import { resolveLanguage, type LanguageResolution } from "./language";
-import type { PublicHomepage, PublicJobPosition, ShipContext } from "./types";
+import type {
+  PublicCabin,
+  PublicCabinFull,
+  PublicHomepage,
+  PublicJobPosition,
+  PublicPage,
+  ShipContext,
+} from "./types";
 
 const pathInput = z.object({ pathname: z.string().default("/") });
 const slugInput = pathInput.extend({ slug: z.string().min(1).max(200) });
@@ -112,6 +119,74 @@ export const getPublicCabin = createServerFn({ method: "GET" })
     if (!s) return null;
     const { getCabin } = await import("./content.server");
     return getCabin(s.scope, data.slug);
+  });
+
+export interface PublicCabinsLanguageData {
+  cabins: PublicCabinFull[];
+  /** Editorial copy of the cabins index page (`ship_pages.slug = 'cabins'`). */
+  page: PublicPage | null;
+}
+
+export interface PublicCabinsBundle {
+  ship: ShipContext;
+  language: LanguageResolution;
+  languages: Partial<Record<LanguageCode, PublicCabinsLanguageData>>;
+}
+
+/** Cabins list + page copy for every enabled language (client-side language switch). */
+export const getPublicCabinsBundle = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
+  .handler(async ({ data }): Promise<PublicCabinsBundle | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { listCabinsFull, getPage } = await import("./content.server");
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const scope = { ...s.scope, language };
+        const [cabins, page] = await Promise.all([listCabinsFull(scope), getPage(scope, "cabins")]);
+        return [language, { cabins, page }] as const;
+      }),
+    );
+    return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
+  });
+
+export interface PublicCabinLanguageData {
+  cabin: PublicCabinFull;
+  /** Other cabins of the ship (for the "other cabins" links). */
+  others: PublicCabinFull[];
+  page: PublicPage | null;
+}
+
+export interface PublicCabinBundle {
+  ship: ShipContext;
+  language: LanguageResolution;
+  languages: Partial<Record<LanguageCode, PublicCabinLanguageData>>;
+}
+
+/** One cabin (+ siblings and page copy) for every enabled language. */
+export const getPublicCabinBundle = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => slugInput.parse(d))
+  .handler(async ({ data }): Promise<PublicCabinBundle | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { getCabin, listCabinsFull, getPage } = await import("./content.server");
+    // Tenant + published scoping happens in the reader; a miss is a real 404.
+    const exists = await getCabin(s.scope, data.slug);
+    if (!exists) return null;
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const scope = { ...s.scope, language };
+        const [all, page] = await Promise.all([listCabinsFull(scope), getPage(scope, "cabins")]);
+        const cabin = all.find((c) => c.slug === data.slug);
+        if (!cabin) return null;
+        return [language, { cabin, others: all.filter((c) => c.slug !== data.slug), page }] as const;
+      }),
+    );
+    return {
+      ship: s.context,
+      language: s.lang,
+      languages: Object.fromEntries(entries.filter((e): e is NonNullable<typeof e> => e !== null)),
+    };
   });
 
 export const getPublicItineraries = createServerFn({ method: "GET" })

@@ -104,6 +104,23 @@ function toCabin(r: CabinRow, media: EntityMedia): PublicCabin {
   };
 }
 
+const CABIN_DETAIL_COLUMNS = "id,cabin_id,group_name,label,value,content_type,sort_order,translations";
+
+type CabinDetailRow = {
+  id: string; cabin_id: string; group_name: string | null; label: string; value: string | null;
+  content_type: string; sort_order: number; translations: unknown;
+};
+
+function toDetail(d: CabinDetailRow): PublicCabinDetail {
+  return { id: d.id, group: d.group_name, label: d.label, value: d.value, contentType: d.content_type, sortOrder: d.sort_order };
+}
+
+function byType(list: PublicCabinDetail[]): Record<string, PublicCabinDetail[]> {
+  const out: Record<string, PublicCabinDetail[]> = {};
+  for (const d of list) (out[d.contentType] ??= []).push(d);
+  return out;
+}
+
 export async function listCabins(scope: ReadScope): Promise<PublicCabin[]> {
   const db = getPublicDb();
   const { data, error } = await db.from("cabins").select(CABIN_COLUMNS).eq("ship_id", scope.shipId).order("sort_order");
@@ -113,6 +130,31 @@ export async function listCabins(scope: ReadScope): Promise<PublicCabin[]> {
   return rows.map((r) => toCabin(r, mediaFor(media, r.id)));
 }
 
+/** Every cabin of the ship with its details (one details query for the whole list). */
+export async function listCabinsFull(scope: ReadScope): Promise<PublicCabinFull[]> {
+  const db = getPublicDb();
+  const { data, error } = await db.from("cabins").select(CABIN_COLUMNS).eq("ship_id", scope.shipId).order("sort_order");
+  if (error) throw error;
+  const rows = localizeRows((data ?? []) as CabinRow[], scope.language, scope.defaultLanguage);
+  const ids = rows.map((r) => r.id);
+  if (ids.length === 0) return [];
+  const [{ data: details, error: dErr }, media] = await Promise.all([
+    db.from("cabin_details").select(CABIN_DETAIL_COLUMNS).eq("ship_id", scope.shipId).in("cabin_id", ids).order("sort_order"),
+    loadEntityMedia(scope, "cabin", ids),
+  ]);
+  if (dErr) throw dErr;
+  const perCabin = new Map<string, PublicCabinDetail[]>();
+  for (const d of localizeRows((details ?? []) as CabinDetailRow[], scope.language, scope.defaultLanguage)) {
+    const list = perCabin.get(d.cabin_id) ?? [];
+    list.push(toDetail(d));
+    perCabin.set(d.cabin_id, list);
+  }
+  return rows.map((r) => {
+    const list = perCabin.get(r.id) ?? [];
+    return { ...toCabin(r, mediaFor(media, r.id)), details: list, detailsByType: byType(list) };
+  });
+}
+
 export async function getCabin(scope: ReadScope, slug: string): Promise<PublicCabinFull | null> {
   const db = getPublicDb();
   const { data, error } = await db.from("cabins").select(CABIN_COLUMNS).eq("ship_id", scope.shipId).eq("slug", slug).maybeSingle();
@@ -120,16 +162,12 @@ export async function getCabin(scope: ReadScope, slug: string): Promise<PublicCa
   if (!data) return null;
   const row = localizeRow(data as CabinRow, scope.language, scope.defaultLanguage).value;
   const [{ data: details, error: dErr }, media] = await Promise.all([
-    db.from("cabin_details").select("id,group_name,label,value,content_type,sort_order,translations").eq("cabin_id", row.id).order("sort_order"),
+    db.from("cabin_details").select(CABIN_DETAIL_COLUMNS).eq("ship_id", scope.shipId).eq("cabin_id", row.id).order("sort_order"),
     getEntityMedia(scope, "cabin", row.id),
   ]);
   if (dErr) throw dErr;
-  const list: PublicCabinDetail[] = localizeRows(details ?? [], scope.language, scope.defaultLanguage).map((d) => ({
-    id: d.id, group: d.group_name, label: d.label, value: d.value, contentType: d.content_type, sortOrder: d.sort_order,
-  }));
-  const detailsByType: Record<string, PublicCabinDetail[]> = {};
-  for (const d of list) (detailsByType[d.contentType] ??= []).push(d);
-  return { ...toCabin(row, media), details: list, detailsByType };
+  const list = localizeRows((details ?? []) as CabinDetailRow[], scope.language, scope.defaultLanguage).map(toDetail);
+  return { ...toCabin(row, media), details: list, detailsByType: byType(list) };
 }
 
 /* ------------------------------------------------------------ itineraries */
@@ -256,9 +294,13 @@ export async function getPage(scope: ReadScope, slug: string): Promise<PublicPag
   if (error) throw error;
   if (!data) return null;
   const r = localizeRow(data as PageRow, scope.language, scope.defaultLanguage).value;
+  // Page-specific copy beyond the fixed columns lives in `translations` for
+  // every language (incl. the default), same convention as homepage sections.
+  const bags = ((data as PageRow).translations ?? {}) as Record<string, Record<string, unknown> | undefined>;
+  const text = { ...(bags[scope.defaultLanguage] ?? {}), ...(bags[scope.language] ?? {}) } as Record<string, Json>;
   return {
     id: r.id, slug: r.slug, title: r.title, intro: r.intro, content: r.content,
-    seoTitle: r.seo_title, seoDescription: r.seo_description,
+    seoTitle: r.seo_title, seoDescription: r.seo_description, text,
     media: await getEntityMedia(scope, "ship_page", r.id),
   };
 }
