@@ -21,7 +21,7 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 
 - Mỗi tàu có tên miền riêng, tất cả trỏ về cùng hệ thống này.
 - Khác biệt giao diện = mẫu bố cục + bộ thương hiệu riêng. Hai tàu **có thể dùng cùng mẫu** mà vẫn khác hẳn nhau nhờ màu, phông, thứ tự khối trang chủ, cách xử lý ảnh.
-- Chỉ bạn (chủ nền tảng) tạo tàu và nhập nội dung. Cấu trúc phân quyền cho từng tàu được chuẩn bị sẵn từ đầu, giao diện phân quyền làm sau.
+- v1 dùng một hệ thống quản trị chung; owner/admin quản toàn bộ đội tàu. Nếu tương lai cần phân quyền theo từng tàu sẽ bổ sung sau.
 - Nội dung nhập được từ trang quản trị: thương hiệu + ảnh, phòng nghỉ, hải trình, dịch vụ, ưu đãi, trang nội dung tự do, tuyển dụng + hồ sơ ứng viên, khách hỏi giá.
 
 ## Sáu điều chỉnh so với bản thảo đầu
