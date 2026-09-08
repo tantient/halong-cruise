@@ -35,6 +35,7 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 
 ## Nguyên tắc ranh giới
 
+Nền tảng web **không phải PMS**. Web giữ: nội dung marketing, thông tin phòng/hải trình công khai, ưu đãi, khách hỏi giá, tuyển dụng, SEO, ảnh. PMS giữ: tồn phòng, đặt phòng, giá, khách, thanh toán, vận hành. Sau này web lấy tình trạng phòng/giá từ PMS qua API.
 
 ## Để ngỏ đường cho AI (v1 KHÔNG làm AI)
 
