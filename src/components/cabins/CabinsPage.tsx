@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
-import { useLanguage } from "@/components/landing/use-language";
+import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,9 +28,9 @@ import { pageText, toCabinView, type CabinView } from "./cabin-view";
  * translations.
  */
 export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t, href } = useLanguage();
   const ui = cabinUi(lang);
-  const { data } = useSuspenseQuery({ ...publicQueries.cabinsBundle("/cabins"), initialData: bundle });
+  const { data } = useSuspenseQuery({ ...publicQueries.cabinsBundle(href("/cabins")), initialData: bundle });
   const b = data ?? bundle;
 
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
@@ -89,9 +88,8 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
             {cabins.map((cabin, index) => (
               <Reveal key={cabin.slug} delay={80 * index}>
                 <article className="flex h-full flex-col overflow-hidden rounded-sm border border-chronos-ink/10 bg-card">
-                  <Link
-                    to="/cabins/$cabinId"
-                    params={{ cabinId: cabin.slug }}
+                  <LocalLink
+                    path={`/cabins/${cabin.slug}`}
                     className="group block overflow-hidden"
                   >
                     {cabin.cover ? (
@@ -104,7 +102,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
                     ) : (
                       <div className="aspect-[4/3] w-full bg-chronos-ink/10" />
                     )}
-                  </Link>
+                  </LocalLink>
 
                   <div className="flex flex-1 flex-col p-7">
                     {cabin.code ? (
@@ -145,13 +143,12 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
                           {ui.requestQuote}
                         </a>
                       </Button>
-                      <Link
-                        to="/cabins/$cabinId"
-                        params={{ cabinId: cabin.slug }}
+                      <LocalLink
+                        path={`/cabins/${cabin.slug}`}
                         className="border-b border-chronos-gold pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:text-chronos-gold"
                       >
                         {ui.viewDetails}
-                      </Link>
+                      </LocalLink>
                       <Button
                         type="button"
                         variant="outline"

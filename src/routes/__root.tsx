@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider, themeInitScript } from "@/components/theme-provider";
+import { LanguageProvider } from "@/lib/i18n/language-context";
+import { publicQueries } from "@/lib/platform";
 
 function NotFoundComponent() {
   return (
@@ -76,6 +78,19 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  // Tenant language config (default + enabled languages) for the language
+  // switcher and link building. Resolved from the request host on the server.
+  loader: async ({ context, location }) => {
+    const site = await context.queryClient
+      .ensureQueryData(publicQueries.siteContext(location.pathname))
+      .catch(() => null);
+    return {
+      // Serialized with the route match, so server and client agree during hydration.
+      languageConfig: site
+        ? { defaultLanguage: site.ship.defaultLanguage, enabledLanguages: site.ship.enabledLanguages }
+        : null,
+    };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -147,13 +162,16 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const languageConfig = Route.useLoaderData()?.languageConfig ?? null;
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster position="top-center" richColors />
+        <LanguageProvider config={languageConfig}>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <Toaster position="top-center" richColors />
+        </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -21,7 +21,7 @@ const CATEGORIES: { id: GalleryCategory | "all"; vi: string; en: string }[] = [
 ];
 
 export function GalleryPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const [filter, setFilter] = useState<GalleryCategory | "all">("all");
   const [active, setActive] = useState<number | null>(null);
   // Fallback: sau khi trang ổn định, ép tải hết ảnh để không có ô trống khi cuộn nhanh

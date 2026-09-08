@@ -17,7 +17,7 @@ import {
 } from "./careers-data";
 
 export function CareersPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const tc = t.careers;
   const vi = lang === "vi";
 

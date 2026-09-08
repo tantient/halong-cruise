@@ -3,8 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CabinDetailPage } from "@/components/cabins/CabinDetailPage";
 import { cabinHead, loadCabinBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-/** Cabin detail in the ship's default language (no URL prefix). */
-export const Route = createFileRoute("/cabins/$cabinId")({
+export const Route = createFileRoute("/$lang/cabins/$cabinId")({
   loader: async ({ context, location, params }) => ({
     bundle: await loadCabinBundle(context.queryClient, location.pathname, params.cabinId),
   }),

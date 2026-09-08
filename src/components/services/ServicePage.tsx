@@ -14,7 +14,7 @@ import { services, serviceImages, type Service } from "./services-data";
 const QUOTE_LINK = "https://zalo.me/";
 
 export function ServicePage({ service }: { service: Service }) {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const vi = lang === "vi";
   const [active, setActive] = useState<number | null>(null);
 

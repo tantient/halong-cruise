@@ -14,7 +14,7 @@ const featureIcons: LucideIcon[] = [Waves, ChefHat, ConciergeBell, Anchor];
 const valueIcons: LucideIcon[] = [Heart, ShieldCheck, Leaf, Anchor];
 
 export function AboutPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const vi = lang === "vi";
 
   const features = t.about.features;

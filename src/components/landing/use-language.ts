@@ -1,26 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getT, type Lang } from "@/lib/translations";
-
-const STORAGE_KEY = "chronos-lang";
-
-export function useLanguage() {
-  const [lang, setLangState] = useState<Lang>("en");
-
-  useEffect(() => {
-    const saved = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
-    if (saved === "vi" || saved === "en") {
-      setLangState(saved);
-    }
-  }, []);
-
-  const setLang = (next: Lang) => {
-    setLangState(next);
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(STORAGE_KEY, next);
-    }
-  };
-
-  return { lang, setLang, t: getT(lang) };
-}
+/**
+ * Language for the current URL. Kept at this path for existing imports; the
+ * implementation lives in the platform language context.
+ */
+export { useLanguage, LocalLink, LanguageProvider } from "@/lib/i18n/language-context";
+export type { LanguageContextValue } from "@/lib/i18n/language-context";
