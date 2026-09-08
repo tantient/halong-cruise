@@ -1,67 +1,128 @@
-# Chronos → nền tảng 8 website du thuyền
+# Cruise Web Platform — một nền tảng, nhiều thương hiệu du thuyền
 
-## Ý tưởng tổng thể
-
-Một hệ thống duy nhất chạy 8 website. Mỗi tàu là một "hồ sơ tàu" trong hệ thống: tên, logo, màu sắc, phông chữ, mẫu bố cục, ảnh, phòng nghỉ, hải trình, ưu đãi, dịch vụ, tin tuyển dụng, liên hệ.
-
-Khi mở một tên miền (ví dụ `chronoscruise.com`), hệ thống nhận ra đó là tàu nào và hiển thị đúng website của tàu đó — nội dung riêng, giao diện riêng, ảnh riêng, hồ sơ ứng viên gửi về riêng.
-
-Thêm tàu thứ 9 chỉ là: tạo hồ sơ tàu trong trang quản trị → chọn mẫu bố cục + màu/phông → nhập nội dung và tải ảnh → gắn tên miền. Không cần lập trình thêm.
+Chronos không còn là "website chính rồi copy ra 7 bản". Chronos là **tàu số 1** của một nền tảng: 1 codebase + 1 database + 1 trang quản trị + nhiều tên miền + nhiều thương hiệu.
 
 ```text
-chronoscruise.com   ─┐
-tau-b.com           ─┤   một hệ thống    ┌─ hồ sơ tàu + nội dung + ảnh
-tau-c.com           ─┼──────────────────►┤─ mẫu bố cục (1 trong 4)
-...                 ─┤                   └─ màu / phông / logo
-tau-h.com           ─┘
+Domain
+  │
+  ▼
+resolveShip(hostname)
+  │
+  ▼
+Ship ──┬── Thương hiệu (màu / phông / logo)
+       ├── Mẫu bố cục
+       ├── Phòng · Hải trình · Dịch vụ · Ưu đãi
+       ├── Thư viện ảnh · Trang nội dung · Thứ tự khối trang chủ
+       ├── Tuyển dụng · Hồ sơ ứng viên · Khách hỏi giá
+       └── SEO · Liên hệ · Mạng xã hội
 ```
 
 ## Quyết định đã chốt
 
 - Mỗi tàu có tên miền riêng, tất cả trỏ về cùng hệ thống này.
-- Khác biệt giao diện: 4 mẫu bố cục để chọn + bộ màu, phông chữ, logo riêng từng tàu.
-- Chỉ bạn (chủ nền tảng) tạo tàu và nhập nội dung; tài khoản riêng cho từng tàu là bước mở rộng sau.
-- Nội dung nhập được từ trang quản trị: thông tin cơ bản + ảnh, phòng nghỉ & hải trình, ưu đãi & dịch vụ, tuyển dụng & hồ sơ ứng viên.
+- Khác biệt giao diện = mẫu bố cục + bộ thương hiệu riêng. Hai tàu **có thể dùng cùng mẫu** mà vẫn khác hẳn nhau nhờ màu, phông, thứ tự khối trang chủ, cách xử lý ảnh.
+- Chỉ bạn (chủ nền tảng) tạo tàu và nhập nội dung. Cấu trúc phân quyền cho từng tàu được chuẩn bị sẵn từ đầu, giao diện phân quyền làm sau.
+- Nội dung nhập được từ trang quản trị: thương hiệu + ảnh, phòng nghỉ, hải trình, dịch vụ, ưu đãi, trang nội dung tự do, tuyển dụng + hồ sơ ứng viên, khách hỏi giá.
 
-## Bốn mẫu bố cục
+## Sáu điều chỉnh so với bản thảo đầu
 
-1. **Heritage** — chính là giao diện Chronos hiện tại: hero ảnh lớn chạy slide, chữ serif, tông ấm.
+1. **Tên miền tách riêng** — một tàu có thể có domain chính, `www`, domain cũ, domain marketing; mỗi domain một dòng, có cờ "chính".
+2. **Bỏ mọi tên gọi "chronos" khỏi phần lõi** — dùng token dùng chung (màu chính, màu nền, phông tiêu đề…); Chronos chỉ là một bộ giá trị nạp vào.
+3. **Trang nội dung tự do + thứ tự khối trang chủ** — thêm trang mới (Nhà hàng, Spa, Chính sách…) và bật/tắt, sắp lại thứ tự các khối trang chủ ngay trong quản trị, không cần lập trình.
+4. **Lưu khách hỏi giá (leads)** — mọi form liên hệ / hỏi giá / đặt phòng vào cơ sở dữ liệu theo tàu, không chỉ gửi email rồi mất dấu.
+5. **Chuẩn bị phân quyền theo tàu** — có sẵn bảng gán người dùng ↔ tàu ↔ vai trò để sau này giao tàu cho từng đội.
+6. **Chỉ hoàn thiện một mẫu trước** — Heritage chạy trọn vẹn, Chronos chuyển sang nền tảng, quản trị xong, tàu số 2 chạy được **không sửa code**; sau đó mới xây các mẫu còn lại.
+
+## Nguyên tắc ranh giới
+
+Nền tảng web **không phải PMS**. Web giữ: nội dung marketing, thông tin phòng/hải trình công khai, ưu đãi, khách hỏi giá, tuyển dụng, SEO, ảnh. PMS giữ: tồn phòng, đặt phòng, giá, khách, thanh toán, vận hành. Sau này web lấy tình trạng phòng/giá từ PMS qua API.
+
+## Bốn mẫu bố cục (làm dần)
+
+1. **Heritage** — nền tảng của giao diện Chronos hiện tại: hero ảnh lớn chạy slide, chữ serif, tông ấm.
 2. **Editorial** — kiểu tạp chí: ảnh bìa dọc, chữ lớn, chia cột, nhiều khoảng trắng.
-3. **Panorama** — hero video/ảnh toàn màn hình, các mục cuộn ngang, tối giản, nền tối.
-4. **Grid** — trang chủ dạng ô lưới, xem nhanh phòng và hải trình, phù hợp tàu thiên về đặt phòng.
+3. **Panorama** — hero toàn màn hình, cuộn ngang, tối giản, nền tối.
+4. **Grid** — trang chủ dạng ô lưới, xem nhanh phòng và hải trình.
 
-Mỗi mẫu dùng chung dữ liệu, nên đổi mẫu cho một tàu không mất nội dung.
+Mẫu chỉ là cấu trúc; nội dung dùng chung nên đổi mẫu không mất dữ liệu.
 
-## Các giai đoạn triển khai
+Phông chữ chọn từ **danh sách cho phép** (đã kiểm tra hỗ trợ tiếng Việt và hiệu năng), không nhập tự do.
+
+## Các giai đoạn
 
 **Giai đoạn 1 — Nền tảng dữ liệu**
-Tạo cấu trúc lưu trữ cho tàu và toàn bộ nội dung; chuyển dữ liệu Chronos hiện tại (phòng, hải trình, dịch vụ, ưu đãi, ảnh, tuyển dụng) vào đó. Kết thúc giai đoạn này website Chronos vẫn y như cũ nhưng đã đọc từ hệ thống.
+Tạo cấu trúc lưu trữ cho tàu, tên miền, thương hiệu, nội dung, ảnh, khách hỏi giá, phân quyền. Chuyển toàn bộ dữ liệu Chronos hiện tại vào đó. Kết thúc giai đoạn: website Chronos trông y như cũ nhưng đã đọc từ hệ thống.
 
-**Giai đoạn 2 — Nhận diện tàu theo tên miền**
-Website tự xác định tàu theo tên miền đang mở; trong lúc phát triển có thể xem thử bằng đường dẫn `/xem/<ma-tau>`. Chữ, ảnh, logo, màu, thẻ SEO, sitemap đều theo tàu.
+**Giai đoạn 2 — Đổi phần lõi sang token dùng chung**
+Thay mọi màu/phông mang tên "chronos" bằng token chung; giao diện Chronos giữ nguyên vì chỉ đổi cách gọi tên.
 
-**Giai đoạn 3 — Trang quản trị**
-Khu vực đăng nhập cho bạn: danh sách tàu, tạo tàu mới, sửa mọi nội dung, tải ảnh, chọn mẫu bố cục và bộ màu/phông, xem hồ sơ ứng viên của từng tàu.
+**Giai đoạn 3 — Nhận diện tàu theo tên miền**
+Website xác định tàu theo tên miền; khi phát triển xem thử qua `/preview/<mã-tàu>` (chặn Google lập chỉ mục). Chữ, ảnh, logo, màu, thẻ SEO, sitemap, dữ liệu có cấu trúc đều theo tàu.
 
-**Giai đoạn 4 — Ba mẫu bố cục còn lại**
-Xây Editorial, Panorama, Grid và cho phép chuyển mẫu bằng một lựa chọn.
+**Giai đoạn 4 — Trang quản trị**
+Danh sách tàu → mở một tàu → các tab: Tổng quan, Thương hiệu, Trang chủ (thứ tự khối), Phòng, Hải trình, Dịch vụ, Ưu đãi, Thư viện, Trang nội dung, Tuyển dụng, Hồ sơ ứng viên, Khách hỏi giá, SEO, Tên miền, Cài đặt.
 
-**Giai đoạn 5 — Tàu thứ hai thật**
-Tạo tàu số 2 từ đầu bằng trang quản trị để kiểm chứng luồng, rồi gắn tên miền. Sau đó lặp cho các tàu còn lại.
+**Giai đoạn 5 — Tàu số 2 (kiểm chứng)**
+Tạo tàu số 2 hoàn toàn bằng quản trị, dùng cùng mẫu Heritage nhưng bộ thương hiệu và thứ tự khối khác, rồi gắn tên miền. Chạy được mà không sửa một dòng code = kiến trúc đã được kiểm chứng.
+
+**Giai đoạn 6 — Ba mẫu còn lại**
+Xây Editorial, Panorama, Grid và cho chuyển mẫu bằng một lựa chọn.
+
+**Giai đoạn 7 — Tàu 3 đến 8**
+Chỉ còn nhập nội dung và gắn tên miền.
 
 ## Điều cần chuẩn bị từ bạn
 
 - Danh sách 8 tàu: tên, tên miền dự định.
-- Với mỗi tàu: logo, ảnh, nội dung giới thiệu, phòng, hải trình, số điện thoại/email, kênh mạng xã hội.
-- Tên miền phải được trỏ về hệ thống này (mình sẽ hướng dẫn từng bước khi tới bước đó).
+- Mỗi tàu: logo, ảnh, nội dung giới thiệu, phòng, hải trình, hotline/email, mạng xã hội.
+- Tên miền trỏ về hệ thống này (mình hướng dẫn từng bước khi tới bước đó).
 
 ## Chi tiết kỹ thuật
 
-- **Multi-tenant theo hostname.** Bảng `ships` (slug, domains[], name, contact, socials, theme jsonb, layout enum, logo, seo). Server fn `resolveShip` đọc `getRequestHeader("host")` trong `beforeLoad` của `__root`, cache theo host; fallback `/preview/$shipSlug` cho dev. Tất cả custom domain của 8 tàu connect vào chính project này.
-- **Bảng nội dung** khoá theo `ship_id`: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `gallery_images`, `job_positions`, và `job_applications` (thêm cột `ship_id`). Mỗi bảng: GRANT `SELECT` cho `anon` (nội dung công khai), full cho `authenticated` admin qua `has_role`, `ALL` cho `service_role`; RLS bật, policy public chỉ đọc hàng `published = true`, policy owner-read cho admin để thấy cả bản nháp.
-- **Đọc dữ liệu công khai** bằng server publishable client trong `*.functions.ts` (không dùng admin), gọi từ loader public + `ensureQueryData`/`useSuspenseQuery`. Ghi/quản trị qua `requireSupabaseAuth` + kiểm `has_role(admin)`.
-- **Theming.** Token màu/phông đặt trong `src/styles.css` dưới dạng CSS variables; theme của tàu inject bằng thẻ `<style>` trong `head()` của `__root` (ghi đè `--chronos-*`), font Google load động theo cấu hình tàu. Không hardcode màu trong component.
-- **Layout templates.** `src/templates/{heritage,editorial,panorama,grid}/` mỗi mẫu export các section component cùng interface; route page chọn mẫu theo `ship.layout`. Refactor `LandingPage`/`CabinsPage`/... hiện tại thành template `heritage` nhận props từ dữ liệu thay vì import file `*-data.ts`.
-- **Ảnh** chuyển sang Storage bucket public `ship-media` (đường dẫn `ship-slug/...`), asset Chronos hiện tại upload vào bucket trong bước migrate; component dùng URL thay vì ES import (mất preload asset hashing, bù bằng `loading`/`fetchpriority` và width/height cố định).
-- **SEO.** `SITE_URL`/`SITE_NAME` trong `src/lib/seo.ts` trở thành tham số theo tàu; `sitemap[.]xml.ts` và `robots.txt` sinh theo host; canonical/og:url dùng domain của tàu.
-- **Quản trị** dưới `src/routes/_authenticated/admin.*`: `ships`, `ships.$id` (tab: cơ bản, giao diện, phòng, hải trình, dịch vụ, ưu đãi, thư viện ảnh, tuyển dụng), `applications` lọc theo tàu.
+### Schema (Lovable Cloud)
+
+- `ships` — identity: `slug`, `name`, `status`, `layout` (enum), `default_language`, `currency`.
+- `ship_domains` — `ship_id`, `domain` (unique), `is_primary`, `is_active`, `redirect_to`. Lookup hostname qua bảng này.
+- `ship_branding` — `primary_color`, `secondary_color`, `accent_color`, `background_color`, `surface_color`, `text_color`, `heading_font`, `body_font` (enum từ danh sách cho phép), `logo_light`, `logo_dark`, `favicon`, `theme_config jsonb` (chỉ cho tuỳ chọn phụ: borderRadius, heroOverlay, buttonStyle).
+- `ship_settings` — hotline, whatsapp, zalo, email, recruit_email, facebook, instagram, tiktok, tripadvisor, google_maps, booking_url, checkin_point, address.
+- `ship_seo` — `title_template`, `default_description`, `og_image`, `schema_type`, `schema_name`.
+- `homepage_sections` — `ship_id`, `section_type` (enum: hero, story, cabins, itinerary, dining, services, gallery, offers, recruit, quote), `position`, `enabled`, `configuration jsonb`.
+- `ship_pages` — `slug`, `title`, `content`, `seo_title`, `seo_description`, `published`.
+- Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `published`, `sort_order`.
+- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`. Các bảng nội dung tham chiếu `media_id` để một ảnh dùng nhiều chỗ.
+- `leads` — `ship_id`, `type` (quote/contact/booking/agent/group), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
+- `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
+- `user_ship_access` — `user_id`, `ship_id`, `role` (enum: platform_owner, ship_admin, editor, recruitment, sales), unique (user_id, ship_id, role). Chưa có UI, nhưng RLS đã dựa vào nó.
+
+Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ ở bảng nội dung công khai, full cho `authenticated`, `ALL` cho `service_role`; RLS bật.
+
+### RLS
+
+- Public: `SELECT TO anon` chỉ hàng `published = true` của tàu `status = 'live'`.
+- Admin: security-definer `has_ship_access(_user_id, _ship_id, _role)` đọc `user_ship_access`; `platform_owner` (qua `has_role(admin)`) thấy mọi tàu. Mọi policy trên `leads`, `job_applications`, nội dung đều đi qua `ship_id` — không có đường nào để admin tàu A đọc dữ liệu tàu B.
+- `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
+
+### Runtime
+
+- `resolveShipByHost` (server fn, publishable client) đọc `getRequestHeader("host")` trong `beforeLoad` của `__root`, trả về ship + branding + settings + seo + sections; cache theo host. Domain có `redirect_to` → 301. Host không khớp → trang "chưa cấu hình". `/preview/$shipSlug` set `robots: noindex` và chỉ mở khi đăng nhập ở production.
+- Đọc công khai: `*.functions.ts` + server publishable client, gọi từ loader public với `ensureQueryData` / `useSuspenseQuery`. Ghi/quản trị: `requireSupabaseAuth` + kiểm quyền theo `ship_id`.
+
+### Theming
+
+`src/styles.css` khai báo token semantic: `--color-primary`, `--color-secondary`, `--color-accent`, `--color-background`, `--color-surface`, `--color-text`, `--font-heading`, `--font-body`. Bỏ toàn bộ `--chronos-*` và class `bg-chronos-*` trong component (đổi sang utility Tailwind map vào token). Branding của tàu inject bằng `<style>` trong `head()` của `__root`; font Google load theo `heading_font`/`body_font` từ danh sách cho phép (preconnect + `display=swap`).
+
+### Templates
+
+`src/templates/heritage/**` export các section component cùng interface `{ ship, data, config }`; page component render theo `homepage_sections` đã sắp thứ tự. `LandingPage`, `CabinsPage`, `ItinerariesPage`, `ServicePage`, `OffersPage`, `GalleryPage`, `AboutPage`, `ContactPage`, `CareersPage` hiện tại refactor thành template Heritage nhận props, thay vì import `*-data.ts`. Các mẫu sau chỉ cần implement cùng interface.
+
+### Media
+
+Bucket public `ship-media`, đường dẫn `<ship-slug>/<category>/<file>`. Asset Chronos hiện tại upload vào bucket ở bước migrate; component dùng URL + `width`/`height` cố định + `loading`/`fetchpriority` để bù việc mất preload theo asset hash.
+
+### SEO
+
+`src/lib/seo.ts` nhận `ship` thay vì `SITE_URL`/`SITE_NAME` hằng số; canonical / `og:url` dùng domain chính của tàu; `sitemap[.]xml` và `robots.txt` sinh theo host; JSON-LD theo `schema_type` từng tàu (Organization / Hotel / TouristTrip tuỳ trang).
+
+### Quản trị
+
+`src/routes/_authenticated/admin/`: `ships` (danh sách + tạo), `ships.$shipId.<tab>` cho các tab đã nêu, `leads`, `applications` lọc theo tàu.
