@@ -142,3 +142,17 @@ Bucket public `ship-media`, đường dẫn `<ship-slug>/<category>/<file>`. Ass
 ### Quản trị
 
 `src/routes/_authenticated/admin/`: `ships` (danh sách + tạo), `ships.$shipId.<tab>` cho các tab đã nêu, `leads`, `applications` lọc theo tàu.
+
+### Giai đoạn 1 chia thành task nhỏ
+
+Làm lần lượt, mỗi task tự đứng được và website Chronos vẫn chạy sau từng task — không đập cả site cùng lúc.
+
+1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo`, `user_ship_access` + hàm `has_ship_access` + GRANT/RLS. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
+2. **1b — Schema nội dung**: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions`, `ship_pages`, `homepage_sections`.
+3. **1c — Schema media & leads**: bucket `ship-media`, `media`, `entity_media`, `leads`, thêm `ship_id` vào `job_applications`.
+4. **1d — Chuyển ảnh**: upload asset Chronos vào bucket, tạo hàng `media` + `entity_media`. Web vẫn dùng import cũ.
+5. **1e — Chuyển dữ liệu**: đổ nội dung từ các file `*-data.ts` vào bảng, đối chiếu từng bản ghi.
+6. **1f — Lớp đọc dữ liệu**: server fn công khai + query options; chưa gắn vào trang.
+7. **1g — Chuyển từng trang sang đọc database**, mỗi trang một bước: trang chủ → phòng → hải trình → dịch vụ → ưu đãi → thư viện → giới thiệu/liên hệ → tuyển dụng. Sau mỗi bước so ảnh chụp trước/sau để chắc giao diện không đổi.
+8. **1h — Dọn dẹp**: xoá các file `*-data.ts` và import ảnh tĩnh không còn dùng.
+
