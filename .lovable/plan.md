@@ -30,7 +30,7 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 2. **Bỏ mọi tên gọi "chronos" khỏi phần lõi** — dùng token dùng chung (màu chính, màu nền, phông tiêu đề…); Chronos chỉ là một bộ giá trị nạp vào.
 3. **Trang nội dung tự do + thứ tự khối trang chủ** — thêm trang mới (Nhà hàng, Spa, Chính sách…) và bật/tắt, sắp lại thứ tự các khối trang chủ ngay trong quản trị, không cần lập trình.
 4. **Lưu khách hỏi giá (leads)** — mọi form liên hệ / hỏi giá / đặt phòng vào cơ sở dữ liệu theo tàu, không chỉ gửi email rồi mất dấu.
-5. **Chuẩn bị phân quyền theo tàu** — có sẵn bảng gán người dùng ↔ tàu ↔ vai trò để sau này giao tàu cho từng đội.
+5. **Chuẩn bị phân quyền theo tàu** — v1 để admin quản toàn bộ 8 tàu cho đơn giản, nhưng bảng gán người dùng ↔ tàu ↔ vai trò và cột "thuộc tàu nào" đã có sẵn để sau này giao tàu cho từng đội.
 6. **Chỉ hoàn thiện một mẫu trước** — Heritage chạy trọn vẹn, Chronos chuyển sang nền tảng, quản trị xong, tàu số 2 chạy được **không sửa code**; sau đó mới xây các mẫu còn lại.
 
 ## Nguyên tắc ranh giới
@@ -93,7 +93,7 @@ v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
 3. Quản trị tạo được một tàu mới mà không đụng code.
 4. Tàu mới cấu hình được: tên miền, logo, màu, phông, nội dung, phòng, hải trình, dịch vụ, ưu đãi, trang nội dung, thứ tự khối trang chủ, SEO, tuyển dụng, khách hỏi giá.
 5. Hai tên miền cùng trỏ về một bản triển khai nhưng trả ra đúng hai thương hiệu khác nhau.
-6. Dữ liệu từng tàu được cô lập bằng RLS.
+6. Dữ liệu mỗi tàu luôn ghi rõ thuộc tàu nào, và RLS chặn mọi truy cập công khai vào bản nháp, leads, hồ sơ ứng viên.
 7. Form công khai không nhận `ship_id` từ phía client.
 8. Trang xem thử không bị Google lập chỉ mục.
 9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
@@ -124,21 +124,25 @@ v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
 - `entity_media` — `ship_id`, `media_id`, `entity_type`, `entity_id`, `usage` (cover / gallery / floorplan / hero), `sort_order`. Đây là cách gắn ảnh vào nội dung, cho phép một nội dung có nhiều ảnh nhiều vai trò (ví dụ phòng: ảnh bìa + thư viện + sơ đồ mặt bằng) và một ảnh dùng lại ở nhiều chỗ.
 - `leads` — `ship_id`, `type` (`quote` / `contact` / `booking_request` / `agent` / `group` — dùng `booking_request` vì web chỉ ghi nhận yêu cầu, booking thật thuộc PMS), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
 - `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
-- `user_ship_access` — `user_id`, `ship_id`, `role` (enum: platform_owner, ship_admin, editor, recruitment, sales), unique (user_id, ship_id, role). Chưa có UI, nhưng RLS đã dựa vào nó.
+- `user_ship_access` — `user_id`, `ship_id`, `role` (enum: platform_owner, ship_admin, editor, recruitment, sales), unique (user_id, ship_id, role). **v1 tạo bảng nhưng chưa dùng làm cơ chế quyền** — chỉ để mở rộng sau này.
 - `ship_ai_profiles` — `ship_id` UNIQUE: `brand_voice`, `target_audience`, `writing_style`, `preferred_terms`, `forbidden_terms`, `seo_guidelines`, `translation_guidelines`, `additional_instructions`, `updated_at`. Chỉ lưu dữ liệu; v1 không có sinh nội dung tự động.
 
 Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ ở bảng nội dung công khai, full cho `authenticated`, `ALL` cho `service_role`; RLS bật.
 
 
-### RLS
+### RLS (v1 giữ đơn giản)
 
-- Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`.
-- Admin: security-definer `has_ship_access(_user_id, _ship_id, _role)` đọc `user_ship_access`; `platform_owner` (qua `has_role(admin)`) thấy mọi tàu. Mọi policy trên `leads`, `job_applications`, nội dung đều đi qua `ship_id` — không có đường nào để admin tàu A đọc dữ liệu tàu B.
+Thực tế vận hành: 1 tài khoản admin quản cả 8 tàu, cùng lắm thêm 1–2 nhân viên cũng truy cập toàn bộ. Nên v1 làm gọn:
+
+- Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`. Bản nháp, `staging`, `disabled`, leads và hồ sơ ứng viên không lộ ra ngoài.
+- Admin: mọi policy quản trị chỉ cần `has_role(auth.uid(), 'admin')` — admin đọc/ghi được toàn bộ tàu. Không bắt buộc lọc qua `user_ship_access` ở v1.
 - `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
+- Mọi bảng nội dung, `leads`, `job_applications` vẫn luôn có `ship_id` NOT NULL. Sau này muốn giới hạn người A chỉ quản vài tàu, chỉ cần đổi điều kiện policy sang `has_ship_access(...)` — dữ liệu đã sẵn sàng, không phải chuyển đổi lại.
 
 ### Lớp service (chuẩn bị cho AI/n8n sau này)
 
-Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, tự kiểm `has_ship_access`, và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`), không cần logic mới. `setStatus` là con đường duy nhất để xuất bản — không service nào tự chuyển sang `published`.
+Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, kiểm quyền một chỗ duy nhất (v1: `has_role(admin)`; sau này đổi thành kiểm theo tàu mà không sửa call site), và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`). `setStatus` là con đường duy nhất để xuất bản.
+
 
 
 ### Runtime
@@ -170,7 +174,7 @@ Bucket public `ship-media`, đường dẫn `<ship-slug>/<category>/<file>`. Ass
 
 Làm lần lượt, mỗi task tự đứng được và website Chronos vẫn chạy sau từng task — không đập cả site cùng lúc.
 
-1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo`, `user_ship_access` + hàm `has_ship_access` + GRANT/RLS. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
+1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo`, `ship_ai_profiles`, `user_ship_access` (chỉ tạo, chưa dùng làm quyền) + GRANT/RLS theo `has_role(admin)`. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
 2. **1b — Schema nội dung**: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions`, `ship_pages`, `homepage_sections`.
 3. **1c — Schema media & leads**: bucket `ship-media`, `media`, `entity_media`, `leads`, thêm `ship_id` vào `job_applications`.
 4. **1d — Chuyển ảnh**: upload asset Chronos vào bucket, tạo hàng `media` + `entity_media`. Web vẫn dùng import cũ.
