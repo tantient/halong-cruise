@@ -14,6 +14,324 @@ export type Database = {
   }
   public: {
     Tables: {
+      cabin_details: {
+        Row: {
+          cabin_id: string
+          content_type: string
+          created_at: string
+          group_name: string | null
+          id: string
+          label: string
+          ship_id: string
+          sort_order: number
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          cabin_id: string
+          content_type?: string
+          created_at?: string
+          group_name?: string | null
+          id?: string
+          label: string
+          ship_id: string
+          sort_order?: number
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          cabin_id?: string
+          content_type?: string
+          created_at?: string
+          group_name?: string | null
+          id?: string
+          label?: string
+          ship_id?: string
+          sort_order?: number
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cabin_details_cabin_id_fkey"
+            columns: ["cabin_id"]
+            isOneToOne: false
+            referencedRelation: "cabins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cabin_details_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cabins: {
+        Row: {
+          bed_config: string | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          deck: string | null
+          description: string | null
+          id: string
+          max_guests: number | null
+          name: string
+          price_from: number | null
+          published_at: string | null
+          ship_id: string
+          size_sqm: number | null
+          slug: string
+          sort_order: number
+          status: string
+          summary: string | null
+          updated_at: string
+          updated_by: string | null
+          view_type: string | null
+        }
+        Insert: {
+          bed_config?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          deck?: string | null
+          description?: string | null
+          id?: string
+          max_guests?: number | null
+          name: string
+          price_from?: number | null
+          published_at?: string | null
+          ship_id: string
+          size_sqm?: number | null
+          slug: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          view_type?: string | null
+        }
+        Update: {
+          bed_config?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          deck?: string | null
+          description?: string | null
+          id?: string
+          max_guests?: number | null
+          name?: string
+          price_from?: number | null
+          published_at?: string | null
+          ship_id?: string
+          size_sqm?: number | null
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          view_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cabins_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      homepage_sections: {
+        Row: {
+          configuration: Json
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          id: string
+          position: number
+          published_at: string | null
+          section_type: string
+          ship_id: string
+          status: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          position?: number
+          published_at?: string | null
+          section_type: string
+          ship_id: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          position?: number
+          published_at?: string | null
+          section_type?: string
+          ship_id?: string
+          status?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homepage_sections_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itineraries: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          days: number | null
+          departure_point: string | null
+          description: string | null
+          highlights: Json
+          id: string
+          name: string
+          nights: number | null
+          price_from: number | null
+          published_at: string | null
+          ship_id: string
+          slug: string
+          sort_order: number
+          status: string
+          summary: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          days?: number | null
+          departure_point?: string | null
+          description?: string | null
+          highlights?: Json
+          id?: string
+          name: string
+          nights?: number | null
+          price_from?: number | null
+          published_at?: string | null
+          ship_id: string
+          slug: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          days?: number | null
+          departure_point?: string | null
+          description?: string | null
+          highlights?: Json
+          id?: string
+          name?: string
+          nights?: number | null
+          price_from?: number | null
+          published_at?: string | null
+          ship_id?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itineraries_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      itinerary_days: {
+        Row: {
+          created_at: string
+          day_number: number
+          description: string | null
+          id: string
+          itinerary_id: string
+          meals: string | null
+          ship_id: string
+          sort_order: number
+          timeline: Json
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_number: number
+          description?: string | null
+          id?: string
+          itinerary_id: string
+          meals?: string | null
+          ship_id: string
+          sort_order?: number
+          timeline?: Json
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_number?: number
+          description?: string | null
+          id?: string
+          itinerary_id?: string
+          meals?: string | null
+          ship_id?: string
+          sort_order?: number
+          timeline?: Json
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "itinerary_days_itinerary_id_fkey"
+            columns: ["itinerary_id"]
+            isOneToOne: false
+            referencedRelation: "itineraries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "itinerary_days_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_applications: {
         Row: {
           contact: string
@@ -40,6 +358,216 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      job_positions: {
+        Row: {
+          benefits: Json
+          created_at: string
+          created_by: string | null
+          department: string | null
+          description: string | null
+          employment_type: string | null
+          headcount: number | null
+          id: string
+          published_at: string | null
+          requirements: Json
+          ship_id: string
+          slug: string
+          sort_order: number
+          status: string
+          title_en: string
+          title_vi: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          benefits?: Json
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          description?: string | null
+          employment_type?: string | null
+          headcount?: number | null
+          id?: string
+          published_at?: string | null
+          requirements?: Json
+          ship_id: string
+          slug: string
+          sort_order?: number
+          status?: string
+          title_en: string
+          title_vi?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          benefits?: Json
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          description?: string | null
+          employment_type?: string | null
+          headcount?: number | null
+          id?: string
+          published_at?: string | null
+          requirements?: Json
+          ship_id?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          title_en?: string
+          title_vi?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_positions_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          badge: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          ends_at: string | null
+          id: string
+          name: string
+          offer_type: string | null
+          published_at: string | null
+          ship_id: string
+          slug: string
+          sort_order: number
+          starts_at: string | null
+          status: string
+          terms: string | null
+          updated_at: string
+          updated_by: string | null
+          value_text: string | null
+        }
+        Insert: {
+          badge?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          name: string
+          offer_type?: string | null
+          published_at?: string | null
+          ship_id: string
+          slug: string
+          sort_order?: number
+          starts_at?: string | null
+          status?: string
+          terms?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          value_text?: string | null
+        }
+        Update: {
+          badge?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          name?: string
+          offer_type?: string | null
+          published_at?: string | null
+          ship_id?: string
+          slug?: string
+          sort_order?: number
+          starts_at?: string | null
+          status?: string
+          terms?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          value_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          highlights: Json
+          id: string
+          name: string
+          opening_hours: string | null
+          price_note: string | null
+          published_at: string | null
+          ship_id: string
+          slug: string
+          sort_order: number
+          status: string
+          summary: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          highlights?: Json
+          id?: string
+          name: string
+          opening_hours?: string | null
+          price_note?: string | null
+          published_at?: string | null
+          ship_id: string
+          slug: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          highlights?: Json
+          id?: string
+          name?: string
+          opening_hours?: string | null
+          price_note?: string | null
+          published_at?: string | null
+          ship_id?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          summary?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ship_branding: {
         Row: {
@@ -143,6 +671,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "ship_domains_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ship_pages: {
+        Row: {
+          content: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          intro: string | null
+          published_at: string | null
+          seo_description: string | null
+          seo_title: string | null
+          ship_id: string
+          slug: string
+          sort_order: number
+          status: string
+          title: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          ship_id: string
+          slug: string
+          sort_order?: number
+          status?: string
+          title: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          intro?: string | null
+          published_at?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          ship_id?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_pages_ship_id_fkey"
             columns: ["ship_id"]
             isOneToOne: false
             referencedRelation: "ships"
