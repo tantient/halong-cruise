@@ -1,0 +1,80 @@
+/**
+ * TanStack Query options for the public read layer.
+ *
+ * Keys always start with `["platform", hostKey, ...]` and include the language
+ * whenever the data depends on it, so cached data of one ship/language is
+ * never served for another. `hostKey` is the browser hostname (or the SSR
+ * request host) — the server still resolves the ship itself from the request;
+ * the key only partitions the cache.
+ *
+ * Typical use in a route:
+ *   loader: ({ context, location }) =>
+ *     context.queryClient.ensureQueryData(publicQueries.cabins(location.pathname))
+ *   component: useSuspenseQuery(publicQueries.cabins(pathname))
+ */
+
+import { queryOptions } from "@tanstack/react-query";
+
+import { splitLanguagePath } from "@/lib/i18n/paths";
+import {
+  getPublicCabin,
+  getPublicCabins,
+  getPublicHomepage,
+  getPublicItineraries,
+  getPublicItinerary,
+  getPublicJobPositions,
+  getPublicMediaByCategory,
+  getPublicOffers,
+  getPublicPage,
+  getPublicService,
+  getPublicServices,
+  getPublicSiteContext,
+} from "./public.functions";
+
+function hostKey(): string {
+  return typeof window !== "undefined" ? window.location.host.toLowerCase() : "ssr";
+}
+
+/** Language segment of the URL (or "default") — part of every language-dependent key. */
+function langKey(pathname: string): string {
+  return splitLanguagePath(pathname).language ?? "default";
+}
+
+const STALE = 5 * 60 * 1000;
+
+const base = (pathname: string, ...parts: unknown[]) => ["platform", hostKey(), langKey(pathname), ...parts] as const;
+
+export const publicQueries = {
+  siteContext: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "site-context"), queryFn: () => getPublicSiteContext({ data: { pathname } }), staleTime: STALE }),
+
+  homepage: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "homepage"), queryFn: () => getPublicHomepage({ data: { pathname } }), staleTime: STALE }),
+
+  cabins: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "cabins"), queryFn: () => getPublicCabins({ data: { pathname } }), staleTime: STALE }),
+  cabin: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: base(pathname, "cabin", slug), queryFn: () => getPublicCabin({ data: { pathname, slug } }), staleTime: STALE }),
+
+  itineraries: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "itineraries"), queryFn: () => getPublicItineraries({ data: { pathname } }), staleTime: STALE }),
+  itinerary: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: base(pathname, "itinerary", slug), queryFn: () => getPublicItinerary({ data: { pathname, slug } }), staleTime: STALE }),
+
+  services: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "services"), queryFn: () => getPublicServices({ data: { pathname } }), staleTime: STALE }),
+  service: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: base(pathname, "service", slug), queryFn: () => getPublicService({ data: { pathname, slug } }), staleTime: STALE }),
+
+  offers: (pathname: string, activeOnly = false) =>
+    queryOptions({ queryKey: base(pathname, "offers", activeOnly), queryFn: () => getPublicOffers({ data: { pathname, activeOnly } }), staleTime: STALE }),
+
+  page: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: base(pathname, "page", slug), queryFn: () => getPublicPage({ data: { pathname, slug } }), staleTime: STALE }),
+
+  jobPositions: (pathname: string) =>
+    queryOptions({ queryKey: base(pathname, "jobs"), queryFn: () => getPublicJobPositions({ data: { pathname } }), staleTime: STALE }),
+
+  mediaByCategory: (pathname: string, category: string) =>
+    queryOptions({ queryKey: base(pathname, "media", category), queryFn: () => getPublicMediaByCategory({ data: { pathname, category } }), staleTime: STALE }),
+};
