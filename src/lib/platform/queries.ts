@@ -24,6 +24,7 @@ import {
   getPublicHomepage,
   getPublicHomepageBundle,
   getPublicItineraries,
+  getPublicItinerariesBundle,
   getPublicItinerary,
   getPublicJobPositions,
   getPublicMediaByCategory,
@@ -76,6 +77,9 @@ export const publicQueries = {
 
   itineraries: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "itineraries"), queryFn: () => getPublicItineraries({ data: { pathname } }), staleTime: STALE }),
+  /** All enabled languages in one payload (language-independent key). */
+  itinerariesBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "itineraries-bundle"] as const, queryFn: () => getPublicItinerariesBundle({ data: { pathname } }), staleTime: STALE }),
   itinerary: (pathname: string, slug: string) =>
     queryOptions({ queryKey: base(pathname, "itinerary", slug), queryFn: () => getPublicItinerary({ data: { pathname, slug } }), staleTime: STALE }),
 

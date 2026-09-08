@@ -198,6 +198,46 @@ export async function listItineraries(scope: ReadScope): Promise<PublicItinerary
   return rows.map((r) => toItinerary(r, mediaFor(media, r.id)));
 }
 
+const ITIN_DAY_COLUMNS = "id,itinerary_id,day_number,title,description,timeline,meals,sort_order,translations";
+
+type ItinDayRow = {
+  id: string; itinerary_id: string; day_number: number; title: string | null; description: string | null;
+  timeline: unknown; meals: string | null; sort_order: number; translations: unknown;
+};
+
+function toItineraryDay(d: ItinDayRow): PublicItineraryDay {
+  return {
+    id: d.id, dayNumber: d.day_number, title: d.title, description: d.description,
+    timeline: Array.isArray(d.timeline) ? (d.timeline as Json[]) : [], meals: d.meals, sortOrder: d.sort_order,
+  };
+}
+
+/**
+ * Every itinerary of the ship with its day plan (one query for all days).
+ * Days are attached by `itinerary_id`, never by (localized) title.
+ */
+export async function listItinerariesFull(scope: ReadScope): Promise<PublicItineraryFull[]> {
+  const db = getPublicDb();
+  const { data, error } = await db.from("itineraries").select(ITIN_COLUMNS).eq("ship_id", scope.shipId).order("sort_order");
+  if (error) throw error;
+  const rows = localizeRows((data ?? []) as ItinRow[], scope.language, scope.defaultLanguage);
+  const ids = rows.map((r) => r.id);
+  if (ids.length === 0) return [];
+  const [{ data: days, error: dErr }, media] = await Promise.all([
+    db.from("itinerary_days").select(ITIN_DAY_COLUMNS).eq("ship_id", scope.shipId).in("itinerary_id", ids)
+      .order("day_number").order("sort_order"),
+    loadEntityMedia(scope, "itinerary", ids),
+  ]);
+  if (dErr) throw dErr;
+  const perItinerary = new Map<string, PublicItineraryDay[]>();
+  for (const d of localizeRows((days ?? []) as ItinDayRow[], scope.language, scope.defaultLanguage)) {
+    const list = perItinerary.get(d.itinerary_id) ?? [];
+    list.push(toItineraryDay(d));
+    perItinerary.set(d.itinerary_id, list);
+  }
+  return rows.map((r) => ({ ...toItinerary(r, mediaFor(media, r.id)), dayPlan: perItinerary.get(r.id) ?? [] }));
+}
+
 export async function getItinerary(scope: ReadScope, slug: string): Promise<PublicItineraryFull | null> {
   const db = getPublicDb();
   const { data, error } = await db.from("itineraries").select(ITIN_COLUMNS).eq("ship_id", scope.shipId).eq("slug", slug).maybeSingle();
