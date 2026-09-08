@@ -84,9 +84,11 @@ Xây Editorial, Panorama, Grid và cho chuyển mẫu bằng một lựa chọn.
 
 **Giai đoạn 7 — Tàu 3 đến 8**
 Chỉ còn nhập nội dung và gắn tên miền.
-## Nghiệm thu v1 (10 tiêu chí)
 
-v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
+## Nghiệm thu v1 (12 tiêu chí)
+
+v1 chỉ được coi là xong khi tất cả các điều sau đúng:
+
 
 1. `chronoscruise.com` chạy hoàn toàn từ cơ sở dữ liệu, không còn import dữ liệu Chronos tĩnh.
 2. Phần lõi không còn `--chronos-*`, hằng số Chronos, hay logic phụ thuộc tên thương hiệu.
