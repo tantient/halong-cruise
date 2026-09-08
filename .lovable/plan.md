@@ -70,6 +70,21 @@ Xây Editorial, Panorama, Grid và cho chuyển mẫu bằng một lựa chọn.
 
 **Giai đoạn 7 — Tàu 3 đến 8**
 Chỉ còn nhập nội dung và gắn tên miền.
+## Nghiệm thu v1 (10 tiêu chí)
+
+v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
+
+1. `chronoscruise.com` chạy hoàn toàn từ cơ sở dữ liệu, không còn import dữ liệu Chronos tĩnh.
+2. Phần lõi không còn `--chronos-*`, hằng số Chronos, hay logic phụ thuộc tên thương hiệu.
+3. Quản trị tạo được một tàu mới mà không đụng code.
+4. Tàu mới cấu hình được: tên miền, logo, màu, phông, nội dung, phòng, hải trình, dịch vụ, ưu đãi, trang nội dung, thứ tự khối trang chủ, SEO, tuyển dụng, khách hỏi giá.
+5. Hai tên miền cùng trỏ về một bản triển khai nhưng trả ra đúng hai thương hiệu khác nhau.
+6. Dữ liệu từng tàu được cô lập bằng RLS.
+7. Form công khai không nhận `ship_id` từ phía client.
+8. Trang xem thử không bị Google lập chỉ mục.
+9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
+10. Tàu số 2 chạy production mà không cần thêm route hay component riêng.
+
 
 ## Điều cần chuẩn bị từ bạn
 
