@@ -1,0 +1,1 @@
+ALTER TABLE public.job_positions RENAME COLUMN title_en TO title;

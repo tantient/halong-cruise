@@ -2,11 +2,11 @@
  * Media layer: turns `media` + `entity_media` rows into `EntityMedia` groups and
  * resolves storage paths to URLs.
  *
- * URL strategy: the `ship-media` bucket is a public marketing bucket. URLs are
- * built as stable public object URLs. While the workspace still blocks public
- * buckets these URLs return 400 — once the bucket is switched to public they
- * start working without any component change. If a signed/proxied strategy is
- * ever needed, only `mediaUrl` changes.
+ * URL strategy: every `media.storage_path` maps to a stable same-origin URL
+ * `/api/public/media/<path>` served by `src/routes/api/public/media/$.ts`.
+ * That route streams from the `ship-media` bucket regardless of whether the
+ * bucket is public or private, so components never depend on the bucket
+ * setting. Switching to direct storage URLs later only touches `mediaUrl`.
  */
 
 import type { LanguageCode } from "@/lib/i18n/languages";
@@ -14,18 +14,13 @@ import { localizeRow } from "@/lib/i18n/localize";
 import type { EntityMedia, MediaItem } from "./types";
 
 export const SHIP_MEDIA_BUCKET = "ship-media";
+export const MEDIA_ROUTE_PREFIX = "/api/public/media";
 
-function supabaseUrl(): string {
-  const fromClient = typeof import.meta !== "undefined" ? import.meta.env?.["VITE_SUPABASE_URL"] : undefined;
-  const fromServer = typeof process !== "undefined" ? process.env?.["SUPABASE_URL"] : undefined;
-  return (fromClient || fromServer || "").replace(/\/+$/, "");
-}
-
-/** Public URL for a `media.storage_path` (`<ship-slug>/<category>/<file>`). */
+/** Same-origin URL for a `media.storage_path` (`<ship-slug>/<category>/<file>`). */
 export function mediaUrl(storagePath: string): string {
   if (/^https?:\/\//.test(storagePath)) return storagePath;
   const clean = storagePath.replace(/^\/+/, "");
-  return `${supabaseUrl()}/storage/v1/object/public/${SHIP_MEDIA_BUCKET}/${clean}`;
+  return `${MEDIA_ROUTE_PREFIX}/${clean}`;
 }
 
 export interface MediaRow {

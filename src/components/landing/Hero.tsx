@@ -7,23 +7,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { HeroMedia, type HeroSlide } from "./HeroMedia";
 import { Reveal } from "./Reveal";
-import slide1 from "@/assets/chronos-slide-1.webp";
-import slide2 from "@/assets/chronos-slide-2.webp";
-import slide3 from "@/assets/chronos-slide-3-v2.webp";
-import slide4 from "@/assets/chronos-slide-4.webp";
-import slide5 from "@/assets/gallery/chronos-exterior-01-v2.webp";
-import slide6 from "@/assets/gallery/chronos-exterior-02-v2.webp";
-import slide7 from "@/assets/gallery/chronos-exterior-07.webp";
-import slide8 from "@/assets/gallery/chronos-exterior-05.webp";
+
+/** Ship-specific copy (from the database, already localized). */
+export interface HeroContent {
+  tagline: string;
+  title: string;
+  titleAccent: string;
+  subtitle: string;
+  cta: string;
+}
 
 interface HeroProps {
+  content: HeroContent;
+  slides: HeroSlide[];
+  /** Shared UI labels (platform translation files). */
   t: {
     hero: {
-      tagline: string;
-      title: string;
-      titleAccent: string;
-      subtitle: string;
-      cta: string;
       scroll: string;
     };
     earlyAccess: {
@@ -35,18 +34,7 @@ interface HeroProps {
   };
 }
 
-const SLIDES: HeroSlide[] = [
-  { url: slide1, alt: "Chronos Cruise on Ha Long Bay at sunset" },
-  { url: slide2, alt: "Panoramic view of Chronos Cruise in the bay" },
-  { url: slide3, alt: "Chronos Cruise seen from above" },
-  { url: slide4, alt: "Welcome lobby and infinity pool aboard Chronos Cruise" },
-  { url: slide5, alt: "Aerial view of Chronos Cruise at golden hour" },
-  { url: slide6, alt: "Chronos Cruise sailing across the bay at sunset" },
-  { url: slide7, alt: "Bow of Chronos Cruise cutting through calm water" },
-  { url: slide8, alt: "Stern view of Chronos Cruise with the ship name" },
-];
-
-export function Hero({ t }: HeroProps) {
+export function Hero({ content, slides, t }: HeroProps) {
   const [contact, setContact] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -60,7 +48,7 @@ export function Hero({ t }: HeroProps) {
 
   return (
     <section className="relative flex h-screen w-full items-center justify-center overflow-hidden">
-      <HeroMedia slides={SLIDES} intervalMs={7000} />
+      <HeroMedia slides={slides} intervalMs={7000} />
       <div className="pointer-events-none absolute inset-0 bg-black/30" />
       <div
         className="pointer-events-none absolute inset-0"
@@ -73,17 +61,17 @@ export function Hero({ t }: HeroProps) {
       <div className="relative z-10 mx-auto w-full max-w-5xl px-6 text-center lg:px-8">
         <Reveal immediate delay={100}>
           <span className="mb-6 inline-block text-xs font-semibold uppercase tracking-[0.5em] text-chronos-sand-300 drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
-            {t.hero.tagline}
+            {content.tagline}
           </span>
         </Reveal>
         <Reveal immediate delay={260}>
           <h1 className="mb-8 text-5xl font-normal tracking-tight text-white drop-shadow-xl sm:text-6xl md:text-7xl lg:text-8xl font-display">
-            {t.hero.title} <span className="font-display italic text-chronos-sand-300">{t.hero.titleAccent}</span>
+            {content.title} <span className="font-display italic text-chronos-sand-300">{content.titleAccent}</span>
           </h1>
         </Reveal>
         <Reveal immediate delay={420}>
           <p className="mx-auto mb-12 max-w-2xl text-base font-light leading-relaxed text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
-            {t.hero.subtitle}
+            {content.subtitle}
           </p>
         </Reveal>
 
@@ -105,7 +93,7 @@ export function Hero({ t }: HeroProps) {
                 type="submit"
                 className="rounded-full bg-chronos-sand-500 px-8 py-3 text-xs font-medium uppercase tracking-[0.15em] text-white transition-all duration-500 hover:bg-chronos-sand-700"
               >
-                {t.hero.cta}
+                {content.cta}
               </button>
             </div>
           </Reveal>

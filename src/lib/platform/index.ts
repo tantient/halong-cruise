@@ -11,6 +11,7 @@ export * from "./types";
 export * from "./host";
 export * from "./language";
 export * from "./seo";
-export { mediaUrl, groupMedia, emptyEntityMedia, SHIP_MEDIA_BUCKET } from "./media";
+export { mediaUrl, groupMedia, emptyEntityMedia, SHIP_MEDIA_BUCKET, MEDIA_ROUTE_PREFIX } from "./media";
+export * from "./section-text";
 export * from "./public.functions";
 export { publicQueries } from "./queries";

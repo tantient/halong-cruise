@@ -11,9 +11,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 
-import { shipLanguageConfig } from "@/lib/i18n/languages";
+import { shipLanguageConfig, type LanguageCode } from "@/lib/i18n/languages";
 import { resolveLanguage, type LanguageResolution } from "./language";
-import type { ShipContext } from "./types";
+import type { PublicHomepage, PublicJobPosition, ShipContext } from "./types";
 
 const pathInput = z.object({ pathname: z.string().default("/") });
 const slugInput = pathInput.extend({ slug: z.string().min(1).max(200) });
@@ -60,6 +60,40 @@ export const getPublicHomepage = createServerFn({ method: "GET" })
     if (!s) return null;
     const { getHomepage } = await import("./content.server");
     return getHomepage(s.scope);
+  });
+
+export interface PublicHomepageLanguageData {
+  homepage: PublicHomepage;
+  /** Published job positions (slug + localized title) for homepage recruit widgets. */
+  jobs: Pick<PublicJobPosition, "id" | "slug" | "title">[];
+}
+
+export interface PublicHomepageBundle {
+  ship: ShipContext;
+  language: LanguageResolution;
+  /** Homepage data resolved per enabled language (each already fallback-resolved). */
+  languages: Partial<Record<LanguageCode, PublicHomepageLanguageData>>;
+}
+
+/**
+ * Homepage for every enabled language of the ship in one call. Used while the
+ * homepage language switch is client-side (no URL prefix yet) so switching
+ * languages needs no extra round-trip.
+ */
+export const getPublicHomepageBundle = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
+  .handler(async ({ data }): Promise<PublicHomepageBundle | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { getHomepage, listJobPositions } = await import("./content.server");
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const scope = { ...s.scope, language };
+        const [homepage, jobs] = await Promise.all([getHomepage(scope), listJobPositions(scope)]);
+        return [language, { homepage, jobs: jobs.map((j) => ({ id: j.id, slug: j.slug, title: j.title })) }] as const;
+      }),
+    );
+    return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
   });
 
 export const getPublicCabins = createServerFn({ method: "GET" })

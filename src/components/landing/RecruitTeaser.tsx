@@ -11,27 +11,32 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { jobPositions } from "@/components/careers/careers-data";
 import type { Lang } from "@/lib/translations";
 
 import { Reveal } from "./Reveal";
-import recruitImage from "@/assets/gallery/chronos-public-reception.webp";
+
+/** Ship-specific copy (from the database, already localized). */
+export interface RecruitTeaserContent {
+  title: string;
+  titleAccent: string;
+  subtitle: string;
+  cta: string;
+}
 
 interface RecruitTeaserProps {
   lang: Lang;
+  content: RecruitTeaserContent;
+  image: { url: string; alt: string } | null;
+  jobs: { id: string; slug: string; title: string }[];
+  /** Shared UI labels (platform translation files). */
   t: {
     recruitTeaser: {
-      label: string;
-      title: string;
-      titleAccent: string;
-      subtitle: string;
       name: string;
       contact: string;
       position: string;
       positionPlaceholder: string;
       submit: string;
       success: string;
-      viewAll: string;
     };
   };
 }
@@ -42,7 +47,7 @@ const applicationSchema = z.object({
   position: z.string().trim().min(1).max(64),
 });
 
-export function RecruitTeaser({ lang, t }: RecruitTeaserProps) {
+export function RecruitTeaser({ lang, content, image, jobs, t }: RecruitTeaserProps) {
   const tr = t.recruitTeaser;
   const vi = lang === "vi";
   const [values, setValues] = useState({ name: "", contact: "", position: "" });
@@ -77,12 +82,14 @@ export function RecruitTeaser({ lang, t }: RecruitTeaserProps) {
           <Reveal className="order-1 lg:order-2">
             <div className="relative">
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-chronos-sand-100 shadow-2xl">
+                {image && (
                 <img
-                  src={recruitImage}
-                  alt="Chronos Cruise reception and hospitality team"
+                  src={image.url}
+                  alt={image.alt}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
                 />
+                )}
               </div>
               <div className="absolute -top-10 -right-10 hidden h-40 w-40 border border-chronos-sand-300/30 md:block" />
               <div className="absolute -bottom-6 -left-6 -z-10 h-full w-full border border-chronos-sand-300/20" />
@@ -93,11 +100,11 @@ export function RecruitTeaser({ lang, t }: RecruitTeaserProps) {
             <div className="space-y-8">
               <div className="space-y-4">
                 <h2 className="font-display text-4xl font-normal leading-tight text-chronos-sand-900 md:text-5xl lg:text-6xl">
-                  {tr.title} <span className="font-display italic font-light text-chronos-sand-500">{tr.titleAccent}</span>
+                  {content.title} <span className="font-display italic font-light text-chronos-sand-500">{content.titleAccent}</span>
                 </h2>
                 <div className="h-px w-20 bg-chronos-sand-500" />
               </div>
-              <p className="text-lg font-light leading-relaxed text-chronos-sand-700">{tr.subtitle}</p>
+              <p className="text-lg font-light leading-relaxed text-chronos-sand-700">{content.subtitle}</p>
 
               <form onSubmit={handleSubmit} className="space-y-6 pt-4">
                 <div className="space-y-2">
@@ -138,9 +145,9 @@ export function RecruitTeaser({ lang, t }: RecruitTeaserProps) {
                     <option value="" disabled>
                       {tr.positionPlaceholder}
                     </option>
-                    {jobPositions.map((job) => (
-                      <option key={job.id} value={job.id}>
-                        {vi ? job.titleVi : job.titleEn}
+                    {jobs.map((job) => (
+                      <option key={job.id} value={job.slug}>
+                        {job.title}
                       </option>
                     ))}
                   </select>
@@ -158,7 +165,7 @@ export function RecruitTeaser({ lang, t }: RecruitTeaserProps) {
                     to="/careers"
                     className="group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-sand-700 transition-colors hover:text-chronos-sand-500"
                   >
-                    {tr.viewAll}
+                    {content.cta}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>

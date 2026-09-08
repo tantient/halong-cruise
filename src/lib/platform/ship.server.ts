@@ -4,8 +4,8 @@
  *   hostname → ship_domains (active, live ship) → ship → branding/settings/seo
  *
  * Nothing here knows about a specific brand. Dev hosts (localhost, preview
- * URLs) are not tenant domains; they fall back to the ship flagged by
- * `PLATFORM_DEV_SHIP_SLUG` or, failing that, the first live ship by sort_order.
+ * URLs) are not tenant domains; they serve the ship named by the
+ * `PLATFORM_DEV_SHIP_SLUG` environment variable, or nothing when it is unset.
  */
 
 import { shipLanguageConfig, type LanguageCode } from "@/lib/i18n/languages";
@@ -78,11 +78,11 @@ export async function resolveShipByHost(hostname: string | null | undefined): Pr
   }
 
   if (!shipId) {
-    // Dev / preview host only: fall back to the configured dev ship or first live ship.
+    // Dev / preview host only: serve the ship configured via PLATFORM_DEV_SHIP_SLUG.
+    // No implicit "first live ship" fallback — an unconfigured dev host resolves to nothing.
     const devSlug = process.env["PLATFORM_DEV_SHIP_SLUG"];
-    let q = db.from("ships").select("id").eq("status", "live").order("sort_order").limit(1);
-    if (devSlug) q = q.eq("slug", devSlug);
-    const { data, error } = await q.maybeSingle();
+    if (!devSlug) return null;
+    const { data, error } = await db.from("ships").select("id").eq("status", "live").eq("slug", devSlug).maybeSingle();
     if (error) throw error;
     if (!data) return null;
     shipId = data.id;
