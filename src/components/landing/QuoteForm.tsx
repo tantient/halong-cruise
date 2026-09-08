@@ -26,6 +26,9 @@ interface QuoteFormProps {
     footer: {
       contact: string[];
     };
+    contact: {
+      phone: string;
+    };
   };
 }
 
