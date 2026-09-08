@@ -1,11 +1,10 @@
 "use client";
 
-import { Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
-import { useLanguage } from "@/components/landing/use-language";
+import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import { publicQueries, type PublicCabinBundle } from "@/lib/platform";
@@ -18,9 +17,9 @@ import { DeckPlan, DeckPlanProvider } from "./DeckPlan";
  * come from the database; only shared labels come from the UI translations.
  */
 export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; slug: string }) {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t, href } = useLanguage();
   const ui = cabinUi(lang);
-  const { data } = useSuspenseQuery({ ...publicQueries.cabinBundle(`/cabins/${slug}`, slug), initialData: bundle });
+  const { data } = useSuspenseQuery({ ...publicQueries.cabinBundle(href(`/cabins/${slug}`), slug), initialData: bundle });
   const b = data ?? bundle;
 
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
@@ -58,12 +57,12 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
           <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
-              <Link
-                to="/cabins"
+              <LocalLink
+                path="/cabins"
                 className="eyebrow mb-5 inline-block text-chronos-gold hover:text-chronos-gold/80"
               >
                 ← {ui.eyebrowCabins}
-              </Link>
+              </LocalLink>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl">
                 {cabin.name}
               </h1>
@@ -185,10 +184,9 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2">
               {others.map((o) => (
-                <Link
+                <LocalLink
                   key={o.slug}
-                  to="/cabins/$cabinId"
-                  params={{ cabinId: o.slug }}
+                  path={`/cabins/${o.slug}`}
                   className="group grid grid-cols-[110px_1fr] items-center gap-4 rounded-sm border border-chronos-ink/10 p-3 transition-colors hover:border-chronos-gold/60"
                 >
                   {o.cover ? (
@@ -210,7 +208,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
                     </p>
                     {o.meta ? <p className="text-sm text-chronos-stone/75">{o.meta}</p> : null}
                   </div>
-                </Link>
+                </LocalLink>
               ))}
             </div>
           </Reveal>

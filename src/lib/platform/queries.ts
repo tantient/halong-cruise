@@ -34,8 +34,15 @@ import {
   getPublicSiteContext,
 } from "./public.functions";
 
+/**
+ * Cache namespace. It must be identical on server and client, otherwise SSR
+ * dehydrated data does not match the client key and every page refetches (and
+ * hydration mismatches). The ship is always resolved server-side from the
+ * request host, and a browser only ever talks to one host, so a constant is
+ * both safe and correct.
+ */
 function hostKey(): string {
-  return typeof window !== "undefined" ? window.location.host.toLowerCase() : "ssr";
+  return "site";
 }
 
 /** Language segment of the URL (or "default") — part of every language-dependent key. */
@@ -55,7 +62,7 @@ export const publicQueries = {
     queryOptions({ queryKey: base(pathname, "homepage"), queryFn: () => getPublicHomepage({ data: { pathname } }), staleTime: STALE }),
   /** Homepage for all enabled languages (language-independent key: it contains every language). */
   homepageBundle: (pathname: string) =>
-    queryOptions({ queryKey: ["platform", hostKey(), "homepage-bundle"] as const, queryFn: () => getPublicHomepageBundle({ data: { pathname } }), staleTime: STALE }),
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "homepage-bundle"] as const, queryFn: () => getPublicHomepageBundle({ data: { pathname } }), staleTime: STALE }),
 
   cabins: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "cabins"), queryFn: () => getPublicCabins({ data: { pathname } }), staleTime: STALE }),
@@ -63,9 +70,9 @@ export const publicQueries = {
     queryOptions({ queryKey: base(pathname, "cabin", slug), queryFn: () => getPublicCabin({ data: { pathname, slug } }), staleTime: STALE }),
   /** All enabled languages in one payload (language-independent key). */
   cabinsBundle: (pathname: string) =>
-    queryOptions({ queryKey: ["platform", hostKey(), "cabins-bundle"] as const, queryFn: () => getPublicCabinsBundle({ data: { pathname } }), staleTime: STALE }),
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "cabins-bundle"] as const, queryFn: () => getPublicCabinsBundle({ data: { pathname } }), staleTime: STALE }),
   cabinBundle: (pathname: string, slug: string) =>
-    queryOptions({ queryKey: ["platform", hostKey(), "cabin-bundle", slug] as const, queryFn: () => getPublicCabinBundle({ data: { pathname, slug } }), staleTime: STALE }),
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "cabin-bundle", slug] as const, queryFn: () => getPublicCabinBundle({ data: { pathname, slug } }), staleTime: STALE }),
 
   itineraries: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "itineraries"), queryFn: () => getPublicItineraries({ data: { pathname } }), staleTime: STALE }),

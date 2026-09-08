@@ -12,7 +12,7 @@ import { offers, type Offer } from "./offers-data";
 const BOOKING_LINK = "https://zalo.me/";
 
 export function OffersPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-chronos-ivory">

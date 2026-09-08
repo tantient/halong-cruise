@@ -3,8 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LandingPage } from "@/components/landing/LandingPage";
 import { homepageHead, loadHomepageBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-/** Homepage in the ship's default language (no URL prefix). */
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/$lang/")({
   loader: async ({ context, location }) => ({
     bundle: await loadHomepageBundle(context.queryClient, location.pathname),
   }),

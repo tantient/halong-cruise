@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { ChevronDown, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChronosLogo } from "./ChronosLogo";
 import { services } from "@/components/services/services-data";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
+import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import type { Lang } from "@/lib/translations";
 
 interface HeaderProps {
@@ -21,6 +22,8 @@ interface HeaderProps {
 const BOOKING_LINK = "https://zalo.me/";
 
 export function Header({ lang, setLang, t }: HeaderProps) {
+  // Languages come from the resolved ship, so the switcher works for any tenant.
+  const { languages } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -74,28 +77,28 @@ export function Header({ lang, setLang, t }: HeaderProps) {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-        <Link to="/" className="flex items-center">
+        <LocalLink path="/" className="flex items-center">
           <ChronosLogo
             showTagline={false}
             size="md"
             tone={scrolled ? "auto" : "onDark"}
             aria-label="Chronos Cruise"
           />
-        </Link>
+        </LocalLink>
 
         <nav className="hidden items-center gap-3 xl:gap-4 xl:flex">
-          <Link
-            to="/itineraries"
+          <LocalLink
+            path="/itineraries"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.itineraries}
-          </Link>
-          <Link
-            to="/cabins"
+          </LocalLink>
+          <LocalLink
+            path="/cabins"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.cabins}
-          </Link>
+          </LocalLink>
 
           <div className="group relative">
             <button
@@ -112,9 +115,9 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                       {group.title}
                     </p>
                     {group.links.map((link) => (
-                      <Link
+                      <LocalLink
                         key={link.href}
-                        to={link.href}
+                        path={link.href}
                         title={link.desc}
                         className={dropdownLinkClasses}
                       >
@@ -124,7 +127,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                         <span className="mt-0.5 block text-xs leading-snug text-chronos-ink/75">
                           {link.desc}
                         </span>
-                      </Link>
+                      </LocalLink>
                     ))}
                   </div>
                 ))}
@@ -132,24 +135,24 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             </div>
           </div>
 
-          <Link
-            to="/gallery"
+          <LocalLink
+            path="/gallery"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.gallery}
-          </Link>
-          <Link
-            to="/careers"
+          </LocalLink>
+          <LocalLink
+            path="/careers"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.careers}
-          </Link>
-          <Link
-            to="/contact"
+          </LocalLink>
+          <LocalLink
+            path="/contact"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.contact}
-          </Link>
+          </LocalLink>
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -158,36 +161,24 @@ export function Header({ lang, setLang, t }: HeaderProps) {
               scrolled ? "border-chronos-sand-900/20" : "border-chronos-ivory/30"
             }`}
           >
-            <button
-              onClick={() => setLang("vi")}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-                lang === "vi"
-                  ? scrolled
-                    ? "bg-chronos-sand-900 text-chronos-ivory"
-                    : "bg-chronos-ivory text-chronos-sand-900"
-                  : scrolled
-                    ? "text-chronos-sand-900/70 hover:text-chronos-sand-900"
-                    : "text-chronos-ivory/80 hover:text-chronos-ivory"
-              }`}
-              aria-label="Tiếng Việt"
-            >
-              VI
-            </button>
-            <button
-              onClick={() => setLang("en")}
-              className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-                lang === "en"
-                  ? scrolled
-                    ? "bg-chronos-sand-900 text-chronos-ivory"
-                    : "bg-chronos-ivory text-chronos-sand-900"
-                  : scrolled
-                    ? "text-chronos-sand-900/70 hover:text-chronos-sand-900"
-                    : "text-chronos-ivory/80 hover:text-chronos-ivory"
-              }`}
-              aria-label="English"
-            >
-              EN
-            </button>
+            {languages.map((code) => (
+              <button
+                key={code}
+                onClick={() => setLang(code as Lang)}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                  lang === code
+                    ? scrolled
+                      ? "bg-chronos-sand-900 text-chronos-ivory"
+                      : "bg-chronos-ivory text-chronos-sand-900"
+                    : scrolled
+                      ? "text-chronos-sand-900/70 hover:text-chronos-sand-900"
+                      : "text-chronos-ivory/80 hover:text-chronos-ivory"
+                }`}
+                aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
+              >
+                {code.toUpperCase()}
+              </button>
+            ))}
           </div>
 
           <ThemeToggle
@@ -222,14 +213,14 @@ export function Header({ lang, setLang, t }: HeaderProps) {
         <div className="border-t border-chronos-ink/10 bg-chronos-ivory/98 px-6 pb-6 xl:hidden">
           <nav className="flex flex-col gap-4 pt-4">
             {navLinks.slice(0, 2).map((link) => (
-              <Link
+              <LocalLink
                 key={link.href}
-                to={link.href}
+                path={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="text-sm font-medium tracking-wide text-chronos-ink/80"
               >
                 {link.label}
-              </Link>
+              </LocalLink>
             ))}
             {serviceGroups.map((group) => (
               <div key={group.title} className="pt-1">
@@ -238,9 +229,9 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                 </p>
                 <div className="flex flex-col gap-3 border-l border-chronos-ink/10 pl-4">
                   {group.links.map((link) => (
-                    <Link
+                    <LocalLink
                       key={link.href}
-                      to={link.href}
+                      path={link.href}
                       onClick={() => setMobileOpen(false)}
                       className="block"
                     >
@@ -250,38 +241,34 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                       <span className="mt-0.5 block text-xs leading-snug text-chronos-ink/70">
                         {link.desc}
                       </span>
-                    </Link>
+                    </LocalLink>
                   ))}
                 </div>
               </div>
             ))}
             {navLinks.slice(2).map((link) => (
-              <Link
+              <LocalLink
                 key={link.href}
-                to={link.href}
+                path={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="text-sm font-medium tracking-wide text-chronos-ink/80"
               >
                 {link.label}
-              </Link>
+              </LocalLink>
             ))}
             <div className="flex items-center gap-2 pt-2">
-              <button
-                onClick={() => setLang("vi")}
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  lang === "vi" ? "bg-chronos-sand-900 text-chronos-ivory" : "text-chronos-sand-900/70"
-                }`}
-              >
-                VI
-              </button>
-              <button
-                onClick={() => setLang("en")}
-                className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                  lang === "en" ? "bg-chronos-sand-900 text-chronos-ivory" : "text-chronos-sand-900/70"
-                }`}
-              >
-                EN
-              </button>
+              {languages.map((code) => (
+                <button
+                  key={code}
+                  onClick={() => setLang(code as Lang)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                    lang === code ? "bg-chronos-sand-900 text-chronos-ivory" : "text-chronos-sand-900/70"
+                  }`}
+                  aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
+                >
+                  {code.toUpperCase()}
+                </button>
+              ))}
               <ThemeToggle className="border-chronos-sand-900/15 text-chronos-sand-900 hover:bg-chronos-sand-900/5" />
             </div>
             <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">

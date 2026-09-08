@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { LocalLink } from "@/lib/i18n/language-context";
 import { Facebook, Instagram, MessageCircle } from "lucide-react";
 
 import { ChronosLogo } from "./ChronosLogo";
@@ -66,14 +66,13 @@ export function Footer({ t }: FooterProps) {
 
           <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-xs uppercase tracking-[0.2em] text-chronos-sand-700">
             {quickLinks.map((link) => (
-              <Link
+              <LocalLink
                 key={link.label}
-                to={link.to}
-                {...(link.params ? { params: link.params } : {})}
+                path={link.to}
                 className="transition-colors hover:text-chronos-sand-500"
               >
                 {link.label}
-              </Link>
+              </LocalLink>
             ))}
           </nav>
 

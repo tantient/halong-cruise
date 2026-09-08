@@ -13,7 +13,7 @@ import { itineraries, type Itinerary } from "./itineraries-data";
 const BOOKING_LINK = "https://zalo.me/";
 
 export function ItinerariesPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const vi = lang === "vi";
   const [openId, setOpenId] = useState<string | null>(itineraries[0]?.id ?? null);
 

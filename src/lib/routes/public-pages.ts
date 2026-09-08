@@ -1,0 +1,88 @@
+/**
+ * Shared loader/head logic for public pages so the unprefixed (default
+ * language) and language-prefixed route files use exactly one implementation.
+ */
+
+import type { QueryClient } from "@tanstack/react-query";
+import { notFound } from "@tanstack/react-router";
+
+import {
+  buildSeo,
+  publicQueries,
+  type PublicCabinBundle,
+  type PublicCabinsBundle,
+  type PublicHomepageBundle,
+} from "@/lib/platform";
+
+export async function loadHomepageBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.homepageBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function homepageHead(bundle: PublicHomepageBundle) {
+  const { ship, language, languages } = bundle;
+  const home = languages[language.language]?.homepage;
+  const firstSlide = home?.hero[0]?.url ?? null;
+  const seo = buildSeo(ship, language.language, { path: "/", image: firstSlide, type: "website" });
+  return {
+    meta: seo.meta,
+    links: [
+      ...seo.links,
+      ...(firstSlide ? [{ rel: "preload", as: "image", href: firstSlide, fetchPriority: "high" }] : []),
+    ],
+  };
+}
+
+export async function loadCabinsBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.cabinsBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function cabinsHead(bundle: PublicCabinsBundle) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const page = data?.page ?? null;
+  const cover = data?.cabins[0]?.media.cover?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: "/cabins",
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+export async function loadCabinBundle(qc: QueryClient, pathname: string, slug: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.cabinBundle(pathname, slug));
+  // Unknown slug, unpublished cabin or a cabin of another ship → 404.
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function cabinHead(bundle: PublicCabinBundle, slug: string) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const cabin = data?.cabin;
+  const cover = cabin?.media.cover?.url ?? cabin?.media.all[0]?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: `/cabins/${slug}`,
+    title: cabin?.name ?? null,
+    description: cabin?.summary ?? cabin?.description ?? null,
+    image: cover,
+    type: "product",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+export const notFoundHead = { meta: [{ title: "Not found" }, { name: "robots", content: "noindex" }] };
+
+export const publicErrorComponents = {
+  domain: "This site is not configured for this domain.",
+  cabin: "This cabin is not available.",
+  generic: "Something went wrong loading this page. Please try again.",
+};

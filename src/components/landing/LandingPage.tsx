@@ -17,9 +17,9 @@ import { useLanguage } from "./use-language";
  * platform translation files via `useLanguage()`.
  */
 export function LandingPage({ bundle }: { bundle: PublicHomepageBundle }) {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t, href } = useLanguage();
   // Keep the cached bundle live for client navigations / language switches.
-  const { data } = useSuspenseQuery({ ...publicQueries.homepageBundle("/"), initialData: bundle });
+  const { data } = useSuspenseQuery({ ...publicQueries.homepageBundle(href("/")), initialData: bundle });
   const b = data ?? bundle;
 
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;

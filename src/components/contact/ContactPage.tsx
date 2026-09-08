@@ -32,7 +32,7 @@ const MAP_EMBED =
 const MAP_LINK = "https://www.openstreetmap.org/?mlat=20.9570&mlon=107.0680#map=15/20.9570/107.0680";
 
 export function ContactPage() {
-  const { lang, setLang, t } = useLanguage();
+  const { uiLang: lang, setLang, t } = useLanguage();
   const [values, setValues] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
