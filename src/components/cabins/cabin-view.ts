@@ -97,10 +97,18 @@ export interface CabinLink {
   slug: string;
   name: string;
   cover: MediaItem | null;
+  /** "code · area · view" summary line, built from stored values only. */
+  meta: string;
 }
 
-export function toCabinLink(cabin: PublicCabin): CabinLink {
-  return { slug: cabin.slug, name: cabin.name, cover: cabin.media.cover ?? cabin.media.all[0] ?? null };
+export function toCabinLink(cabin: PublicCabinFull): CabinLink {
+  const v = toCabinView(cabin);
+  return {
+    slug: v.slug,
+    name: v.name,
+    cover: v.cover,
+    meta: [v.code, v.areaValue, v.view].filter(Boolean).join(" · "),
+  };
 }
 
 /** Page copy accessor with `{total}` substitution for the ship's cabin count. */
