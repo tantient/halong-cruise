@@ -30,7 +30,7 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 2. **Bỏ mọi tên gọi "chronos" khỏi phần lõi** — dùng token dùng chung (màu chính, màu nền, phông tiêu đề…); Chronos chỉ là một bộ giá trị nạp vào.
 3. **Trang nội dung tự do + thứ tự khối trang chủ** — thêm trang mới (Nhà hàng, Spa, Chính sách…) và bật/tắt, sắp lại thứ tự các khối trang chủ ngay trong quản trị, không cần lập trình.
 4. **Lưu khách hỏi giá (leads)** — mọi form liên hệ / hỏi giá / đặt phòng vào cơ sở dữ liệu theo tàu, không chỉ gửi email rồi mất dấu.
-5. **Chuẩn bị phân quyền theo tàu** — v1 để admin quản toàn bộ 8 tàu cho đơn giản, nhưng bảng gán người dùng ↔ tàu ↔ vai trò và cột "thuộc tàu nào" đã có sẵn để sau này giao tàu cho từng đội.
+5. **Quyền giữ đơn giản** — v1 chỉ hai vai trò `owner` và `admin`, cả hai quản toàn bộ đội tàu (1 tài khoản chính, sau thêm 1–2 nhân sự). Mọi dữ liệu vẫn ghi rõ thuộc tàu nào, nên sau này muốn giao tàu riêng cho từng người thì chỉ thêm bảng phân quyền, không phải chuyển đổi dữ liệu.
 6. **Chỉ hoàn thiện một mẫu trước** — Heritage chạy trọn vẹn, Chronos chuyển sang nền tảng, quản trị xong, tàu số 2 chạy được **không sửa code**; sau đó mới xây các mẫu còn lại.
 
 ## Nguyên tắc ranh giới
