@@ -37,18 +37,11 @@ Ship ──┬── Thương hiệu (màu / phông / logo)
 
 Nền tảng web **không phải PMS**. Web giữ: nội dung marketing, thông tin phòng/hải trình công khai, ưu đãi, khách hỏi giá, tuyển dụng, SEO, ảnh. PMS giữ: tồn phòng, đặt phòng, giá, khách, thanh toán, vận hành. Sau này web lấy tình trạng phòng/giá từ PMS qua API.
 
-## Để ngỏ đường cho AI (v1 KHÔNG làm AI)
+## AI: để sau, không chuẩn bị gì trong v1
 
-v1 không gọi bất kỳ dịch vụ AI nào, không chatbot, không automation, không prompt. Chỉ đảm bảo kiến trúc sau này gắn AI vào được mà không viết lại CMS hay cơ sở dữ liệu. Nếu bỏ AI vĩnh viễn, nền tảng vẫn hoạt động bình thường.
+v1 không có AI: không viết bài tự động, không dịch tự động, không chatbot, không automation. Cũng **không** thêm bảng giọng thương hiệu, không thêm cột "nội dung do máy tạo", không thêm trạng thái phục vụ AI. Khi nào cần AI sẽ bổ sung khi đó. Điều duy nhất giữ lại vì bản thân nó đã đúng: **thao tác nội dung nằm ở lớp service riêng, không nằm trong component giao diện** — quản trị gọi service, mọi service đều kiểm tra tàu và quyền.
 
-Bốn điều chuẩn bị sẵn trong v1:
 
-1. **Trạng thái nội dung** `draft → review → published → archived` trên mọi bảng nội dung, thay cho cờ đúng/sai. Sau này AI chỉ tạo bản nháp; người quản trị xem, sửa rồi mới xuất bản — AI không tự xuất bản.
-2. **Nguồn nội dung**: mỗi bản ghi ghi lại do người tạo, do máy tạo, hay người sửa từ bản máy tạo, cùng thời điểm và người thao tác. Đủ để sau này bổ sung lịch sử phiên bản mà không phải đổi cấu trúc.
-3. **Giọng thương hiệu từng tàu**: bảng lưu sẵn giọng điệu, đối tượng khách, lối viết, từ nên dùng / tránh dùng, hướng dẫn SEO và dịch thuật. v1 chỉ lưu, chưa dùng.
-4. **Mọi thao tác nội dung là một service riêng**, không nằm trong component giao diện: tạo bản nháp, cập nhật trang, tạo ưu đãi, cập nhật SEO, tạo bản dịch, gắn ảnh… Quản trị gọi service; sau này AI hoặc n8n gọi cùng service qua API đã xác thực. Mọi thao tác luôn kiểm tra tàu và quyền.
-
-Nguyên tắc bất di bất dịch: **AI chỉ được đọc và ghi trong phạm vi một tàu** — thông tin tàu, giọng thương hiệu, phòng, hải trình, dịch vụ, ưu đãi, trang, ảnh, SEO, nội dung đã xuất bản của chính tàu đó. Không trộn dữ liệu giữa các tàu.
 
 
 ## Bốn mẫu bố cục (làm dần)
