@@ -96,16 +96,17 @@ v1 chỉ được coi là xong khi tất cả 10 điều sau đúng:
 
 ### Schema (Lovable Cloud)
 
-- `ships` — identity: `slug`, `name`, `status`, `layout` (enum), `default_language`, `currency`.
+- `ships` — identity: `slug`, `name`, `status`, `layout` (enum), `default_language`, `currency`. `status` gồm đúng 4 giá trị: `draft` (đang nhập), `staging` (đã đủ nội dung, test domain/preview), `live` (mở công khai), `disabled` (tắt). Public chỉ đọc tàu `live`.
 - `ship_domains` — `ship_id`, `domain` (unique), `is_primary`, `is_active`, `redirect_to`. Lookup hostname qua bảng này.
-- `ship_branding` — `primary_color`, `secondary_color`, `accent_color`, `background_color`, `surface_color`, `text_color`, `heading_font`, `body_font` (enum từ danh sách cho phép), `logo_light`, `logo_dark`, `favicon`, `theme_config jsonb` (chỉ cho tuỳ chọn phụ: borderRadius, heroOverlay, buttonStyle).
-- `ship_settings` — hotline, whatsapp, zalo, email, recruit_email, facebook, instagram, tiktok, tripadvisor, google_maps, booking_url, checkin_point, address.
-- `ship_seo` — `title_template`, `default_description`, `og_image`, `schema_type`, `schema_name`.
-- `homepage_sections` — `ship_id`, `section_type` (enum: hero, story, cabins, itinerary, dining, services, gallery, offers, recruit, quote), `position`, `enabled`, `configuration jsonb`.
-- `ship_pages` — `slug`, `title`, `content`, `seo_title`, `seo_description`, `published`.
+- `ship_branding` — `ship_id` UNIQUE (1–1), `primary_color`, `secondary_color`, `accent_color`, `background_color`, `surface_color`, `text_color`, `heading_font`, `body_font` (enum từ danh sách cho phép), `logo_light`, `logo_dark`, `favicon`, `theme_config jsonb` (chỉ tuỳ chọn phụ: borderRadius, heroOverlay, buttonStyle).
+- `ship_settings` — `ship_id` UNIQUE (1–1): hotline, whatsapp, zalo, email, recruit_email, facebook, instagram, tiktok, tripadvisor, google_maps, booking_url, checkin_point, address.
+- `ship_seo` — `ship_id` UNIQUE (1–1): `title_template`, `default_description`, `og_image`, `schema_type`, `schema_name`.
+- `homepage_sections` — `ship_id`, `section_type` **text** (validate ở tầng ứng dụng, không dùng enum Postgres — thêm kiểu section mới như spa, activities, video, testimonial, destination, transport không cần migration), `position`, `enabled`, `configuration jsonb`.
+- `ship_pages` — `ship_id`, `slug`, `title`, `content`, `seo_title`, `seo_description`, `published`, `sort_order`, UNIQUE(`ship_id`, `slug`).
 - Nội dung: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions` — tất cả khoá `ship_id`, có `published`, `sort_order`.
-- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`. Các bảng nội dung tham chiếu `media_id` để một ảnh dùng nhiều chỗ.
-- `leads` — `ship_id`, `type` (quote/contact/booking/agent/group), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
+- `media` — `ship_id`, `storage_path`, `alt`, `caption`, `width`, `height`, `mime_type`, `category` (hero/exterior/cabin/restaurant/spa/activity/destination), `sort_order`, `is_featured`.
+- `entity_media` — `ship_id`, `media_id`, `entity_type`, `entity_id`, `usage` (cover / gallery / floorplan / hero), `sort_order`. Đây là cách gắn ảnh vào nội dung, cho phép một nội dung có nhiều ảnh nhiều vai trò (ví dụ phòng: ảnh bìa + thư viện + sơ đồ mặt bằng) và một ảnh dùng lại ở nhiều chỗ.
+- `leads` — `ship_id`, `type` (`quote` / `contact` / `booking_request` / `agent` / `group` — dùng `booking_request` vì web chỉ ghi nhận yêu cầu, booking thật thuộc PMS), `name`, `phone`, `email`, `nationality`, `message`, `source`, `utm_source`, `utm_campaign`, `status`.
 - `job_applications` — thêm `ship_id` (NOT NULL, backfill Chronos).
 - `user_ship_access` — `user_id`, `ship_id`, `role` (enum: platform_owner, ship_admin, editor, recruitment, sales), unique (user_id, ship_id, role). Chưa có UI, nhưng RLS đã dựa vào nó.
 
