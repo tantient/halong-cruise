@@ -18,7 +18,9 @@ import { queryOptions } from "@tanstack/react-query";
 import { splitLanguagePath } from "@/lib/i18n/paths";
 import {
   getPublicCabin,
+  getPublicCabinBundle,
   getPublicCabins,
+  getPublicCabinsBundle,
   getPublicHomepage,
   getPublicHomepageBundle,
   getPublicItineraries,
@@ -59,6 +61,11 @@ export const publicQueries = {
     queryOptions({ queryKey: base(pathname, "cabins"), queryFn: () => getPublicCabins({ data: { pathname } }), staleTime: STALE }),
   cabin: (pathname: string, slug: string) =>
     queryOptions({ queryKey: base(pathname, "cabin", slug), queryFn: () => getPublicCabin({ data: { pathname, slug } }), staleTime: STALE }),
+  /** All enabled languages in one payload (language-independent key). */
+  cabinsBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), "cabins-bundle"] as const, queryFn: () => getPublicCabinsBundle({ data: { pathname } }), staleTime: STALE }),
+  cabinBundle: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), "cabin-bundle", slug] as const, queryFn: () => getPublicCabinBundle({ data: { pathname, slug } }), staleTime: STALE }),
 
   itineraries: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "itineraries"), queryFn: () => getPublicItineraries({ data: { pathname } }), staleTime: STALE }),

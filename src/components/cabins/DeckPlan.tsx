@@ -10,21 +10,21 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import type { LayoutZone } from "./cabins-data";
+import type { PlanZone } from "./cabin-view";
 
 interface DeckPlanProps {
-  zones: LayoutZone[];
-  vi: boolean;
+  /** Zones already localized by the read layer. */
+  zones: PlanZone[];
+  /** Shared UI labels for the plan. */
+  labels: { area: string; tapHint: string };
   /** Ghi chú chung hiển thị khi chưa chọn khu vực nào */
   hint: string;
 }
 
-export function DeckPlan({ zones, vi, hint }: DeckPlanProps) {
+export function DeckPlan({ zones, labels, hint }: DeckPlanProps) {
   const isMobile = useIsMobile();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const active = activeIndex !== null ? zones[activeIndex] : undefined;
-
-  const label = (z: LayoutZone) => (vi ? z.labelVi : z.labelEn);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-center">
@@ -51,24 +51,24 @@ export function DeckPlan({ zones, vi, hint }: DeckPlanProps) {
                 }}
               >
                 <span className="line-clamp-3 text-xs uppercase leading-tight tracking-[0.18em] text-chronos-ink">
-                  {label(z)}
+                  {z.label}
                 </span>
               </button>
             );
 
             // Trên mobile không dùng tooltip nổi (dễ che nội dung) — thông tin
             // hiển thị ở khối bên dưới sơ đồ.
-            if (isMobile) return <span key={z.labelEn}>{button}</span>;
+            if (isMobile) return <span key={`${z.label}-${i}`}>{button}</span>;
 
             return (
-              <Tooltip key={z.labelEn}>
+              <Tooltip key={`${z.label}-${i}`}>
                 <TooltipTrigger asChild>{button}</TooltipTrigger>
                 <TooltipContent
                   side="top"
                   collisionPadding={16}
                   className="max-w-[min(18rem,calc(100vw-2rem))]"
                 >
-                  {label(z)}
+                  {z.label}
                 </TooltipContent>
               </Tooltip>
             );
@@ -81,17 +81,11 @@ export function DeckPlan({ zones, vi, hint }: DeckPlanProps) {
         >
           {active ? (
             <>
-              <p className="text-xs uppercase tracking-[0.24em] text-chronos-gold">
-                {vi ? "KHU VỰC" : "AREA"}
-              </p>
-              <p className="mt-1 text-sm text-chronos-ink">{label(active)}</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-chronos-gold">{labels.area}</p>
+              <p className="mt-1 text-sm text-chronos-ink">{active.label}</p>
             </>
           ) : (
-            <p className="text-sm text-chronos-stone/75">
-              {vi
-                ? "Chạm vào từng khu vực trên sơ đồ để xem tên khu vực."
-                : "Tap any area on the plan to see its name."}
-            </p>
+            <p className="text-sm text-chronos-stone/75">{labels.tapHint}</p>
           )}
         </div>
       </div>

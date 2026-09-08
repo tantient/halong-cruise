@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
@@ -18,25 +19,35 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import {
-  cabinTypes,
-  TOTAL_CABINS,
-  AREA_LABEL_VI,
-  AREA_LABEL_EN,
-  AREA_NOTE_VI,
-  AREA_NOTE_EN,
-  type CabinType,
-} from "./cabins-data";
+import { publicQueries, type PublicCabinsBundle } from "@/lib/platform";
+import { cabinUi, type CabinUi } from "@/lib/i18n/ui-cabins";
+import { pageText, toCabinView, type CabinView } from "./cabin-view";
 
-const QUOTE_LINK = "https://zalo.me/";
-
-
-export function CabinsPage() {
+/**
+ * Heritage cabins index template. Cabin data, specs and page copy come from the
+ * database through the public read layer; shared labels come from the UI
+ * translations.
+ */
+export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
   const { lang, setLang, t } = useLanguage();
-  const vi = lang === "vi";
-  const vipCabins = cabinTypes.filter((c) => c.vip);
-  const [compareCabin, setCompareCabin] = useState<CabinType | null>(null);
+  const ui = cabinUi(lang);
+  const { data } = useSuspenseQuery({ ...publicQueries.cabinsBundle("/cabins"), initialData: bundle });
+  const b = data ?? bundle;
 
+  const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
+  const cabins = perLang.cabins.map(toCabinView);
+  const page = perLang.page;
+  const totalCabins = b.ship.ship.totalCabins;
+  const copy = (key: string) => pageText(page, key, totalCabins);
+
+  const vipCabins = cabins.filter((c) => c.vip);
+  const areaNote = cabins.find((c) => c.areaNote)?.areaNote ?? null;
+  const heroImage = cabins[0]?.cover ?? null;
+  const quoteLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
+  const [compareCabin, setCompareCabin] = useState<CabinView | null>(null);
+
+  const areaLabel = (c: CabinView) => (c.vip ? ui.totalPrivateArea : ui.area);
+  const areaValue = (c: CabinView) => (c.vip ? `${c.areaValue} ${ui.totalPrivateAreaSuffix}` : c.areaValue);
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -44,55 +55,55 @@ export function CabinsPage() {
 
       <main>
         <section className="relative h-[70vh] min-h-[460px] w-full overflow-hidden">
-          <img
-            src={cabinTypes[0]!.hero}
-            alt={vi ? "Phòng nghỉ trên Chronos Cruise" : "Cabins aboard Chronos Cruise"}
-            className="h-full w-full object-cover"
-          />
+          {heroImage ? (
+            <img
+              src={heroImage.url}
+              alt={copy("hero_alt") || heroImage.alt || b.ship.ship.displayName}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-chronos-ink/20" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
-              <p className="eyebrow mb-5 text-chronos-gold">{vi ? "PHÒNG NGHỈ" : "CABINS"}</p>
+              <p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowCabins}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl">
-                {vi ? "Giấc ngủ giữa lòng vịnh" : "Sleep in the heart of the bay"}
+                {copy("hero_title")}
               </h1>
-              <p className="mt-4 max-w-xl text-chronos-ivory/85">
-                {vi
-                  ? `${TOTAL_CABINS} phòng nghỉ hướng biển, mỗi hạng phòng là một cách cảm nhận khác nhau về Hạ Long.`
-                  : `${TOTAL_CABINS} sea-facing cabins, each category offering its own way of experiencing Ha Long.`}
-              </p>
+              <p className="mt-4 max-w-xl text-chronos-ivory/85">{copy("hero_subtitle")}</p>
             </div>
           </div>
         </section>
 
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
           <Reveal className="mb-14 max-w-2xl">
-            <p className="eyebrow mb-5 text-chronos-gold">{vi ? "HẠNG PHÒNG" : "CABIN CATEGORIES"}</p>
+            <p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowCategories}</p>
             <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink sm:text-4xl">
-              {vi ? `Các hạng phòng, ${TOTAL_CABINS} lựa chọn` : `Cabin categories, ${TOTAL_CABINS} cabins`}
+              {copy("list_title")}
             </h2>
-            <p className="text-chronos-stone/85">
-              {vi
-                ? "Tất cả các phòng đều hướng biển, sử dụng 1 giường đôi hoặc 2 giường đơn tuỳ yêu cầu của khách."
-                : "Every cabin faces the sea and can be arranged with one double bed or two twin beds on request."}
-            </p>
+            <p className="text-chronos-stone/85">{copy("list_subtitle")}</p>
           </Reveal>
 
           <div className="grid gap-8 md:grid-cols-2">
-            {cabinTypes.map((cabin, index) => (
-              <Reveal key={cabin.id} delay={80 * index}>
+            {cabins.map((cabin, index) => (
+              <Reveal key={cabin.slug} delay={80 * index}>
                 <article className="flex h-full flex-col overflow-hidden rounded-sm border border-chronos-ink/10 bg-card">
                   <Link
                     to="/cabins/$cabinId"
-                    params={{ cabinId: cabin.id }}
+                    params={{ cabinId: cabin.slug }}
                     className="group block overflow-hidden"
                   >
-                    <img
-                      src={cabin.hero}
-                      alt={vi ? cabin.nameVi : cabin.nameEn}
-                      loading="lazy"
-                      className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
-                    />
+                    {cabin.cover ? (
+                      <img
+                        src={cabin.cover.url}
+                        alt={cabin.cover.alt ?? cabin.name}
+                        loading="lazy"
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <div className="aspect-[4/3] w-full bg-chronos-ink/10" />
+                    )}
                   </Link>
 
                   <div className="flex flex-1 flex-col p-7">
@@ -102,54 +113,26 @@ export function CabinsPage() {
                       </p>
                     ) : null}
                     <h3 className="mb-3 text-2xl tracking-[0.02em] text-card-foreground">
-                      {vi ? cabin.nameVi : cabin.nameEn}
+                      {cabin.name}
                     </h3>
                     <p className="mb-6 text-sm leading-relaxed text-chronos-stone/85">
-                      {vi ? cabin.descVi : cabin.descEn}
+                      {cabin.summary}
                     </p>
 
                     <dl className="mb-6 grid grid-cols-2 gap-x-6 gap-y-4 border-y border-chronos-ink/10 py-5">
-                      <Spec
-                        label={
-                          cabin.vip
-                            ? vi
-                              ? AREA_LABEL_VI
-                              : AREA_LABEL_EN
-                            : vi
-                              ? "Diện tích"
-                              : "Area"
-                        }
-                        value={
-                          cabin.vip
-                            ? vi
-                              ? `${cabin.area} tổng diện tích riêng`
-                              : `${cabin.area} Total Private Area`
-                            : cabin.area
-                        }
-                      />
-                      <Spec
-                        label={vi ? "Số phòng" : "Cabins"}
-                        value={
-                          vi ? `${cabin.roomCount} phòng` : `${cabin.roomCount} cabins`
-                        }
-                      />
-                      <Spec
-                        label={vi ? "Giường" : "Bed"}
-                        value={vi ? cabin.bedVi : cabin.bedEn}
-                        wide
-                      />
-                      <Spec
-                        label={vi ? "Sức chứa tối đa" : "Max occupancy"}
-                        value={
-                          vi ? `${cabin.maxGuests} khách` : `${cabin.maxGuests} guests`
-                        }
-                        wide
-                      />
+                      <Spec label={areaLabel(cabin)} value={areaValue(cabin)} />
+                      {cabin.roomCount ? (
+                        <Spec label={ui.cabinsCount} value={ui.rooms(cabin.roomCount)} />
+                      ) : null}
+                      {cabin.bed ? <Spec label={ui.bed} value={cabin.bed} wide /> : null}
+                      {cabin.maxGuests !== null ? (
+                        <Spec label={ui.maxOccupancy} value={ui.guests(cabin.maxGuests)} wide />
+                      ) : null}
                     </dl>
 
-                    {cabin.vip ? (
+                    {cabin.areaNote ? (
                       <p className="-mt-3 mb-6 text-xs leading-relaxed text-chronos-stone/70">
-                        {vi ? AREA_NOTE_VI : AREA_NOTE_EN}
+                        {cabin.areaNote}
                       </p>
                     ) : null}
 
@@ -158,16 +141,16 @@ export function CabinsPage() {
                         asChild
                         className="btn-sheen rounded-none bg-chronos-gold px-5 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
                       >
-                        <a href={QUOTE_LINK} target="_blank" rel="noopener noreferrer">
-                          {vi ? "Liên hệ báo giá" : "Request a quote"}
+                        <a href={quoteLink} target="_blank" rel="noopener noreferrer">
+                          {ui.requestQuote}
                         </a>
                       </Button>
                       <Link
                         to="/cabins/$cabinId"
-                        params={{ cabinId: cabin.id }}
+                        params={{ cabinId: cabin.slug }}
                         className="border-b border-chronos-gold pb-1 text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:text-chronos-gold"
                       >
-                        {vi ? "Xem chi tiết" : "View details"}
+                        {ui.viewDetails}
                       </Link>
                       <Button
                         type="button"
@@ -176,111 +159,98 @@ export function CabinsPage() {
                         onClick={() => setCompareCabin(cabin)}
                         className="rounded-none border-chronos-gold/50 text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:border-chronos-gold hover:bg-chronos-gold/10 hover:text-chronos-gold"
                       >
-                        {vi ? "So sánh chi tiết" : "Compare details"}
+                        {ui.compareDetails}
                       </Button>
                     </div>
-
                   </div>
                 </article>
               </Reveal>
             ))}
           </div>
 
+          {vipCabins.length ? (
+            <Reveal className="mt-16">
+              <p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowComparison}</p>
 
-          <Reveal className="mt-16">
-            <p className="eyebrow mb-5 text-chronos-gold">{vi ? "BẢNG SO SÁNH SUITE" : "SUITE COMPARISON"}</p>
-
-            {/* Desktop / tablet: table keeps the requested column structure */}
-            <div className="hidden overflow-x-auto rounded-sm border border-chronos-ink/10 sm:block">
-              <table className="w-full min-w-[640px] border-collapse text-left text-sm">
-                <thead>
-                  <tr className="bg-chronos-ink/[0.04] text-xs uppercase tracking-[0.2em] text-chronos-stone/70">
-                    <th className="sticky left-0 z-10 bg-chronos-ink/[0.04] px-5 py-4 font-medium shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]">
-                      {vi ? "Hạng phòng" : "Cabin type"}
-                    </th>
-                    <th className="px-5 py-4 font-medium">{vi ? AREA_LABEL_VI : AREA_LABEL_EN}</th>
-                    <th className="px-5 py-4 font-medium">{vi ? "Giường" : "Bed"}</th>
-                    <th className="px-5 py-4 font-medium">{vi ? "Sân riêng" : "Private terrace"}</th>
-                    <th className="px-5 py-4 font-medium">{vi ? "Hồ sục ngoài trời" : "Outdoor whirlpool"}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vipCabins.map((c) => (
-                    <tr key={c.id} className="border-t border-chronos-ink/10 text-chronos-ink">
-                      <td className="sticky left-0 z-10 bg-chronos-ivory px-5 py-4 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]">
-                        {c.code}
-                      </td>
-                      <td className="px-5 py-4">{c.area}</td>
-                      <td className="px-5 py-4">King</td>
-                      <td className="px-5 py-4">{vi ? "Có" : "Included"}</td>
-                      <td className="px-5 py-4">{vi ? "Có" : "Included"}</td>
+              {/* Desktop / tablet: table keeps the requested column structure */}
+              <div className="hidden overflow-x-auto rounded-sm border border-chronos-ink/10 sm:block">
+                <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+                  <thead>
+                    <tr className="bg-chronos-ink/[0.04] text-xs uppercase tracking-[0.2em] text-chronos-stone/70">
+                      <th className="sticky left-0 z-10 bg-chronos-ink/[0.04] px-5 py-4 font-medium shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]">
+                        {ui.cabinType}
+                      </th>
+                      <th className="px-5 py-4 font-medium">{ui.totalPrivateArea}</th>
+                      <th className="px-5 py-4 font-medium">{ui.bed}</th>
+                      <th className="px-5 py-4 font-medium">{ui.privateTerrace}</th>
+                      <th className="px-5 py-4 font-medium">{ui.outdoorWhirlpool}</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {vipCabins.map((c) => (
+                      <tr key={c.slug} className="border-t border-chronos-ink/10 text-chronos-ink">
+                        <td className="sticky left-0 z-10 bg-chronos-ivory px-5 py-4 shadow-[2px_0_6px_-2px_rgba(0,0,0,0.08)]">
+                          {c.code}
+                        </td>
+                        <td className="px-5 py-4">{c.areaValue}</td>
+                        <td className="px-5 py-4">{ui.king}</td>
+                        <td className="px-5 py-4">{ui.included}</td>
+                        <td className="px-5 py-4">{ui.included}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
-            {/* Mobile: same 5 data points, no overflow, card layout */}
-            <div className="space-y-4 sm:hidden">
-              {vipCabins.map((c) => (
-                <article
-                  key={c.id}
-                  className="rounded-sm border border-chronos-ink/10 bg-card p-5"
-                >
-                  <p className="mb-1 text-xs uppercase tracking-[0.2em] text-chronos-stone/70">
-                    {vi ? "Hạng phòng" : "Cabin type"}
-                  </p>
-                  <p className="mb-4 text-sm font-medium text-card-foreground">{c.code}</p>
-                  <dl className="space-y-3 text-xs">
-                    <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
-                      <dt className="text-chronos-stone/70">{vi ? AREA_LABEL_VI : AREA_LABEL_EN}</dt>
-                      <dd className="font-medium text-card-foreground">{c.area}</dd>
-                    </div>
-                    <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
-                      <dt className="text-chronos-stone/70">{vi ? "Giường" : "Bed"}</dt>
-                      <dd className="font-medium text-card-foreground">King</dd>
-                    </div>
-                    <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
-                      <dt className="text-chronos-stone/70">{vi ? "Sân riêng" : "Private terrace"}</dt>
-                      <dd className="font-medium text-card-foreground">{vi ? "Có" : "Included"}</dd>
-                    </div>
-                    <div className="flex items-start justify-between gap-4">
-                      <dt className="text-chronos-stone/70">{vi ? "Hồ sục ngoài trời" : "Outdoor whirlpool"}</dt>
-                      <dd className="font-medium text-card-foreground">{vi ? "Có" : "Included"}</dd>
-                    </div>
-                  </dl>
-                </article>
-              ))}
-            </div>
+              {/* Mobile: same 5 data points, no overflow, card layout */}
+              <div className="space-y-4 sm:hidden">
+                {vipCabins.map((c) => (
+                  <article key={c.slug} className="rounded-sm border border-chronos-ink/10 bg-card p-5">
+                    <p className="mb-1 text-xs uppercase tracking-[0.2em] text-chronos-stone/70">
+                      {ui.cabinType}
+                    </p>
+                    <p className="mb-4 text-sm font-medium text-card-foreground">{c.code}</p>
+                    <dl className="space-y-3 text-xs">
+                      <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
+                        <dt className="text-chronos-stone/70">{ui.totalPrivateArea}</dt>
+                        <dd className="font-medium text-card-foreground">{c.areaValue}</dd>
+                      </div>
+                      <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
+                        <dt className="text-chronos-stone/70">{ui.bed}</dt>
+                        <dd className="font-medium text-card-foreground">{ui.king}</dd>
+                      </div>
+                      <div className="flex items-start justify-between gap-4 border-b border-chronos-ink/10 pb-3">
+                        <dt className="text-chronos-stone/70">{ui.privateTerrace}</dt>
+                        <dd className="font-medium text-card-foreground">{ui.included}</dd>
+                      </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <dt className="text-chronos-stone/70">{ui.outdoorWhirlpool}</dt>
+                        <dd className="font-medium text-card-foreground">{ui.included}</dd>
+                      </div>
+                    </dl>
+                  </article>
+                ))}
+              </div>
 
-            <p className="mt-4 text-xs leading-relaxed text-chronos-stone/70">
-              {vi ? AREA_NOTE_VI : AREA_NOTE_EN}
-            </p>
-          </Reveal>
+              {areaNote ? (
+                <p className="mt-4 text-xs leading-relaxed text-chronos-stone/70">{areaNote}</p>
+              ) : null}
+            </Reveal>
+          ) : null}
 
           <Reveal className="mt-8 rounded-sm border border-chronos-gold/30 bg-chronos-gold/5 p-6">
-            <p className="text-sm leading-relaxed text-chronos-stone/85">
-              {vi
-                ? "Junior Suite loại A và loại B có sức chứa khác nhau. Số khách tối đa của từng phòng cụ thể sẽ được xác nhận khi bạn chọn phòng, không áp dụng chung một con số cho cả nhóm Junior Suite."
-                : "Junior Suite type A and type B have different maximum occupancies. The exact figure is confirmed per individual cabin at the time of selection rather than applied to the Junior Suite group as a whole."}
-            </p>
+            <p className="text-sm leading-relaxed text-chronos-stone/85">{copy("junior_note")}</p>
           </Reveal>
 
           <Reveal className="mt-24 border-t border-chronos-ink/10 pt-16 text-center">
-            <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink">
-              {vi ? "Chọn phòng phù hợp với bạn" : "Find the cabin that fits you"}
-            </h2>
-            <p className="mx-auto mb-8 max-w-xl text-chronos-stone/85">
-              {vi
-                ? "Để lại thông tin, đội ngũ Chronos sẽ tư vấn hạng phòng và báo giá trong 24 giờ."
-                : "Leave your details and our team will advise on cabins and pricing within 24 hours."}
-            </p>
+            <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink">{copy("cta_title")}</h2>
+            <p className="mx-auto mb-8 max-w-xl text-chronos-stone/85">{copy("cta_subtitle")}</p>
             <Button
               asChild
               className="btn-sheen rounded-none bg-chronos-gold px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
             >
-              <a href={QUOTE_LINK} target="_blank" rel="noopener noreferrer">
-                {vi ? "Liên hệ báo giá" : "Request a quote"}
+              <a href={quoteLink} target="_blank" rel="noopener noreferrer">
+                {ui.requestQuote}
               </a>
             </Button>
           </Reveal>
@@ -293,7 +263,8 @@ export function CabinsPage() {
         cabin={compareCabin}
         open={!!compareCabin}
         onClose={() => setCompareCabin(null)}
-        vi={vi}
+        ui={ui}
+        quoteLink={quoteLink}
       />
     </div>
   );
@@ -303,15 +274,17 @@ function CabinCompareDialog({
   cabin,
   open,
   onClose,
-  vi,
+  ui,
+  quoteLink,
 }: {
-  cabin: CabinType | null;
+  cabin: CabinView | null;
   open: boolean;
   onClose: () => void;
-  vi: boolean;
+  ui: CabinUi;
+  quoteLink: string;
 }) {
   // Giữ lại dữ liệu phòng cuối cùng để dialog có animation đóng mượt
-  const [shown, setShown] = useState<CabinType | null>(cabin);
+  const [shown, setShown] = useState<CabinView | null>(cabin);
   const [loading, setLoading] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
 
@@ -329,27 +302,20 @@ function CabinCompareDialog({
   if (!shown) return null;
 
   const rows = [
-    { label: vi ? "Hạng phòng" : "Cabin type", value: vi ? shown.nameVi : shown.nameEn },
-    ...(shown.code ? [{ label: vi ? "Mã kỹ thuật" : "Technical code", value: shown.code }] : []),
+    { label: ui.cabinType, value: shown.name },
+    ...(shown.code ? [{ label: ui.technicalCode, value: shown.code }] : []),
     {
-      label: shown.vip ? (vi ? AREA_LABEL_VI : AREA_LABEL_EN) : vi ? "Diện tích" : "Area",
-      value: shown.vip
-        ? vi
-          ? `${shown.area} tổng diện tích riêng`
-          : `${shown.area} Total Private Area`
-        : shown.area,
+      label: shown.vip ? ui.totalPrivateArea : ui.area,
+      value: shown.vip ? `${shown.areaValue} ${ui.totalPrivateAreaSuffix}` : shown.areaValue,
     },
-    { label: vi ? "Giường" : "Bed", value: vi ? shown.bedVi : shown.bedEn },
-    {
-      label: vi ? "Sức chứa tối đa" : "Max occupancy",
-      value: vi ? `${shown.maxGuests} khách` : `${shown.maxGuests} guests`,
-    },
-    { label: vi ? "Số phòng" : "Cabins", value: vi ? `${shown.roomCount} phòng` : `${shown.roomCount} cabins` },
-    { label: vi ? "Tầm nhìn" : "View", value: shown.view },
+    ...(shown.bed ? [{ label: ui.bed, value: shown.bed }] : []),
+    ...(shown.maxGuests !== null ? [{ label: ui.maxOccupancy, value: ui.guests(shown.maxGuests) }] : []),
+    ...(shown.roomCount ? [{ label: ui.cabinsCount, value: ui.rooms(shown.roomCount) }] : []),
+    ...(shown.view ? [{ label: ui.view, value: shown.view }] : []),
     ...(shown.vip
       ? [
-          { label: vi ? "Sân riêng" : "Private terrace", value: vi ? "Có" : "Included" },
-          { label: vi ? "Hồ sục ngoài trời" : "Outdoor whirlpool", value: vi ? "Có" : "Included" },
+          { label: ui.privateTerrace, value: ui.included },
+          { label: ui.outdoorWhirlpool, value: ui.included },
         ]
       : []),
   ];
@@ -359,37 +325,33 @@ function CabinCompareDialog({
       <DialogContent className="max-h-[90vh] max-w-md overflow-y-auto rounded-sm border-chronos-ink/10 bg-card p-0 duration-300 sm:max-w-lg">
         <div className="relative h-40 w-full overflow-hidden bg-chronos-ink/10 sm:h-48">
           {!imgLoaded ? <Skeleton className="absolute inset-0 h-full w-full rounded-none" /> : null}
-          <img
-            src={shown.hero}
-            alt={vi ? shown.nameVi : shown.nameEn}
-            onLoad={() => setImgLoaded(true)}
-            className={cn(
-              "h-full w-full object-cover transition-all duration-500",
-              imgLoaded ? "scale-100 opacity-100 blur-0" : "scale-105 opacity-0 blur-sm",
-            )}
-          />
+          {shown.cover ? (
+            <img
+              src={shown.cover.url}
+              alt={shown.cover.alt ?? shown.name}
+              onLoad={() => setImgLoaded(true)}
+              className={cn(
+                "h-full w-full object-cover transition-all duration-500",
+                imgLoaded ? "scale-100 opacity-100 blur-0" : "scale-105 opacity-0 blur-sm",
+              )}
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/80 via-chronos-ink/20 to-transparent" />
           <div className="absolute bottom-0 left-0 p-5">
             {shown.code ? (
               <p className="mb-1 text-xs uppercase tracking-[0.24em] text-chronos-gold">{shown.code}</p>
             ) : null}
-            <p className="text-xl text-chronos-ivory">{vi ? shown.nameVi : shown.nameEn}</p>
+            <p className="text-xl text-chronos-ivory">{shown.name}</p>
           </div>
         </div>
 
         <div className="px-5 pb-6 pt-2">
           <DialogHeader className="mb-3">
             <DialogTitle className="text-left text-lg tracking-[0.02em] text-card-foreground">
-              {vi ? "So sánh chi tiết" : "Compare details"}
+              {ui.compareDetails}
             </DialogTitle>
             <DialogDescription className="text-left text-xs text-muted-foreground">
-              {loading
-                ? vi
-                  ? "Đang tải dữ liệu so sánh…"
-                  : "Loading comparison data…"
-                : vi
-                  ? "Thông tin nhanh về hạng phòng này."
-                  : "Quick overview for this cabin category."}
+              {loading ? ui.compareLoading : ui.compareIntro}
             </DialogDescription>
           </DialogHeader>
 
@@ -417,9 +379,9 @@ function CabinCompareDialog({
             </dl>
           )}
 
-          {shown.vip && !loading ? (
+          {shown.areaNote && !loading ? (
             <p className="animate-in fade-in mt-3 text-xs leading-relaxed text-chronos-stone/70 duration-300">
-              {vi ? AREA_NOTE_VI : AREA_NOTE_EN}
+              {shown.areaNote}
             </p>
           ) : null}
 
@@ -429,8 +391,8 @@ function CabinCompareDialog({
               disabled={loading}
               className="btn-sheen flex-1 rounded-none bg-chronos-gold text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink transition-opacity hover:bg-chronos-gold/90"
             >
-              <a href={QUOTE_LINK} target="_blank" rel="noopener noreferrer">
-                {vi ? "Liên hệ báo giá" : "Request a quote"}
+              <a href={quoteLink} target="_blank" rel="noopener noreferrer">
+                {ui.requestQuote}
               </a>
             </Button>
             <Button
@@ -438,7 +400,7 @@ function CabinCompareDialog({
               onClick={onClose}
               className="flex-1 rounded-none border-chronos-ink/20 text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:bg-chronos-ink/5"
             >
-              {vi ? "Đóng" : "Close"}
+              {ui.close}
             </Button>
           </div>
         </div>
@@ -446,7 +408,6 @@ function CabinCompareDialog({
     </Dialog>
   );
 }
-
 
 function Spec({ label, value, wide }: { label: string; value: string; wide?: boolean }) {
   return (
