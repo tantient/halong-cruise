@@ -41,6 +41,287 @@ export type Database = {
         }
         Relationships: []
       }
+      ship_branding: {
+        Row: {
+          accent_color: string | null
+          background_color: string | null
+          body_font: string | null
+          created_at: string
+          favicon: string | null
+          heading_font: string | null
+          id: string
+          logo_dark: string | null
+          logo_light: string | null
+          logo_mark: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          ship_id: string
+          surface_color: string | null
+          text_color: string | null
+          theme_config: Json
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string | null
+          background_color?: string | null
+          body_font?: string | null
+          created_at?: string
+          favicon?: string | null
+          heading_font?: string | null
+          id?: string
+          logo_dark?: string | null
+          logo_light?: string | null
+          logo_mark?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          ship_id: string
+          surface_color?: string | null
+          text_color?: string | null
+          theme_config?: Json
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string | null
+          background_color?: string | null
+          body_font?: string | null
+          created_at?: string
+          favicon?: string | null
+          heading_font?: string | null
+          id?: string
+          logo_dark?: string | null
+          logo_light?: string | null
+          logo_mark?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          ship_id?: string
+          surface_color?: string | null
+          text_color?: string | null
+          theme_config?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_branding_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: true
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ship_domains: {
+        Row: {
+          created_at: string
+          domain: string
+          id: string
+          is_active: boolean
+          is_primary: boolean
+          redirect_to: string | null
+          ship_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          domain: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          redirect_to?: string | null
+          ship_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          redirect_to?: string | null
+          ship_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_domains_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ship_seo: {
+        Row: {
+          created_at: string
+          default_description: string | null
+          default_title: string | null
+          id: string
+          og_image: string | null
+          schema_name: string | null
+          schema_type: string
+          ship_id: string
+          site_name: string | null
+          title_template: string | null
+          twitter_handle: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_description?: string | null
+          default_title?: string | null
+          id?: string
+          og_image?: string | null
+          schema_name?: string | null
+          schema_type?: string
+          ship_id: string
+          site_name?: string | null
+          title_template?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_description?: string | null
+          default_title?: string | null
+          id?: string
+          og_image?: string | null
+          schema_name?: string | null
+          schema_type?: string
+          ship_id?: string
+          site_name?: string | null
+          title_template?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_seo_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: true
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ship_settings: {
+        Row: {
+          address: string | null
+          booking_url: string | null
+          checkin_point: string | null
+          created_at: string
+          email: string | null
+          facebook: string | null
+          google_maps: string | null
+          hotline: string | null
+          hotline_display: string | null
+          id: string
+          instagram: string | null
+          recruit_email: string | null
+          ship_id: string
+          tiktok: string | null
+          tripadvisor: string | null
+          updated_at: string
+          whatsapp: string | null
+          youtube: string | null
+          zalo: string | null
+        }
+        Insert: {
+          address?: string | null
+          booking_url?: string | null
+          checkin_point?: string | null
+          created_at?: string
+          email?: string | null
+          facebook?: string | null
+          google_maps?: string | null
+          hotline?: string | null
+          hotline_display?: string | null
+          id?: string
+          instagram?: string | null
+          recruit_email?: string | null
+          ship_id: string
+          tiktok?: string | null
+          tripadvisor?: string | null
+          updated_at?: string
+          whatsapp?: string | null
+          youtube?: string | null
+          zalo?: string | null
+        }
+        Update: {
+          address?: string | null
+          booking_url?: string | null
+          checkin_point?: string | null
+          created_at?: string
+          email?: string | null
+          facebook?: string | null
+          google_maps?: string | null
+          hotline?: string | null
+          hotline_display?: string | null
+          id?: string
+          instagram?: string | null
+          recruit_email?: string | null
+          ship_id?: string
+          tiktok?: string | null
+          tripadvisor?: string | null
+          updated_at?: string
+          whatsapp?: string | null
+          youtube?: string | null
+          zalo?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ship_settings_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: true
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ships: {
+        Row: {
+          created_at: string
+          currency: string
+          default_language: string
+          display_name: string | null
+          id: string
+          layout: string
+          name: string
+          slug: string
+          sort_order: number
+          status: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          default_language?: string
+          display_name?: string | null
+          id?: string
+          layout?: string
+          name: string
+          slug: string
+          sort_order?: number
+          status?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          default_language?: string
+          display_name?: string | null
+          id?: string
+          layout?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          status?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -74,6 +355,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_platform_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user"
