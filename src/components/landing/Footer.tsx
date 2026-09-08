@@ -2,6 +2,7 @@ import { LocalLink } from "@/lib/i18n/language-context";
 import { Facebook, Instagram, MessageCircle } from "lucide-react";
 
 import { ChronosLogo } from "./ChronosLogo";
+import { useSite } from "@/lib/platform";
 
 interface FooterProps {
   t: {
@@ -33,14 +34,16 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-const SOCIALS = [
-  { label: "Facebook", href: "https://www.facebook.com/chronoscruise/", Icon: Facebook },
-  { label: "Instagram", href: "https://www.instagram.com/chronos.cruise/", Icon: Instagram },
-  { label: "Zalo", href: "https://zalo.me/84902952356", Icon: MessageCircle },
-  { label: "WhatsApp", href: "https://wa.me/84902952356", Icon: WhatsAppIcon },
-];
-
 export function Footer({ t }: FooterProps) {
+  const site = useSite();
+  // Social profiles of the resolved ship; missing channels are simply omitted.
+  const socials = [
+    { label: "Facebook", href: site?.settings.facebook, Icon: Facebook },
+    { label: "Instagram", href: site?.settings.instagram, Icon: Instagram },
+    { label: "Zalo", href: site?.settings.zalo, Icon: MessageCircle },
+    { label: "WhatsApp", href: site?.settings.whatsapp, Icon: WhatsAppIcon },
+  ].filter((s): s is { label: string; href: string; Icon: typeof Facebook } => Boolean(s.href));
+
   const quickLinks: { label: string; to: string; params?: Record<string, string> }[] = [
     { label: t.nav.offers, to: "/offers" },
     { label: t.nav.about, to: "/about" },
@@ -55,12 +58,12 @@ export function Footer({ t }: FooterProps) {
             showTagline={false}
             size="md"
             tone="auto"
-            aria-label="Chronos Cruise"
+            aria-label={site?.ship.displayName ?? undefined}
           />
 
 
           <p className="text-xs uppercase tracking-[0.32em] text-chronos-sand-700">
-            {t.footer.tagline}
+            {site?.ship.tagline ?? t.footer.tagline}
           </p>
 
 
@@ -77,7 +80,7 @@ export function Footer({ t }: FooterProps) {
           </nav>
 
           <div className="flex gap-6">
-            {SOCIALS.map(({ label, href, Icon }) => (
+            {socials.map(({ label, href, Icon }) => (
               <a
                 key={label}
                 href={href}
@@ -92,7 +95,8 @@ export function Footer({ t }: FooterProps) {
           </div>
 
           <div className="text-xs tracking-wide text-chronos-sand-700/60">
-            {t.footer.rights}
+            © {new Date().getFullYear()}
+            {site?.ship.displayName ? ` ${site.ship.displayName}.` : ""} {t.footer.rights}
           </div>
         </div>
       </div>

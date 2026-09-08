@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import { useServiceNav } from "@/lib/i18n/service-nav-context";
+import { useSite } from "@/lib/platform";
 import type { Lang } from "@/lib/translations";
 
 interface HeaderProps {
@@ -19,11 +20,12 @@ interface HeaderProps {
   };
 }
 
-const BOOKING_LINK = "https://zalo.me/";
-
 export function Header({ lang, setLang, t }: HeaderProps) {
   // Languages come from the resolved ship, so the switcher works for any tenant.
   const { languages } = useLanguage();
+  const site = useSite();
+  // Booking destination of the resolved ship (falls back to its Zalo channel).
+  const bookingLink = site?.settings.bookingUrl ?? site?.settings.zalo ?? "#";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -183,7 +185,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           />
 
           <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
-            <a href={BOOKING_LINK} target="_blank" rel="noopener noreferrer">
+            <a href={bookingLink} target="_blank" rel="noopener noreferrer">
               {t.nav.book}
             </a>
           </Button>
@@ -265,7 +267,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
               <ThemeToggle className="border-chronos-sand-900/15 text-chronos-sand-900 hover:bg-chronos-sand-900/5" />
             </div>
             <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
-              <a href={BOOKING_LINK} target="_blank" rel="noopener noreferrer">
+              <a href={bookingLink} target="_blank" rel="noopener noreferrer">
                 {t.nav.book}
               </a>
             </Button>

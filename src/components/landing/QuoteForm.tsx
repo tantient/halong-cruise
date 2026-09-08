@@ -8,6 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
+import { useLanguage } from "@/lib/i18n/language-context";
+import { formUi } from "@/lib/i18n/ui-forms";
+import { submitPublicLead, useSite } from "@/lib/platform";
+
 import { Reveal } from "./Reveal";
 
 /** Ship-specific copy (from the database, already localized). */
@@ -29,9 +33,6 @@ interface QuoteFormProps {
       submit: string;
       success: string;
     };
-    footer: {
-      contact: string[];
-    };
     contact: {
       phone: string;
     };
@@ -40,6 +41,10 @@ interface QuoteFormProps {
 
 export function QuoteForm({ content, t }: QuoteFormProps) {
   const tr = { ...t.teaserForm, ...content };
+  const site = useSite();
+  const { lang } = useLanguage();
+  const ui = formUi(lang);
+  const [submitting, setSubmitting] = useState(false);
   const [values, setValues] = useState({
     name: "",
     phone: "",
@@ -47,8 +52,19 @@ export function QuoteForm({ content, t }: QuoteFormProps) {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // The browser never sends a ship id: the server resolves the tenant from the
+  // request hostname and attaches it before inserting the lead.
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
+    const res = await submitPublicLead({
+      data: { pathname: window.location.pathname, type: "quote", ...values },
+    }).catch(() => ({ ok: false }));
+    setSubmitting(false);
+    if (!res.ok) {
+      toast.error(ui.error);
+      return;
+    }
     toast.success(tr.success);
     setValues({ name: "", phone: "", email: "", message: "" });
   };
@@ -63,7 +79,7 @@ export function QuoteForm({ content, t }: QuoteFormProps) {
             <p className="leading-relaxed text-chronos-sand-700">{tr.subtitle}</p>
             <div className="space-y-4 pt-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-chronos-sand-500">{t.contact.phone}</p>
-              <p className="text-xl font-light text-chronos-sand-900">{t.footer.contact[0]}</p>
+              <p className="text-xl font-light text-chronos-sand-900">{site?.settings.hotlineDisplay ?? site?.settings.hotline ?? ""}</p>
             </div>
           </Reveal>
 

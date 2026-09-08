@@ -11,12 +11,11 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider, themeInitScript } from "@/components/theme-provider";
 import { LanguageProvider } from "@/lib/i18n/language-context";
 import { ServiceNavProvider } from "@/lib/i18n/service-nav-context";
-import { publicQueries } from "@/lib/platform";
+import { publicQueries, SiteProvider, type ShipContext } from "@/lib/platform";
 
 function NotFoundComponent() {
   return (
@@ -87,6 +86,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       context.queryClient.ensureQueryData(publicQueries.serviceNav(location.pathname)).catch(() => null),
     ]);
     return {
+      // Resolved tenant, shared with header/footer through SiteProvider.
+      site,
       // Header service menu of the resolved ship (all enabled languages).
       serviceNav,
       // Serialized with the route match, so server and client agree during hydration.
@@ -95,53 +96,62 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         : null,
     };
   },
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Chronos Cruise | Du thuyền 6 sao Hạ Long - Lan Hạ" },
-      {
-        name: "description",
-        content:
-          "Chronos Cruise - trải nghiệm du thuyền 6 sao tại vịnh Hạ Long và Lan Hạ. Phòng nghỉ hướng biển, nhà hàng Panorama, spa và dịch vụ đẳng cấp.",
-      },
-      { name: "author", content: SITE_NAME },
-      { name: "theme-color", content: "#8b7355" },
-      { property: "og:site_name", content: SITE_NAME },
-      { property: "og:locale", content: "vi_VN" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@chronoscruise" },
-    ],
-    links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap",
-      },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-    ],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: SITE_NAME,
-          url: SITE_URL,
-          logo: `${SITE_URL}/favicon.png`,
-          description:
-            "Chronos Cruise - du thuyền 6 sao trên vịnh Hạ Long và Lan Hạ với phòng nghỉ hướng biển, nhà hàng, spa và dịch vụ đẳng cấp.",
-        }),
-      },
-    ],
-  }),
+  // Tenant-neutral document head. Brand title/description/JSON-LD come from
+  // the resolved ship, so no ship name is hardcoded here.
+  head: ({ loaderData }) => {
+    const site = (loaderData?.site?.ship ?? null) as ShipContext | null;
+    const siteName = site?.seo.siteName ?? site?.ship.displayName ?? "";
+    const title = site?.seo.defaultTitle ?? siteName;
+    const description = site?.seo.defaultDescription ?? site?.ship.tagline ?? "";
+    const themeColor = site?.branding.primaryColor ?? "#8b7355";
+    const locale = site ? site.defaultLanguage.replace("-", "_") : undefined;
+
+    return {
+      meta: [
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        ...(title ? [{ title }] : []),
+        ...(description ? [{ name: "description", content: description }] : []),
+        ...(siteName
+          ? [
+              { name: "author", content: siteName },
+              { property: "og:site_name", content: siteName },
+            ]
+          : []),
+        { name: "theme-color", content: themeColor },
+        ...(locale ? [{ property: "og:locale", content: locale }] : []),
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(site?.seo.twitterHandle ? [{ name: "twitter:site", content: site.seo.twitterHandle }] : []),
+      ],
+      links: [
+        { rel: "stylesheet", href: appCss },
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap",
+        },
+        { rel: "icon", href: site?.branding.favicon ?? "/favicon.png", type: "image/png" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      ],
+      scripts: site
+        ? [
+            {
+              type: "application/ld+json",
+              children: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": site.seo.schemaType,
+                name: site.seo.schemaName ?? siteName,
+                url: site.origin,
+                ...(site.branding.logoLight ? { logo: site.branding.logoLight } : {}),
+                ...(description ? { description } : {}),
+              }),
+            },
+          ]
+        : [],
+    };
+  },
 
   shellComponent: RootShell,
   component: RootComponent,
@@ -169,15 +179,18 @@ function RootComponent() {
   const loaderData = Route.useLoaderData();
   const languageConfig = loaderData?.languageConfig ?? null;
   const serviceNav = loaderData?.serviceNav ?? null;
+  const site = (loaderData?.site?.ship ?? null) as ShipContext | null;
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <LanguageProvider config={languageConfig}>
           <ServiceNavProvider nav={serviceNav}>
+            <SiteProvider site={site}>
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
             <Toaster position="top-center" richColors />
+            </SiteProvider>
           </ServiceNavProvider>
         </LanguageProvider>
       </ThemeProvider>

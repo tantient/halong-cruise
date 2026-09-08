@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { jobPositions } from "@/components/careers/careers-data";
 
 const STATUSES = ["new", "contacted", "hired", "rejected"] as const;
 const STATUS_LABEL: Record<string, string> = {
@@ -16,12 +15,21 @@ const STATUS_LABEL: Record<string, string> = {
   rejected: "Từ chối",
 };
 
-function positionLabel(id: string) {
-  return jobPositions.find((job) => job.id === id)?.titleVi ?? id;
-}
+
 
 export function AdminApplicationsPage() {
   const queryClient = useQueryClient();
+  // Position titles come from the database, so no ship's job list lives in code.
+  const positionsQuery = useQuery({
+    queryKey: ["admin-job-positions"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("job_positions").select("slug,title");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const positionLabel = (id: string) =>
+    positionsQuery.data?.find((p) => p.slug === id)?.title ?? id;
   const navigate = useNavigate();
 
   const rolesQuery = useQuery({

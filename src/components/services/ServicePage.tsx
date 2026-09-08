@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Lightbox } from "@/components/gallery/Lightbox";
 import { publicQueries, type PublicServicesBundle } from "@/lib/platform";
 import { serviceUi } from "@/lib/i18n/ui-services";
-import { toGalleryImages, toServiceView } from "./service-view";
+import { toServiceView } from "./service-view";
 
 /**
  * Heritage service detail template. Every service field and image comes from the
@@ -39,7 +39,6 @@ export function ServicePage({ bundle, slug }: { bundle: PublicServicesBundle; sl
     () => [...(service.cover ? [service.cover] : []), ...service.gallery.filter((g) => g.id !== service.cover?.id)],
     [service],
   );
-  const lightboxImages = useMemo(() => toGalleryImages(images, service.name), [images, service.name]);
   const hero = images[0];
   const quoteLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
 
@@ -182,11 +181,10 @@ export function ServicePage({ bundle, slug }: { bundle: PublicServicesBundle; sl
       </main>
 
       <Lightbox
-        images={lightboxImages}
+        images={images}
         index={active}
         setIndex={(fn) => setActive((i) => fn(i))}
         close={() => setActive(null)}
-        lang={lang}
       />
 
       <Footer t={t} />
