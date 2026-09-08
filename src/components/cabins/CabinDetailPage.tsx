@@ -208,6 +208,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
                     <p className="mt-1 text-lg text-chronos-ink group-hover:text-chronos-gold">
                       {o.name}
                     </p>
+                    {o.meta ? <p className="text-sm text-chronos-stone/75">{o.meta}</p> : null}
                   </div>
                 </Link>
               ))}

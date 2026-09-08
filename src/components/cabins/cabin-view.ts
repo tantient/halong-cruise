@@ -7,7 +7,7 @@
  * because labels are localized.
  */
 
-import type { MediaItem, PublicCabin, PublicCabinFull, PublicPage } from "@/lib/platform";
+import type { MediaItem, PublicCabinFull, PublicPage } from "@/lib/platform";
 
 export interface PlanZone {
   label: string;
