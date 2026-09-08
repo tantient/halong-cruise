@@ -4,7 +4,7 @@
  * belong here so every ship on the platform shares them.
  */
 
-import type { LanguageCode } from "@/lib/platform/types";
+import type { Lang } from "@/lib/translations";
 
 export interface ItineraryUi {
   duration: string;
@@ -26,7 +26,7 @@ const EN: ItineraryUi = {
   collapse: "Collapse",
 };
 
-const DICT: Partial<Record<LanguageCode, ItineraryUi>> = {
+const DICT: Partial<Record<string, ItineraryUi>> = {
   en: EN,
   vi: {
     duration: "Thời lượng",
@@ -66,6 +66,6 @@ const DICT: Partial<Record<LanguageCode, ItineraryUi>> = {
   },
 };
 
-export function itineraryUi(lang: LanguageCode): ItineraryUi {
+export function itineraryUi(lang: Lang): ItineraryUi {
   return DICT[lang] ?? EN;
 }
