@@ -9,7 +9,7 @@ import { HeroMedia, type HeroSlide } from "./HeroMedia";
 import { Reveal } from "./Reveal";
 import slide1 from "@/assets/chronos-slide-1.webp";
 import slide2 from "@/assets/chronos-slide-2.webp";
-import slide3 from "@/assets/chronos-slide-3.webp";
+import slide3 from "@/assets/chronos-slide-3-v2.webp";
 import slide4 from "@/assets/chronos-slide-4.webp";
 import slide5 from "@/assets/gallery/chronos-exterior-01-v2.webp";
 import slide6 from "@/assets/gallery/chronos-exterior-02-v2.webp";
