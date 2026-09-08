@@ -100,6 +100,8 @@ v1 chỉ được coi là xong khi tất cả các điều sau đúng:
 8. Trang xem thử không bị Google lập chỉ mục.
 9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
 10. Tàu số 2 chạy production mà không cần thêm route hay component riêng.
+11. Đổi mẫu bố cục của một tàu (Heritage → Panorama) không mất một dòng dữ liệu nào; nội dung và ảnh giữ nguyên.
+12. Một trang quản trị duy nhất, một lần đăng nhập, thấy và quản được toàn bộ đội tàu; thêm tài khoản admin thứ hai không cần sửa code.
 
 
 ## Điều cần chuẩn bị từ bạn
