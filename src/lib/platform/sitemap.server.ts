@@ -38,12 +38,13 @@ export const STATIC_PUBLIC_PATHS: Array<{ path: string; changefreq: SitemapUrl["
 /** Builds every public URL (all enabled languages) for a ship. */
 export async function buildSitemapUrls(ctx: ShipContext): Promise<SitemapUrl[]> {
   const scope: ReadScope = { shipId: ctx.ship.id, language: ctx.defaultLanguage, defaultLanguage: ctx.defaultLanguage };
+  // Only slugs that have a route in the template are emitted: itineraries are
+  // presented on a single page, so they get no per-voyage URL.
   const slugs = await listPublicSlugs(scope);
 
   const paths: Array<{ path: string; changefreq: SitemapUrl["changefreq"]; priority: string }> = [
     ...STATIC_PUBLIC_PATHS,
     ...slugs.cabins.map((s) => ({ path: `/cabins/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
-    ...slugs.itineraries.map((s) => ({ path: `/itineraries/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
     ...slugs.services.map((s) => ({ path: `/services/${s}`, changefreq: "monthly" as const, priority: "0.6" })),
   ];
 
