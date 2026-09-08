@@ -21,6 +21,8 @@ import {
   getPublicCabinBundle,
   getPublicCabins,
   getPublicCabinsBundle,
+  getPublicCareersBundle,
+  getPublicGalleryBundle,
   getPublicHomepage,
   getPublicHomepageBundle,
   getPublicItineraries,
@@ -29,7 +31,9 @@ import {
   getPublicJobPositions,
   getPublicMediaByCategory,
   getPublicOffers,
+  getPublicOffersBundle,
   getPublicPage,
+  getPublicPageBundle,
   getPublicService,
   getPublicServices,
   getPublicServiceNav,
@@ -105,6 +109,19 @@ export const publicQueries = {
 
   jobPositions: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "jobs"), queryFn: () => getPublicJobPositions({ data: { pathname } }), staleTime: STALE }),
+
+  /** All enabled languages in one payload (language-independent key). */
+  offersBundle: (pathname: string, activeOnly = true) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "offers-bundle", activeOnly] as const, queryFn: () => getPublicOffersBundle({ data: { pathname, activeOnly } }), staleTime: STALE }),
+
+  pageBundle: (pathname: string, slug: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "page-bundle", slug] as const, queryFn: () => getPublicPageBundle({ data: { pathname, slug } }), staleTime: STALE }),
+
+  careersBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "careers-bundle"] as const, queryFn: () => getPublicCareersBundle({ data: { pathname } }), staleTime: STALE }),
+
+  galleryBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "gallery-bundle"] as const, queryFn: () => getPublicGalleryBundle({ data: { pathname } }), staleTime: STALE }),
 
   mediaByCategory: (pathname: string, category: string) =>
     queryOptions({ queryKey: base(pathname, "media", category), queryFn: () => getPublicMediaByCategory({ data: { pathname, category } }), staleTime: STALE }),

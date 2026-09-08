@@ -85,6 +85,27 @@ export async function listMediaByCategory(scope: ReadScope, category: string) {
   return ((data ?? []) as MediaRow[]).map((m) => toMediaItem(m, "gallery", m.sort_order, scope.language, scope.defaultLanguage));
 }
 
+/**
+ * All media of a ship, optionally restricted to (and ordered by) a list of
+ * categories. Used by gallery-style pages whose filter groups are stored as
+ * data, so no category name lives in code.
+ */
+export async function listMediaInCategories(scope: ReadScope, categories?: string[]) {
+  const db = getPublicDb();
+  let q = db.from("media").select(MEDIA_COLUMNS).eq("ship_id", scope.shipId);
+  if (categories && categories.length > 0) q = q.in("category", categories);
+  const { data, error } = await q.order("category").order("sort_order");
+  if (error) throw error;
+  const items = ((data ?? []) as MediaRow[]).map((m) =>
+    toMediaItem(m, "gallery", m.sort_order, scope.language, scope.defaultLanguage),
+  );
+  if (!categories || categories.length === 0) return items;
+  const rank = new Map(categories.map((c, i) => [c, i]));
+  return items.sort(
+    (a, b) => (rank.get(a.category) ?? 99) - (rank.get(b.category) ?? 99) || a.sortOrder - b.sortOrder,
+  );
+}
+
 /* ----------------------------------------------------------------- cabins */
 
 const CABIN_COLUMNS =
