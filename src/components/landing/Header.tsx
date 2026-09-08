@@ -5,10 +5,10 @@ import { ChevronDown, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChronosLogo } from "./ChronosLogo";
-import { services } from "@/components/services/services-data";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
+import { useServiceNav } from "@/lib/i18n/service-nav-context";
 import type { Lang } from "@/lib/translations";
 
 interface HeaderProps {
@@ -42,22 +42,15 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     { href: "/contact", label: t.nav.contact },
   ];
 
-  const toLink = (s: (typeof services)[number]) => ({
-    href: `/services/${s.id}`,
-    label: lang === "vi" ? s.menuNameVi : s.menuNameEn,
-    desc: lang === "vi" ? s.menuDescVi : s.menuDescEn,
-  });
-
-  const serviceGroups = [
-    {
-      title: t.nav.services,
-      links: services.filter((s) => s.group === "service").map(toLink),
-    },
-    {
-      title: t.nav.spaces,
-      links: services.filter((s) => s.group === "space").map(toLink),
-    },
-  ];
+  // Menu entries come from the ship's published services (database-driven).
+  const serviceItems = useServiceNav(lang);
+  const groupTitles: Record<string, string> = { service: t.nav.services, space: t.nav.spaces };
+  const serviceGroups = Array.from(new Set(serviceItems.map((s) => s.group ?? "service"))).map((group) => ({
+    title: groupTitles[group] ?? t.nav.services,
+    links: serviceItems
+      .filter((s) => (s.group ?? "service") === group)
+      .map((s) => ({ href: `/services/${s.slug}`, label: s.label, desc: s.description ?? "" })),
+  }));
 
   const linkClasses = scrolled
     ? "text-chronos-sand-900/75 hover:text-chronos-sand-900"

@@ -15,6 +15,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider, themeInitScript } from "@/components/theme-provider";
 import { LanguageProvider } from "@/lib/i18n/language-context";
+import { ServiceNavProvider } from "@/lib/i18n/service-nav-context";
 import { publicQueries } from "@/lib/platform";
 
 function NotFoundComponent() {
@@ -81,10 +82,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   // Tenant language config (default + enabled languages) for the language
   // switcher and link building. Resolved from the request host on the server.
   loader: async ({ context, location }) => {
-    const site = await context.queryClient
-      .ensureQueryData(publicQueries.siteContext(location.pathname))
-      .catch(() => null);
+    const [site, serviceNav] = await Promise.all([
+      context.queryClient.ensureQueryData(publicQueries.siteContext(location.pathname)).catch(() => null),
+      context.queryClient.ensureQueryData(publicQueries.serviceNav(location.pathname)).catch(() => null),
+    ]);
     return {
+      // Header service menu of the resolved ship (all enabled languages).
+      serviceNav,
       // Serialized with the route match, so server and client agree during hydration.
       languageConfig: site
         ? { defaultLanguage: site.ship.defaultLanguage, enabledLanguages: site.ship.enabledLanguages }
@@ -162,15 +166,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const languageConfig = Route.useLoaderData()?.languageConfig ?? null;
+  const loaderData = Route.useLoaderData();
+  const languageConfig = loaderData?.languageConfig ?? null;
+  const serviceNav = loaderData?.serviceNav ?? null;
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <LanguageProvider config={languageConfig}>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-          <Toaster position="top-center" richColors />
+          <ServiceNavProvider nav={serviceNav}>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+            <Toaster position="top-center" richColors />
+          </ServiceNavProvider>
         </LanguageProvider>
       </ThemeProvider>
     </QueryClientProvider>
