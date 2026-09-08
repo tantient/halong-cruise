@@ -131,13 +131,14 @@ Mỗi `CREATE TABLE` kèm GRANT trong cùng migration: `SELECT` cho `anon` chỉ
 Thực tế vận hành: 1 tài khoản admin quản cả 8 tàu, cùng lắm thêm 1–2 nhân viên cũng truy cập toàn bộ. Nên v1 làm gọn:
 
 - Public: `SELECT TO anon` chỉ hàng `status = 'published'` của tàu `status = 'live'`. Bản nháp, `staging`, `disabled`, leads và hồ sơ ứng viên không lộ ra ngoài.
-- Admin: mọi policy quản trị chỉ cần `has_role(auth.uid(), 'admin')` — admin đọc/ghi được toàn bộ tàu. Không bắt buộc lọc qua `user_ship_access` ở v1.
-- `INSERT TO anon` cho `leads` và `job_applications` (form công khai), `ship_id` do server fn xác định từ hostname, **không** lấy từ payload client.
-- Mọi bảng nội dung, `leads`, `job_applications` vẫn luôn có `ship_id` NOT NULL. Sau này muốn giới hạn người A chỉ quản vài tàu, chỉ cần đổi điều kiện policy sang `has_ship_access(...)` — dữ liệu đã sẵn sàng, không phải chuyển đổi lại.
+- Admin: mọi policy quản trị chỉ cần `has_role(auth.uid(), 'owner')` hoặc `has_role(auth.uid(), 'admin')` — cả hai đọc/ghi được toàn bộ tàu.
+- **Không có `INSERT TO anon`.** Form khách hỏi giá và form ứng tuyển đi qua server function: trình duyệt gửi nội dung form → server đọc hostname → tìm tàu → validate (Zod) → tự gắn `ship_id` → ghi vào cơ sở dữ liệu bằng quyền server. Client không gửi và không quyết định `ship_id`. `leads` và `job_applications` chỉ cấp quyền cho `service_role` và cho admin đọc.
+- Mọi bảng nội dung, `leads`, `job_applications` vẫn luôn có `ship_id` NOT NULL. Sau này muốn giới hạn người A chỉ quản vài tàu, chỉ cần đổi điều kiện policy — dữ liệu đã sẵn sàng, không phải chuyển đổi lại.
 
-### Lớp service (chuẩn bị cho AI/n8n sau này)
+### Lớp service
 
-Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/review/published/archived), `updateSeo`, `attachMedia`, `createTranslation`, `reorderSections`. Mỗi service nhận `shipId`, kiểm quyền một chỗ duy nhất (v1: `has_role(admin)`; sau này đổi thành kiểm theo tàu mà không sửa call site), và ghi `origin` / `updated_by`. Quản trị chỉ là giao diện gọi các service này; sau này AI hoặc n8n gọi cùng service qua server route đã xác thực (`src/routes/api/`). `setStatus` là con đường duy nhất để xuất bản.
+Mọi thao tác nội dung nằm trong `src/lib/cms/*.functions.ts`, không nằm trong component: `createDraft`, `updateContent`, `setStatus` (draft/published), `updateSeo`, `attachMedia`, `reorderSections`, `submitLead`, `submitApplication`. Mỗi service nhận `shipId` (hoặc tự suy ra từ hostname với form công khai), kiểm quyền một chỗ duy nhất, và ghi `updated_by`. Quản trị chỉ là giao diện gọi các service này. `setStatus` là con đường duy nhất để xuất bản.
+
 
 
 
