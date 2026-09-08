@@ -89,7 +89,7 @@ v1 chỉ được coi là xong khi tất cả các điều sau đúng:
 4. Tàu mới cấu hình được: tên miền, logo, màu, phông, nội dung, phòng, hải trình, dịch vụ, ưu đãi, trang nội dung, thứ tự khối trang chủ, SEO, tuyển dụng, khách hỏi giá.
 5. Hai tên miền cùng trỏ về một bản triển khai nhưng trả ra đúng hai thương hiệu khác nhau.
 6. Dữ liệu mỗi tàu luôn ghi rõ thuộc tàu nào, và RLS chặn mọi truy cập công khai vào bản nháp, leads, hồ sơ ứng viên.
-7. Form công khai không nhận `ship_id` từ phía client.
+7. Form công khai không ghi trực tiếp vào cơ sở dữ liệu; máy chủ tự xác định tàu từ tên miền và client không gửi `ship_id`.
 8. Trang xem thử không bị Google lập chỉ mục.
 9. Chronos giữ nguyên giao diện sau khi chuyển đổi.
 10. Tàu số 2 chạy production mà không cần thêm route hay component riêng.
