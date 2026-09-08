@@ -51,8 +51,8 @@ function timelineOf(itinerary: PublicItineraryFull): TimelineEntry[] {
     day.timeline.forEach((raw, index) => {
       if (!raw || typeof raw !== "object" || Array.isArray(raw)) return;
       const item = raw as Record<string, Json>;
-      const time = typeof item.time === "string" ? item.time : "";
-      const label = typeof item.label === "string" ? item.label : "";
+      const time = typeof item['time'] === "string" ? item['time'] : "";
+      const label = typeof item['label'] === "string" ? item['label'] : "";
       if (!label) return;
       // On multi-day voyages the day's own (localized) title introduces its
       // first entry, mirroring how the source content reads.
@@ -65,16 +65,16 @@ function timelineOf(itinerary: PublicItineraryFull): TimelineEntry[] {
 
 export function toItineraryView(itinerary: PublicItineraryFull): ItineraryView {
   const h = bag(itinerary);
-  const duration = typeof h.duration === "string" ? h.duration : "";
+  const duration = typeof h['duration'] === "string" ? h['duration'] : "";
   return {
     id: itinerary.id,
     slug: itinerary.slug,
     name: itinerary.name,
     description: itinerary.description ?? itinerary.summary ?? "",
     duration,
-    includes: strings(h.includes),
-    excludes: strings(h.excludes),
-    highlights: strings(h.highlights),
+    includes: strings(h['includes']),
+    excludes: strings(h['excludes']),
+    highlights: strings(h['highlights']),
     timeline: timelineOf(itinerary),
     cover: itinerary.media.cover ?? itinerary.media.hero[0] ?? itinerary.media.all[0] ?? null,
     gallery: itinerary.media.gallery,
