@@ -13,6 +13,7 @@ import {
   type PublicCabinsBundle,
   type PublicHomepageBundle,
   type PublicItinerariesBundle,
+  type PublicServicesBundle,
 } from "@/lib/platform";
 
 export async function loadHomepageBundle(qc: QueryClient, pathname: string) {
@@ -85,6 +86,7 @@ export const notFoundHead = { meta: [{ title: "Not found" }, { name: "robots", c
 export const publicErrorComponents = {
   domain: "This site is not configured for this domain.",
   cabin: "This cabin is not available.",
+  service: "This service is not available.",
   generic: "Something went wrong loading this page. Please try again.",
 };
 
@@ -105,6 +107,31 @@ export function itinerariesHead(bundle: PublicItinerariesBundle) {
     seoTitle: page?.seoTitle ?? null,
     description: page?.intro ?? null,
     seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+export async function loadServiceBundle(qc: QueryClient, pathname: string, slug: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.servicesBundle(pathname));
+  if (!bundle) throw notFound();
+  // Unknown slug, unpublished service or a service of another ship → 404 (no fallback).
+  const data =
+    bundle.languages[bundle.language.language] ?? bundle.languages[bundle.ship.defaultLanguage];
+  if (!data?.services.some((s) => s.slug === slug)) throw notFound();
+  return bundle;
+}
+
+export function serviceHead(bundle: PublicServicesBundle, slug: string) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const service = data?.services.find((s) => s.slug === slug) ?? null;
+  const cover = service?.media.cover?.url ?? service?.media.all[0]?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: `/services/${slug}`,
+    title: service?.name ?? null,
+    description: service?.summary ?? service?.description ?? null,
     image: cover,
     type: "website",
   });

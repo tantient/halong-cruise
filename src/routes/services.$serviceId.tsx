@@ -1,32 +1,35 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
-import { pageSeo } from "@/lib/seo";
 import { ServicePage } from "@/components/services/ServicePage";
-import { getService, serviceImages } from "@/components/services/services-data";
+import {
+  loadServiceBundle,
+  notFoundHead,
+  publicErrorComponents,
+  serviceHead,
+} from "@/lib/routes/public-pages";
 
+/** Service detail in the ship's default language (no URL prefix). */
 export const Route = createFileRoute("/services/$serviceId")({
-  loader: ({ params }) => {
-    const service = getService(params.serviceId);
-    if (!service) throw notFound();
-    return { service };
-  },
-  head: ({ loaderData, params }) => {
-    if (!loaderData) {
-      return { meta: [{ title: "Không tìm thấy dịch vụ | Chronos Cruise" }, { name: "robots", content: "noindex" }] };
-    }
-    const { service } = loaderData;
-    const hero = serviceImages(service)[0];
-    return pageSeo({
-      title: `${service.nameEn} | Chronos Cruise`,
-      description: service.introEn.slice(0, 155),
-      path: `/services/${params.serviceId}`,
-      image: hero?.src,
-    });
-  },
+  loader: async ({ context, location, params }) => ({
+    bundle: await loadServiceBundle(context.queryClient, location.pathname, params.serviceId),
+  }),
+  head: ({ loaderData, params }) =>
+    loaderData ? serviceHead(loaderData.bundle, params.serviceId) : notFoundHead,
   component: ServiceRoute,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.service} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
 
 function ServiceRoute() {
-  const { service } = Route.useLoaderData();
-  return <ServicePage service={service} />;
+  const { bundle } = Route.useLoaderData();
+  const { serviceId } = Route.useParams();
+  return <ServicePage bundle={bundle} slug={serviceId} />;
+}
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
 }

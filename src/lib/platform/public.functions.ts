@@ -19,6 +19,7 @@ import type {
   PublicHomepage,
   PublicItineraryFull,
   PublicJobPosition,
+  PublicService,
   PublicPage,
   ShipContext,
 } from "./types";
@@ -253,6 +254,74 @@ export const getPublicService = createServerFn({ method: "GET" })
     if (!s) return null;
     const { getService } = await import("./content.server");
     return getService(s.scope, data.slug);
+  });
+
+export interface PublicServicesLanguageData {
+  services: PublicService[];
+}
+
+export interface PublicServicesBundle {
+  ship: ShipContext;
+  language: LanguageResolution;
+  languages: Partial<Record<LanguageCode, PublicServicesLanguageData>>;
+}
+
+/** All published services of the ship, for every enabled language. */
+export const getPublicServicesBundle = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
+  .handler(async ({ data }): Promise<PublicServicesBundle | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { listServices } = await import("./content.server");
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const services = await listServices({ ...s.scope, language });
+        return [language, { services }] as const;
+      }),
+    );
+    return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
+  });
+
+/** Navigation entry for one service (used by the shared header menu). */
+export interface ServiceNavItem {
+  slug: string;
+  /** Menu grouping key stored with the service data (e.g. "service", "space"). */
+  group: string | null;
+  label: string;
+  description: string | null;
+}
+
+export interface ServiceNav {
+  languages: Partial<Record<LanguageCode, ServiceNavItem[]>>;
+}
+
+/** Lightweight service menu for every enabled language (loaded once per request). */
+export const getPublicServiceNav = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
+  .handler(async ({ data }): Promise<ServiceNav | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { listServices } = await import("./content.server");
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const services = await listServices({ ...s.scope, language });
+        return [
+          language,
+          services.map((svc) => {
+            const bag = svc.highlights && typeof svc.highlights === "object" && !Array.isArray(svc.highlights)
+              ? (svc.highlights as Record<string, unknown>)
+              : {};
+            return {
+              slug: svc.slug,
+              group: typeof bag["group"] === "string" ? (bag["group"] as string) : null,
+              label: typeof bag["menuName"] === "string" ? (bag["menuName"] as string) : svc.name,
+              description: svc.summary,
+            } satisfies ServiceNavItem;
+          }),
+        ] as const;
+      }),
+    );
+    return { languages: Object.fromEntries(entries) };
   });
 
 export const getPublicOffers = createServerFn({ method: "GET" })

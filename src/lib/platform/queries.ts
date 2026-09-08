@@ -32,6 +32,8 @@ import {
   getPublicPage,
   getPublicService,
   getPublicServices,
+  getPublicServiceNav,
+  getPublicServicesBundle,
   getPublicSiteContext,
 } from "./public.functions";
 
@@ -87,6 +89,13 @@ export const publicQueries = {
     queryOptions({ queryKey: base(pathname, "services"), queryFn: () => getPublicServices({ data: { pathname } }), staleTime: STALE }),
   service: (pathname: string, slug: string) =>
     queryOptions({ queryKey: base(pathname, "service", slug), queryFn: () => getPublicService({ data: { pathname, slug } }), staleTime: STALE }),
+
+  /** All enabled languages in one payload (language-independent key). */
+  servicesBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "services-bundle"] as const, queryFn: () => getPublicServicesBundle({ data: { pathname } }), staleTime: STALE }),
+  /** Header service menu for all enabled languages. */
+  serviceNav: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), langKey(pathname), "service-nav"] as const, queryFn: () => getPublicServiceNav({ data: { pathname } }), staleTime: STALE }),
 
   offers: (pathname: string, activeOnly = false) =>
     queryOptions({ queryKey: base(pathname, "offers", activeOnly), queryFn: () => getPublicOffers({ data: { pathname, activeOnly } }), staleTime: STALE }),
