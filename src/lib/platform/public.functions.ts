@@ -153,7 +153,7 @@ export const getPublicCabinsBundle = createServerFn({ method: "GET" })
 export interface PublicCabinLanguageData {
   cabin: PublicCabinFull;
   /** Other cabins of the ship (for the "other cabins" links). */
-  others: PublicCabin[];
+  others: PublicCabinFull[];
   page: PublicPage | null;
 }
 
@@ -169,14 +169,15 @@ export const getPublicCabinBundle = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PublicCabinBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
-    const { getCabin, listCabins, getPage } = await import("./content.server");
+    const { getCabin, listCabinsFull, getPage } = await import("./content.server");
     // Tenant + published scoping happens in the reader; a miss is a real 404.
     const exists = await getCabin(s.scope, data.slug);
     if (!exists) return null;
     const entries = await Promise.all(
       s.context.enabledLanguages.map(async (language) => {
         const scope = { ...s.scope, language };
-        const [cabin, all, page] = await Promise.all([getCabin(scope, data.slug), listCabins(scope), getPage(scope, "cabins")]);
+        const [all, page] = await Promise.all([listCabinsFull(scope), getPage(scope, "cabins")]);
+        const cabin = all.find((c) => c.slug === data.slug);
         if (!cabin) return null;
         return [language, { cabin, others: all.filter((c) => c.slug !== data.slug), page }] as const;
       }),
