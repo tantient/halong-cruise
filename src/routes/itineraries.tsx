@@ -1,15 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { pageSeo } from "@/lib/seo";
-
 import { ItinerariesPage } from "@/components/itineraries/ItinerariesPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-02-v2.webp";
+import { itinerariesHead, loadItinerariesBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-const TITLE = "Hải trình Chronos Cruise | 2N1Đ & 3N2Đ Hạ Long - Lan Hạ";
-const DESC =
-  "Các hải trình du thuyền 6 sao Chronos: 2 ngày 1 đêm, 3 ngày 2 đêm và chuyến đi ngắn ngắm hoàng hôn giữa vịnh Hạ Long - Lan Hạ.";
-
+/** Itineraries in the ship default language (no URL prefix). */
 export const Route = createFileRoute("/itineraries")({
-  head: () => pageSeo({ title: TITLE, description: DESC, path: "/itineraries", image: heroAsset }),
-  component: ItinerariesPage,
+  loader: async ({ context, location }) => ({
+    bundle: await loadItinerariesBundle(context.queryClient, location.pathname),
+  }),
+  head: ({ loaderData }) => (loaderData ? itinerariesHead(loaderData.bundle) : notFoundHead),
+  component: () => <ItinerariesPage bundle={Route.useLoaderData().bundle} />,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.domain} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
+}

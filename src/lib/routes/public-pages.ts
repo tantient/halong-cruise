@@ -12,6 +12,7 @@ import {
   type PublicCabinBundle,
   type PublicCabinsBundle,
   type PublicHomepageBundle,
+  type PublicItinerariesBundle,
 } from "@/lib/platform";
 
 export async function loadHomepageBundle(qc: QueryClient, pathname: string) {
@@ -86,3 +87,26 @@ export const publicErrorComponents = {
   cabin: "This cabin is not available.",
   generic: "Something went wrong loading this page. Please try again.",
 };
+
+export async function loadItinerariesBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.itinerariesBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function itinerariesHead(bundle: PublicItinerariesBundle) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const page = data?.page ?? null;
+  const cover = data?.itineraries[0]?.media.cover?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: "/itineraries",
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
