@@ -1,29 +1,22 @@
 import { Link } from "@tanstack/react-router";
 
-import gallerySuite from "@/assets/gallery/chronos-suite-02.webp";
-import galleryDining from "@/assets/gallery/chronos-dining-panorama-01.webp";
-import gallerySundeck from "@/assets/gallery/chronos-public-pool.webp";
-
 import { Reveal } from "./Reveal";
 
-interface GalleryProps {
-  t: {
-    teaserGallery: {
-      title: string;
-      subtitle: string;
-      captions: string[];
-    };
-  };
+/** Ship-specific copy + imagery (from the database, already localized). */
+export interface GalleryContent {
+  title: string;
+  subtitle: string;
+  captions: string[];
 }
 
-const images = [
-  { src: gallerySuite, alt: "Ocean-view suite aboard Chronos Cruise" },
-  { src: galleryDining, alt: "Panorama fine-dining restaurant aboard Chronos Cruise" },
-  { src: gallerySundeck, alt: "Sundeck and infinity pool aboard Chronos Cruise" },
-];
+interface GalleryProps {
+  content: GalleryContent;
+  images: { src: string; alt: string }[];
+}
 
-export function Gallery({ t }: GalleryProps) {
-  const tr = t.teaserGallery;
+export function Gallery({ content, images }: GalleryProps) {
+  const tr = content;
+  if (images.length < 3) return null;
   const main = images[0]!;
   const side = [images[1]!, images[2]!];
 

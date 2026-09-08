@@ -20,6 +20,7 @@ import {
   getPublicCabin,
   getPublicCabins,
   getPublicHomepage,
+  getPublicHomepageBundle,
   getPublicItineraries,
   getPublicItinerary,
   getPublicJobPositions,
@@ -50,6 +51,9 @@ export const publicQueries = {
 
   homepage: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "homepage"), queryFn: () => getPublicHomepage({ data: { pathname } }), staleTime: STALE }),
+  /** Homepage for all enabled languages (language-independent key: it contains every language). */
+  homepageBundle: (pathname: string) =>
+    queryOptions({ queryKey: ["platform", hostKey(), "homepage-bundle"] as const, queryFn: () => getPublicHomepageBundle({ data: { pathname } }), staleTime: STALE }),
 
   cabins: (pathname: string) =>
     queryOptions({ queryKey: base(pathname, "cabins"), queryFn: () => getPublicCabins({ data: { pathname } }), staleTime: STALE }),

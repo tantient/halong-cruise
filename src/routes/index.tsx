@@ -1,25 +1,42 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { LandingPage } from "@/components/landing/LandingPage";
-import { pageSeo } from "@/lib/seo";
-import heroAsset from "@/assets/chronos-hero.webp";
-import slide1 from "@/assets/chronos-slide-1.webp";
-
-const TITLE = "Chronos Cruise | Sắp ra mắt - Du thuyền 6 sao Hạ Long - Lan Hạ";
-const DESC =
-  "Chronos Cruise sắp ra mắt. Đăng ký để là người đầu tiên nhận thông tin về trải nghiệm du thuyền 6 sao tại vịnh Hạ Long và Lan Hạ.";
+import { buildSeo, publicQueries } from "@/lib/platform";
 
 export const Route = createFileRoute("/")({
-  head: () => {
-    const seo = pageSeo({ title: TITLE, description: DESC, path: "/", image: heroAsset });
+  loader: async ({ context }) => {
+    const bundle = await context.queryClient.ensureQueryData(publicQueries.homepageBundle("/"));
+    if (!bundle) throw notFound();
+    return { bundle };
+  },
+  head: ({ loaderData }) => {
+    if (!loaderData) return {};
+    const { ship, language, languages } = loaderData.bundle;
+    const home = languages[language.language]?.homepage;
+    const firstSlide = home?.hero[0]?.url ?? null;
+    const seo = buildSeo(ship, language.language, { path: "/", image: firstSlide, type: "website" });
     return {
-      ...seo,
+      meta: seo.meta,
       links: [
         ...seo.links,
-        { rel: "preload", as: "image", href: slide1, fetchPriority: "high" },
+        ...(firstSlide ? [{ rel: "preload", as: "image", href: firstSlide, fetchPriority: "high" }] : []),
       ],
     };
   },
-  component: LandingPage,
+  component: HomeRoute,
+  notFoundComponent: () => (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">This site is not configured for this domain.</p>
+    </main>
+  ),
+  errorComponent: () => (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">Something went wrong loading this page. Please try again.</p>
+    </main>
+  ),
 });
 
+function HomeRoute() {
+  const { bundle } = Route.useLoaderData();
+  return <LandingPage bundle={bundle} />;
+}

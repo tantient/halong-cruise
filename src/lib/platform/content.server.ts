@@ -274,7 +274,7 @@ export async function listPageSlugs(scope: ReadScope): Promise<string[]> {
 /* ---------------------------------------------------------------- careers */
 
 type JobRow = {
-  id: string; slug: string; title_en: string; department: string | null; employment_type: string | null;
+  id: string; slug: string; title: string; department: string | null; employment_type: string | null;
   description: string | null; requirements: unknown; benefits: unknown; headcount: number | null; sort_order: number; translations: unknown;
 };
 
@@ -282,12 +282,11 @@ export async function listJobPositions(scope: ReadScope): Promise<PublicJobPosit
   const db = getPublicDb();
   const { data, error } = await db
     .from("job_positions")
-    .select("id,slug,title_en,department,employment_type,description,requirements,benefits,headcount,sort_order,translations")
+    .select("id,slug,title,department,employment_type,description,requirements,benefits,headcount,sort_order,translations")
     .eq("ship_id", scope.shipId)
     .order("sort_order");
   if (error) throw error;
-  // `title` lives in translations as `title`; the base column is `title_en`.
-  const rows = ((data ?? []) as JobRow[]).map((r) => ({ ...r, title: r.title_en }));
+  const rows = (data ?? []) as JobRow[];
   return localizeRows(rows, scope.language, scope.defaultLanguage).map((r) => ({
     id: r.id, slug: r.slug, title: r.title, department: r.department, employmentType: r.employment_type,
     description: r.description, requirements: Array.isArray(r.requirements) ? (r.requirements as Json[]) : [],

@@ -455,7 +455,7 @@ export type Database = {
           slug: string
           sort_order: number
           status: string
-          title_en: string
+          title: string
           title_vi: string | null
           translations: Json
           updated_at: string
@@ -476,7 +476,7 @@ export type Database = {
           slug: string
           sort_order?: number
           status?: string
-          title_en: string
+          title: string
           title_vi?: string | null
           translations?: Json
           updated_at?: string
@@ -497,7 +497,7 @@ export type Database = {
           slug?: string
           sort_order?: number
           status?: string
-          title_en?: string
+          title?: string
           title_vi?: string | null
           translations?: Json
           updated_at?: string

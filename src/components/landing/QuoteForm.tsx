@@ -10,12 +10,18 @@ import { Label } from "@/components/ui/label";
 
 import { Reveal } from "./Reveal";
 
+/** Ship-specific copy (from the database, already localized). */
+export interface QuoteFormContent {
+  label: string;
+  title: string;
+  subtitle: string;
+}
+
 interface QuoteFormProps {
+  content: QuoteFormContent;
+  /** Shared UI labels (platform translation files). */
   t: {
     teaserForm: {
-      label: string;
-      title: string;
-      subtitle: string;
       name: string;
       phone: string;
       email: string;
@@ -32,8 +38,8 @@ interface QuoteFormProps {
   };
 }
 
-export function QuoteForm({ t }: QuoteFormProps) {
-  const tr = t.teaserForm;
+export function QuoteForm({ content, t }: QuoteFormProps) {
+  const tr = { ...t.teaserForm, ...content };
   const [values, setValues] = useState({
     name: "",
     phone: "",
