@@ -24,6 +24,7 @@ export type Database = {
           label: string
           ship_id: string
           sort_order: number
+          translations: Json
           updated_at: string
           value: string | null
         }
@@ -36,6 +37,7 @@ export type Database = {
           label: string
           ship_id: string
           sort_order?: number
+          translations?: Json
           updated_at?: string
           value?: string | null
         }
@@ -48,6 +50,7 @@ export type Database = {
           label?: string
           ship_id?: string
           sort_order?: number
+          translations?: Json
           updated_at?: string
           value?: string | null
         }
@@ -88,6 +91,7 @@ export type Database = {
           sort_order: number
           status: string
           summary: string | null
+          translations: Json
           updated_at: string
           updated_by: string | null
           view_type: string | null
@@ -111,6 +115,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           view_type?: string | null
@@ -134,6 +139,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           view_type?: string | null
@@ -211,6 +217,7 @@ export type Database = {
           section_type: string
           ship_id: string
           status: string
+          translations: Json
           updated_at: string
           updated_by: string | null
         }
@@ -225,6 +232,7 @@ export type Database = {
           section_type: string
           ship_id: string
           status?: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -239,6 +247,7 @@ export type Database = {
           section_type?: string
           ship_id?: string
           status?: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -271,6 +280,7 @@ export type Database = {
           sort_order: number
           status: string
           summary: string | null
+          translations: Json
           updated_at: string
           updated_by: string | null
         }
@@ -292,6 +302,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -313,6 +324,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -338,6 +350,7 @@ export type Database = {
           sort_order: number
           timeline: Json
           title: string | null
+          translations: Json
           updated_at: string
         }
         Insert: {
@@ -351,6 +364,7 @@ export type Database = {
           sort_order?: number
           timeline?: Json
           title?: string | null
+          translations?: Json
           updated_at?: string
         }
         Update: {
@@ -364,6 +378,7 @@ export type Database = {
           sort_order?: number
           timeline?: Json
           title?: string | null
+          translations?: Json
           updated_at?: string
         }
         Relationships: [
@@ -442,6 +457,7 @@ export type Database = {
           status: string
           title_en: string
           title_vi: string | null
+          translations: Json
           updated_at: string
           updated_by: string | null
         }
@@ -462,6 +478,7 @@ export type Database = {
           status?: string
           title_en: string
           title_vi?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -482,6 +499,7 @@ export type Database = {
           status?: string
           title_en?: string
           title_vi?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -568,6 +586,7 @@ export type Database = {
           ship_id: string
           sort_order: number
           storage_path: string
+          translations: Json
           updated_at: string
           updated_by: string | null
           width: number | null
@@ -585,6 +604,7 @@ export type Database = {
           ship_id: string
           sort_order?: number
           storage_path: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           width?: number | null
@@ -602,6 +622,7 @@ export type Database = {
           ship_id?: string
           sort_order?: number
           storage_path?: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           width?: number | null
@@ -623,6 +644,7 @@ export type Database = {
           created_by: string | null
           description: string | null
           ends_at: string | null
+          highlights: Json
           id: string
           name: string
           offer_type: string | null
@@ -633,6 +655,7 @@ export type Database = {
           starts_at: string | null
           status: string
           terms: string | null
+          translations: Json
           updated_at: string
           updated_by: string | null
           value_text: string | null
@@ -643,6 +666,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           ends_at?: string | null
+          highlights?: Json
           id?: string
           name: string
           offer_type?: string | null
@@ -653,6 +677,7 @@ export type Database = {
           starts_at?: string | null
           status?: string
           terms?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           value_text?: string | null
@@ -663,6 +688,7 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           ends_at?: string | null
+          highlights?: Json
           id?: string
           name?: string
           offer_type?: string | null
@@ -673,6 +699,7 @@ export type Database = {
           starts_at?: string | null
           status?: string
           terms?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
           value_text?: string | null
@@ -704,6 +731,7 @@ export type Database = {
           sort_order: number
           status: string
           summary: string | null
+          translations: Json
           updated_at: string
           updated_by: string | null
         }
@@ -723,6 +751,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -742,6 +771,7 @@ export type Database = {
           sort_order?: number
           status?: string
           summary?: string | null
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -879,6 +909,7 @@ export type Database = {
           sort_order: number
           status: string
           title: string
+          translations: Json
           updated_at: string
           updated_by: string | null
         }
@@ -896,6 +927,7 @@ export type Database = {
           sort_order?: number
           status?: string
           title: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -913,6 +945,7 @@ export type Database = {
           sort_order?: number
           status?: string
           title?: string
+          translations?: Json
           updated_at?: string
           updated_by?: string | null
         }
@@ -938,6 +971,7 @@ export type Database = {
           ship_id: string
           site_name: string | null
           title_template: string | null
+          translations: Json
           twitter_handle: string | null
           updated_at: string
         }
@@ -952,6 +986,7 @@ export type Database = {
           ship_id: string
           site_name?: string | null
           title_template?: string | null
+          translations?: Json
           twitter_handle?: string | null
           updated_at?: string
         }
@@ -966,6 +1001,7 @@ export type Database = {
           ship_id?: string
           site_name?: string | null
           title_template?: string | null
+          translations?: Json
           twitter_handle?: string | null
           updated_at?: string
         }
@@ -995,6 +1031,7 @@ export type Database = {
           recruit_email: string | null
           ship_id: string
           tiktok: string | null
+          translations: Json
           tripadvisor: string | null
           updated_at: string
           whatsapp: string | null
@@ -1016,6 +1053,7 @@ export type Database = {
           recruit_email?: string | null
           ship_id: string
           tiktok?: string | null
+          translations?: Json
           tripadvisor?: string | null
           updated_at?: string
           whatsapp?: string | null
@@ -1037,6 +1075,7 @@ export type Database = {
           recruit_email?: string | null
           ship_id?: string
           tiktok?: string | null
+          translations?: Json
           tripadvisor?: string | null
           updated_at?: string
           whatsapp?: string | null
@@ -1059,6 +1098,7 @@ export type Database = {
           currency: string
           default_language: string
           display_name: string | null
+          enabled_languages: string[]
           id: string
           layout: string
           name: string
@@ -1066,6 +1106,8 @@ export type Database = {
           sort_order: number
           status: string
           tagline: string | null
+          total_cabins: number | null
+          translations: Json
           updated_at: string
         }
         Insert: {
@@ -1073,6 +1115,7 @@ export type Database = {
           currency?: string
           default_language?: string
           display_name?: string | null
+          enabled_languages?: string[]
           id?: string
           layout?: string
           name: string
@@ -1080,6 +1123,8 @@ export type Database = {
           sort_order?: number
           status?: string
           tagline?: string | null
+          total_cabins?: number | null
+          translations?: Json
           updated_at?: string
         }
         Update: {
@@ -1087,6 +1132,7 @@ export type Database = {
           currency?: string
           default_language?: string
           display_name?: string | null
+          enabled_languages?: string[]
           id?: string
           layout?: string
           name?: string
@@ -1094,6 +1140,8 @@ export type Database = {
           sort_order?: number
           status?: string
           tagline?: string | null
+          total_cabins?: number | null
+          translations?: Json
           updated_at?: string
         }
         Relationships: []
