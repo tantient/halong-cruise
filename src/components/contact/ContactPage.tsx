@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
@@ -12,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
+import { publicQueries, submitPublicLead, type PublicPage, type PublicPageBundle } from "@/lib/platform";
 
 function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -22,34 +24,77 @@ function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-const PHONE = "+84 902 952 356";
-const PHONE_TEL = "+84902952356";
-const ZALO_LINK = "https://zalo.me/84902952356";
-const WHATSAPP_LINK = "https://wa.me/84902952356";
-const EMAIL = "info@chronoscruise.com";
-const MAP_EMBED =
-  "https://www.openstreetmap.org/export/embed.html?bbox=107.0430%2C20.9420%2C107.0930%2C20.9720&layer=mapnik&marker=20.9570%2C107.0680";
-const MAP_LINK = "https://www.openstreetmap.org/?mlat=20.9570&mlon=107.0680#map=15/20.9570/107.0680";
+function str(page: PublicPage | null, key: string): string {
+  const v = page?.text[key];
+  return typeof v === "string" ? v : "";
+}
 
-export function ContactPage() {
-  const { uiLang: lang, setLang, t } = useLanguage();
+/** Digits-only phone for `tel:` / chat deep links. */
+function dial(value: string | null): string {
+  if (!value) return "";
+  const cleaned = value.replace(/[^\d+]/g, "");
+  return cleaned.startsWith("+") ? cleaned : cleaned ? `+${cleaned}` : "";
+}
+
+/** Heritage contact template — details, map and copy from the database. */
+export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
+  const { uiLang: lang, setLang, t, href } = useLanguage();
+  const { data } = useSuspenseQuery({
+    ...publicQueries.pageBundle(href("/contact"), "contact"),
+    initialData: bundle,
+  });
+  const b = data ?? bundle;
+  const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
+
+  const settings = b.ship.settings;
+  const sendLead = useServerFn(submitPublicLead);
   const [values, setValues] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
+  const [sending, setSending] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(t.contact.success);
-    setValues({ name: "", phone: "", email: "", subject: "", message: "" });
+    setSending(true);
+    try {
+      // The server resolves the ship from the hostname; no tenant id is sent.
+      const res = await sendLead({ data: { type: "contact", pathname: href("/contact"), ...values } });
+      if (res.ok) {
+        toast.success(t.contact.success);
+        setValues({ name: "", phone: "", email: "", subject: "", message: "" });
+      } else {
+        toast.error(t.contact.error);
+      }
+    } catch {
+      toast.error(t.contact.error);
+    } finally {
+      setSending(false);
+    }
   };
 
   const set = (key: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setValues((v) => ({ ...v, [key]: e.target.value }));
 
+  const phoneDisplay = settings.hotlineDisplay ?? settings.hotline;
+  const phoneTel = dial(settings.hotline ?? settings.hotlineDisplay);
+  const hero = page?.media.cover ?? null;
+  const mapEmbed = str(page, "map_embed");
+
   const details = [
-    { icon: Phone, label: t.contact.phone, value: PHONE, href: `tel:${PHONE_TEL}` },
-    { icon: Mail, label: t.contact.email, value: EMAIL, href: `mailto:${EMAIL}` },
-    { icon: MapPin, label: t.contact.address, value: t.contact.addressValue, href: MAP_LINK },
-    { icon: Clock, label: t.contact.hours, value: t.contact.hoursValue },
-  ];
+    phoneDisplay
+      ? { icon: Phone, label: t.contact.phone, value: phoneDisplay, href: phoneTel ? `tel:${phoneTel}` : null }
+      : null,
+    settings.email
+      ? { icon: Mail, label: t.contact.email, value: settings.email, href: `mailto:${settings.email}` }
+      : null,
+    settings.zalo
+      ? { icon: MessageCircle, label: t.contact.zalo, value: phoneDisplay ?? settings.zalo, href: settings.zalo }
+      : null,
+    settings.address
+      ? { icon: MapPin, label: t.contact.address, value: settings.address, href: settings.googleMaps ?? null }
+      : null,
+    str(page, "hours_value")
+      ? { icon: Clock, label: t.contact.hours, value: str(page, "hours_value"), href: null }
+      : null,
+  ].filter((d): d is { icon: typeof Phone; label: string; value: string; href: string | null } => d !== null);
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -57,19 +102,23 @@ export function ContactPage() {
 
       <main>
         <section className="relative h-[52vh] min-h-[360px] w-full overflow-hidden">
-          <img
-            src={heroAsset}
-            alt={lang === "vi" ? "Du thuyền Chronos Cruise trên vịnh Hạ Long" : "Chronos Cruise on Ha Long Bay"}
-            className="h-full w-full object-cover"
-          />
+          {hero ? (
+            <img
+              src={hero.url}
+              alt={str(page, "hero_alt") || hero.alt || b.ship.ship.displayName}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-chronos-ink/80" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-14 lg:px-8">
-              <p className="eyebrow mb-5 text-chronos-gold">{t.contact.label}</p>
+              <p className="eyebrow mb-5 text-chronos-gold">{str(page, "eyebrow")}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl">
-                {t.contact.title}
+                {page?.title ?? ""}
               </h1>
-              <p className="mt-4 max-w-xl text-chronos-ivory/85">{t.contact.subtitle}</p>
+              <p className="mt-4 max-w-xl text-chronos-ivory/85">{str(page, "subtitle") || page?.intro || ""}</p>
             </div>
           </div>
         </section>
@@ -77,17 +126,17 @@ export function ContactPage() {
         <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 lg:grid-cols-2 lg:px-8 lg:py-28">
           <Reveal className="space-y-8">
             <div className="space-y-6">
-              {details.map(({ icon: Icon, label, value, href }) => (
+              {details.map(({ icon: Icon, label, value, href: link }) => (
                 <div key={label} className="flex gap-4">
                   <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center border border-chronos-gold/40 text-chronos-gold">
                     <Icon className="h-4 w-4" />
                   </span>
                   <div>
                     <p className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{label}</p>
-                    {href ? (
+                    {link ? (
                       <a
-                        href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
+                        href={link}
+                        target={link.startsWith("http") ? "_blank" : undefined}
                         rel="noopener noreferrer"
                         className="text-chronos-ink transition-colors hover:text-chronos-gold"
                       >
@@ -102,47 +151,53 @@ export function ContactPage() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button
-                asChild
-                className="btn-sheen rounded-none bg-chronos-gold px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
-              >
-                <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer">
-                  {t.contact.chatZalo}
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
-              >
-                <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">
-                  <WhatsAppIcon className="mr-2 h-4 w-4" />
-                  {t.contact.chatWhatsApp}
-                </a>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
-              >
-                <a href={`tel:${PHONE_TEL}`}>{t.contact.call}</a>
-              </Button>
+              {settings.zalo ? (
+                <Button
+                  asChild
+                  className="btn-sheen rounded-none bg-chronos-gold px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
+                >
+                  <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
+                    {t.contact.chatZalo}
+                  </a>
+                </Button>
+              ) : null}
+              {settings.whatsapp ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
+                >
+                  <a href={settings.whatsapp} target="_blank" rel="noopener noreferrer">
+                    <WhatsAppIcon className="mr-2 h-4 w-4" />
+                    {t.contact.chatWhatsApp}
+                  </a>
+                </Button>
+              ) : null}
+              {phoneTel ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
+                >
+                  <a href={`tel:${phoneTel}`}>{t.contact.call}</a>
+                </Button>
+              ) : null}
             </div>
 
-            <div>
-              <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                {t.contact.mapTitle}
-              </h2>
-              <div className="aspect-[4/3] w-full overflow-hidden border border-chronos-ink/10">
-                <iframe
-                  title={t.contact.mapTitle}
-                  src={MAP_EMBED}
-                  loading="lazy"
-                  className="h-full w-full"
-                  style={{ border: 0 }}
-                />
+            {mapEmbed ? (
+              <div>
+                <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{t.contact.mapTitle}</h2>
+                <div className="aspect-[4/3] w-full overflow-hidden border border-chronos-ink/10">
+                  <iframe
+                    title={t.contact.mapTitle}
+                    src={mapEmbed}
+                    loading="lazy"
+                    className="h-full w-full"
+                    style={{ border: 0 }}
+                  />
+                </div>
               </div>
-            </div>
+            ) : null}
           </Reveal>
 
           <Reveal
@@ -150,8 +205,12 @@ export function ContactPage() {
             onSubmit={handleSubmit}
             className="h-fit border border-chronos-ink/10 bg-chronos-ink/[0.02] p-7 sm:p-10"
           >
-            <h2 className="mb-2 text-3xl tracking-[0.02em] text-chronos-ink">{t.contact.formTitle}</h2>
-            <p className="mb-8 text-sm text-chronos-stone/85">{t.contact.formSubtitle}</p>
+            <h2 className="mb-2 text-3xl tracking-[0.02em] text-chronos-ink">
+              {str(page, "form_title") || t.contact.formTitle}
+            </h2>
+            <p className="mb-8 text-sm text-chronos-stone/85">
+              {str(page, "form_subtitle") || t.contact.formSubtitle}
+            </p>
 
             <div className="grid gap-7 sm:grid-cols-2">
               <div className="space-y-2">
@@ -189,6 +248,7 @@ export function ContactPage() {
             <Button
               type="submit"
               size="lg"
+              disabled={sending}
               className="btn-sheen mt-10 w-full rounded-none bg-chronos-gold text-xs font-semibold uppercase tracking-[0.2em] text-chronos-ink hover:bg-chronos-gold/90"
             >
               {t.contact.submit}

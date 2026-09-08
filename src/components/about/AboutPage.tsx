@@ -1,24 +1,56 @@
 "use client";
 
 import { Anchor, ChefHat, ConciergeBell, Heart, Leaf, ShieldCheck, Waves, type LucideIcon } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
-import exteriorImg from "@/assets/gallery/chronos-exterior-01-v2.webp";
-import lobbyImg from "@/assets/gallery/chronos-public-lobby-01.webp";
-import diningImg from "@/assets/gallery/chronos-dining-panorama-01.webp";
+import { publicQueries, type PublicPage, type PublicPageBundle } from "@/lib/platform";
 
 const featureIcons: LucideIcon[] = [Waves, ChefHat, ConciergeBell, Anchor];
 const valueIcons: LucideIcon[] = [Heart, ShieldCheck, Leaf, Anchor];
 
-export function AboutPage() {
-  const { uiLang: lang, setLang, t } = useLanguage();
-  const vi = lang === "vi";
+interface Item {
+  title: string;
+  desc: string;
+}
 
-  const features = t.about.features;
-  const values = t.about.values.items;
+function str(page: PublicPage | null, key: string): string {
+  const v = page?.text[key];
+  return typeof v === "string" ? v : "";
+}
+
+/** `[{ title, desc }]` lists stored in the page copy. */
+function items(page: PublicPage | null, key: string): Item[] {
+  const raw = page?.text[key];
+  if (!Array.isArray(raw)) return [];
+  const out: Item[] = [];
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) continue;
+    const row = entry as Record<string, unknown>;
+    const title = typeof row["title"] === "string" ? row["title"] : "";
+    if (!title) continue;
+    out.push({ title, desc: typeof row["desc"] === "string" ? row["desc"] : "" });
+  }
+  return out;
+}
+
+/** Heritage about template — all copy and imagery come from the database. */
+export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
+  const { uiLang: lang, setLang, t, href } = useLanguage();
+  const { data } = useSuspenseQuery({
+    ...publicQueries.pageBundle(href("/about"), "about"),
+    initialData: bundle,
+  });
+  const b = data ?? bundle;
+
+  const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
+  const hero = page?.media.cover ?? null;
+  const supporting = page?.media.gallery ?? [];
+  const features = items(page, "features");
+  const values = items(page, "values");
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -26,17 +58,21 @@ export function AboutPage() {
 
       <main>
         <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden">
-          <img
-            src={exteriorImg}
-            alt={vi ? "Du thuyền Chronos trên vịnh Hạ Long" : "Chronos Cruise on Ha Long Bay"}
-            className="h-full w-full object-cover"
-          />
+          {hero ? (
+            <img
+              src={hero.url}
+              alt={str(page, "hero_alt") || hero.alt || b.ship.ship.displayName}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-chronos-ink/80" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
-              <p className="eyebrow mb-5 text-chronos-gold">{t.about.label}</p>
+              <p className="eyebrow mb-5 text-chronos-gold">{str(page, "eyebrow")}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl lg:text-6xl">
-                {t.about.title}
+                {page?.title ?? ""}
               </h1>
             </div>
           </div>
@@ -46,9 +82,7 @@ export function AboutPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
               <Reveal>
-                <p className="mb-6 text-lg leading-relaxed text-chronos-stone/90">
-                  {t.about.body}
-                </p>
+                <p className="mb-6 text-lg leading-relaxed text-chronos-stone/90">{page?.intro ?? ""}</p>
               </Reveal>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -60,12 +94,8 @@ export function AboutPage() {
                         <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-full border border-chronos-gold/50 transition-colors duration-500 group-hover:border-chronos-gold">
                           <Icon className="h-5 w-5 text-chronos-gold" strokeWidth={1.25} />
                         </span>
-                        <h3 className="mb-2 text-xl tracking-[0.02em] text-chronos-ink">
-                          {feature.title}
-                        </h3>
-                        <p className="text-sm leading-relaxed text-chronos-stone/80">
-                          {feature.desc}
-                        </p>
+                        <h3 className="mb-2 text-xl tracking-[0.02em] text-chronos-ink">{feature.title}</h3>
+                        <p className="text-sm leading-relaxed text-chronos-stone/80">{feature.desc}</p>
                       </div>
                     </Reveal>
                   );
@@ -77,67 +107,62 @@ export function AboutPage() {
           <div className="mx-auto mt-28 h-px max-w-7xl bg-gradient-to-r from-transparent via-chronos-gold/45 to-transparent" />
         </section>
 
-        <section className="bg-chronos-warm/20 py-28 lg:py-36">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <Reveal className="mb-14 max-w-2xl">
-              <p className="eyebrow mb-6 text-chronos-gold">{t.about.values.label}</p>
-              <h2 className="mb-4 text-4xl tracking-[0.02em] text-chronos-ink sm:text-5xl">
-                {t.about.values.title}
-              </h2>
-            </Reveal>
-
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {values.map((v, idx) => {
-                const Icon = valueIcons[idx % valueIcons.length]!;
-                return (
-                  <Reveal key={v.title} delay={120 * idx}>
-                    <div className="h-full border-t border-chronos-gold/40 pt-6">
-                      <Icon className="mb-4 h-6 w-6 text-chronos-gold" strokeWidth={1.25} />
-                      <h3 className="mb-2 text-xl tracking-[0.02em] text-chronos-ink">{v.title}</h3>
-                      <p className="text-sm leading-relaxed text-chronos-stone/80">{v.desc}</p>
-                    </div>
-                  </Reveal>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-28 lg:py-36">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-              <Reveal>
-                <div className="grid gap-5">
-                  <img
-                    src={lobbyImg}
-                    alt={vi ? "Sảnh đón Chronos" : "Chronos lobby"}
-                    loading="lazy"
-                    className="aspect-[16/10] w-full rounded-sm object-cover"
-                  />
-                  <img
-                    src={diningImg}
-                    alt={vi ? "Nhà hàng Panorama" : "Panorama Restaurant"}
-                    loading="lazy"
-                    className="aspect-[16/10] w-full rounded-sm object-cover"
-                  />
-                </div>
-              </Reveal>
-              <Reveal delay={160}>
-                <p className="eyebrow mb-6 text-chronos-gold">{vi ? "TẦM NHÌN" : "VISION"}</p>
-                <h2 className="mb-6 text-4xl tracking-[0.02em] text-chronos-ink sm:text-5xl">
-                  {vi
-                    ? "Nơi mỗi chuyến đi là một tác phẩm"
-                    : "Where every voyage becomes a work of art"}
+        {values.length > 0 ? (
+          <section className="bg-chronos-warm/20 py-28 lg:py-36">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <Reveal className="mb-14 max-w-2xl">
+                <p className="eyebrow mb-6 text-chronos-gold">{str(page, "values_label")}</p>
+                <h2 className="mb-4 text-4xl tracking-[0.02em] text-chronos-ink sm:text-5xl">
+                  {str(page, "values_title")}
                 </h2>
-                <p className="text-lg leading-relaxed text-chronos-stone/90">
-                  {vi
-                    ? "Chronos không chỉ là một chuyến du ngoạn. Chúng tôi kết hợp kiến trúc tinh tế, dịch vụ chu đáo và cảnh quan kỳ vĩ để tạo nên những kỷ niệm khó quên giữa lòng di sản thiên nhiên thế giới."
-                    : "Chronos is more than a sightseeing trip. We blend refined architecture, thoughtful service and a spectacular landscape to create unforgettable memories in the heart of a UNESCO natural wonder."}
-                </p>
               </Reveal>
+
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                {values.map((v, idx) => {
+                  const Icon = valueIcons[idx % valueIcons.length]!;
+                  return (
+                    <Reveal key={v.title} delay={120 * idx}>
+                      <div className="h-full border-t border-chronos-gold/40 pt-6">
+                        <Icon className="mb-4 h-6 w-6 text-chronos-gold" strokeWidth={1.25} />
+                        <h3 className="mb-2 text-xl tracking-[0.02em] text-chronos-ink">{v.title}</h3>
+                        <p className="text-sm leading-relaxed text-chronos-stone/80">{v.desc}</p>
+                      </div>
+                    </Reveal>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : null}
+
+        {page?.content ? (
+          <section className="py-28 lg:py-36">
+            <div className="mx-auto max-w-7xl px-6 lg:px-8">
+              <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+                <Reveal>
+                  <div className="grid gap-5">
+                    {supporting.slice(0, 2).map((img) => (
+                      <img
+                        key={img.id}
+                        src={img.url}
+                        alt={img.alt ?? page.title}
+                        loading="lazy"
+                        className="aspect-[16/10] w-full rounded-sm object-cover"
+                      />
+                    ))}
+                  </div>
+                </Reveal>
+                <Reveal delay={160}>
+                  <p className="eyebrow mb-6 text-chronos-gold">{str(page, "vision_label")}</p>
+                  <h2 className="mb-6 text-4xl tracking-[0.02em] text-chronos-ink sm:text-5xl">
+                    {str(page, "vision_title")}
+                  </h2>
+                  <p className="whitespace-pre-line text-lg leading-relaxed text-chronos-stone/90">{page.content}</p>
+                </Reveal>
+              </div>
+            </div>
+          </section>
+        ) : null}
       </main>
 
       <Footer t={t} />

@@ -1,15 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { pageSeo } from "@/lib/seo";
-
 import { OffersPage } from "@/components/offers/OffersPage";
-import heroAsset from "@/assets/gallery/chronos-public-pool.webp";
+import { loadOffersBundle, notFoundHead, offersHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-const TITLE = "Ưu đãi Chronos Cruise | Gói nghỉ dưỡng & khuyến mãi du thuyền Hạ Long";
-const DESC =
-  "Các ưu đãi và gói đặc biệt trên Chronos Cruise: giảm giá mùa thấp điểm, ưu đãi gia đình, gói trăng mật và combo nghỉ dưỡng giữa vịnh Hạ Long.";
-
+/** Offers in the ship default language (no URL prefix). */
 export const Route = createFileRoute("/offers")({
-  head: () => pageSeo({ title: TITLE, description: DESC, path: "/offers", image: heroAsset }),
-  component: OffersPage,
+  loader: async ({ context, location }) => ({
+    bundle: await loadOffersBundle(context.queryClient, location.pathname),
+  }),
+  head: ({ loaderData }) => (loaderData ? offersHead(loaderData.bundle) : notFoundHead),
+  component: () => <OffersPage bundle={Route.useLoaderData().bundle} />,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.domain} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
+}

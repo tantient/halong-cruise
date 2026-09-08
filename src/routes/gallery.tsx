@@ -1,15 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { pageSeo } from "@/lib/seo";
-
 import { GalleryPage } from "@/components/gallery/GalleryPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
+import { galleryHead, loadGalleryBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-const TITLE = "Thư viện ảnh Chronos Cruise | Không gian du thuyền 6 sao";
-const DESC =
-  "Khám phá toàn bộ không gian Chronos Cruise: ngoại thất, nhà hàng, khu giải trí, spa và phòng nghỉ hướng vịnh Hạ Long - Lan Hạ.";
-
+/** Gallery page in the ship default language (no URL prefix). */
 export const Route = createFileRoute("/gallery")({
-  head: () => pageSeo({ title: TITLE, description: DESC, path: "/gallery", image: heroAsset }),
-  component: GalleryPage,
+  loader: async ({ context, location }) => ({
+    bundle: await loadGalleryBundle(context.queryClient, location.pathname),
+  }),
+  head: ({ loaderData }) => (loaderData ? galleryHead(loaderData.bundle) : notFoundHead),
+  component: () => <GalleryPage bundle={Route.useLoaderData().bundle} />,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.domain} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
+}

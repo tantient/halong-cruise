@@ -10,9 +10,13 @@ import {
   buildSeo,
   publicQueries,
   type PublicCabinBundle,
+  type PublicCareersBundle,
+  type PublicGalleryBundle,
   type PublicCabinsBundle,
   type PublicHomepageBundle,
   type PublicItinerariesBundle,
+  type PublicOffersBundle,
+  type PublicPageBundle,
   type PublicServicesBundle,
 } from "@/lib/platform";
 
@@ -133,6 +137,102 @@ export function serviceHead(bundle: PublicServicesBundle, slug: string) {
     title: service?.name ?? null,
     description: service?.summary ?? service?.description ?? null,
     image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+/* ----------------------------------------------------------------- offers */
+
+export async function loadOffersBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.offersBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function offersHead(bundle: PublicOffersBundle) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const page = data?.page ?? null;
+  const cover = page?.media.cover?.url ?? data?.offers[0]?.media.cover?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: "/offers",
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+/* --------------------------------------------------- single editorial page */
+
+export async function loadPageBundle(qc: QueryClient, pathname: string, slug: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.pageBundle(pathname, slug));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+/** SEO for a page-backed route (`/about`, `/contact`, …). */
+export function pageHead(bundle: PublicPageBundle, path: string) {
+  const { ship, language, languages } = bundle;
+  const page = (languages[language.language] ?? languages[ship.defaultLanguage])?.page ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path,
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: page?.media.cover?.url ?? null,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+/* ---------------------------------------------------------------- careers */
+
+export async function loadCareersBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.careersBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function careersHead(bundle: PublicCareersBundle) {
+  const { ship, language, languages } = bundle;
+  const page = (languages[language.language] ?? languages[ship.defaultLanguage])?.page ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: "/careers",
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: page?.media.cover?.url ?? null,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+/* ---------------------------------------------------------------- gallery */
+
+export async function loadGalleryBundle(qc: QueryClient, pathname: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.galleryBundle(pathname));
+  if (!bundle) throw notFound();
+  return bundle;
+}
+
+export function galleryHead(bundle: PublicGalleryBundle) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const page = data?.page ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: "/gallery",
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: page?.media.cover?.url ?? data?.images[0]?.url ?? null,
     type: "website",
   });
   return { meta: seo.meta, links: seo.links };

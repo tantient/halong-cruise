@@ -1,15 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { pageSeo } from "@/lib/seo";
-
 import { AboutPage } from "@/components/about/AboutPage";
-import heroAsset from "@/assets/gallery/chronos-exterior-01-v2.webp";
+import { pageHead, loadPageBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
-const TITLE = "Giới thiệu Chronos Cruise | Du thuyền 6 sao Hạ Long - Lan Hạ";
-const DESC =
-  "Tìm hiểu về Chronos Cruise: tinh thần phục vụ, giá trị cốt lõi và trải nghiệm nghỉ dưỡng 6 sao giữa vịnh Hạ Long - Lan Hạ.";
-
+/** About page in the ship default language (no URL prefix). */
 export const Route = createFileRoute("/about")({
-  head: () => pageSeo({ title: TITLE, description: DESC, path: "/about", image: heroAsset }),
-  component: AboutPage,
+  loader: async ({ context, location }) => ({
+    bundle: await loadPageBundle(context.queryClient, location.pathname, "about"),
+  }),
+  head: ({ loaderData }) => (loaderData ? pageHead(loaderData.bundle, "/about") : notFoundHead),
+  component: () => <AboutPage bundle={Route.useLoaderData().bundle} />,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.domain} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
+}

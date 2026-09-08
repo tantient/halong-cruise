@@ -1,11 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { ContactPage } from "@/components/contact/ContactPage";
-import { Route as EnRoute } from "./contact";
+import { pageHead, loadPageBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
 /** Language-prefixed variant of `/contact`. */
 export const Route = createFileRoute("/$lang/contact")({
-  // Same metadata as the unprefixed route (canonical points at the English URL).
-  head: () => (EnRoute.options.head as unknown as () => object)(),
-  component: ContactPage,
+  loader: async ({ context, location }) => ({
+    bundle: await loadPageBundle(context.queryClient, location.pathname, "contact"),
+  }),
+  head: ({ loaderData }) => (loaderData ? pageHead(loaderData.bundle, "/contact") : notFoundHead),
+  component: () => <ContactPage bundle={Route.useLoaderData().bundle} />,
+  notFoundComponent: () => <PublicMessage text={publicErrorComponents.domain} />,
+  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
 });
+
+function PublicMessage({ text }: { text: string }) {
+  return (
+    <main className="flex min-h-screen items-center justify-center p-8 text-center">
+      <p className="text-muted-foreground">{text}</p>
+    </main>
+  );
+}
