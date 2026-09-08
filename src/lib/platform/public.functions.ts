@@ -17,6 +17,7 @@ import type {
   PublicCabin,
   PublicCabinFull,
   PublicHomepage,
+  PublicItineraryFull,
   PublicJobPosition,
   PublicPage,
   ShipContext,
@@ -196,6 +197,35 @@ export const getPublicItineraries = createServerFn({ method: "GET" })
     if (!s) return [];
     const { listItineraries } = await import("./content.server");
     return listItineraries(s.scope);
+  });
+
+export interface PublicItinerariesLanguageData {
+  itineraries: PublicItineraryFull[];
+  /** Editorial copy of the itineraries index page (`ship_pages.slug = 'itineraries'`). */
+  page: PublicPage | null;
+}
+
+export interface PublicItinerariesBundle {
+  ship: ShipContext;
+  language: LanguageResolution;
+  languages: Partial<Record<LanguageCode, PublicItinerariesLanguageData>>;
+}
+
+/** Itineraries (with day plan) + page copy for every enabled language. */
+export const getPublicItinerariesBundle = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
+  .handler(async ({ data }): Promise<PublicItinerariesBundle | null> => {
+    const s = await publicScope(data.pathname);
+    if (!s) return null;
+    const { listItinerariesFull, getPage } = await import("./content.server");
+    const entries = await Promise.all(
+      s.context.enabledLanguages.map(async (language) => {
+        const scope = { ...s.scope, language };
+        const [itineraries, page] = await Promise.all([listItinerariesFull(scope), getPage(scope, "itineraries")]);
+        return [language, { itineraries, page }] as const;
+      }),
+    );
+    return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
   });
 
 export const getPublicItinerary = createServerFn({ method: "GET" })
