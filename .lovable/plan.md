@@ -171,7 +171,7 @@ Bucket public `ship-media`, đường dẫn `<ship-slug>/<category>/<file>`. Ass
 
 Làm lần lượt, mỗi task tự đứng được và website Chronos vẫn chạy sau từng task — không đập cả site cùng lúc.
 
-1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo`, `ship_ai_profiles` + GRANT/RLS theo `has_role(admin)`. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
+1. **1a — Schema tàu**: `ships`, `ship_domains`, `ship_branding`, `ship_settings`, `ship_seo` + GRANT/RLS theo `has_role(owner/admin)`. Chèn tàu Chronos (`status = 'live'`) và domain của nó. Web chưa đổi gì.
 2. **1b — Schema nội dung**: `cabins`, `cabin_details`, `itineraries`, `itinerary_days`, `services`, `offers`, `job_positions`, `ship_pages`, `homepage_sections`.
 3. **1c — Schema media & leads**: bucket `ship-media`, `media`, `entity_media`, `leads`, thêm `ship_id` vào `job_applications`.
 4. **1d — Chuyển ảnh**: upload asset Chronos vào bucket, tạo hàng `media` + `entity_media`. Web vẫn dùng import cũ.
