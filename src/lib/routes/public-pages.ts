@@ -4,7 +4,7 @@
  */
 
 import type { QueryClient } from "@tanstack/react-query";
-import { notFound } from "@tanstack/react-router";
+import { notFound, redirect } from "@tanstack/react-router";
 
 import {
   buildSeo,
@@ -61,6 +61,28 @@ export function cabinsHead(bundle: PublicCabinsBundle) {
     type: "website",
   });
   return { meta: seo.meta, links: seo.links };
+}
+
+/**
+ * Retired cabin slugs → their current commercial slug. Slugs are editable
+ * product data, so renames keep old URLs alive with a permanent redirect.
+ * Works for any language prefix because only the slug segment is swapped.
+ */
+const legacyCabinSlugs: Record<string, string> = {
+  "owners-suite": "chronos-signature-jacuzzi-suite",
+  "junior-suite-a": "premier-double-suite",
+  "junior-suite-b": "premier-twin-suite",
+  "grand-suite-corner": "grand-suite",
+};
+
+export function redirectLegacyCabinSlug(pathname: string, slug: string) {
+  const target = legacyCabinSlugs[slug];
+  if (!target) return;
+  throw redirect({
+    href: pathname.replace(`/cabins/${slug}`, `/cabins/${target}`),
+    statusCode: 301,
+    throw: true,
+  });
 }
 
 export async function loadCabinBundle(qc: QueryClient, pathname: string, slug: string) {
