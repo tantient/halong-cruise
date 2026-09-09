@@ -192,7 +192,7 @@ function ExtendedVoyage({ it, ui }: { it: ItineraryView; ui: ItineraryUi }) {
     <section className="pb-8">
       <div className="mx-auto max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:items-center">
-          <Reveal className="lg:col-span-8">
+          <Reveal className="lg:col-span-8 lg:col-start-1 lg:row-start-1">
             <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[21/10]">
               {image ? (
                 <img
@@ -209,7 +209,7 @@ function ExtendedVoyage({ it, ui }: { it: ItineraryView; ui: ItineraryUi }) {
 
           <Reveal
             delay={120}
-            className="relative z-10 px-6 lg:col-span-5 lg:col-start-8 lg:translate-y-10 lg:px-0"
+            className="relative z-10 px-6 lg:col-span-5 lg:col-start-8 lg:row-start-1 lg:translate-y-10 lg:px-0"
           >
             <div className="bg-chronos-ivory pt-10 lg:py-12 lg:pl-12">
               <p className="eyebrow mb-4 text-chronos-gold">{ui.stayLonger}</p>
