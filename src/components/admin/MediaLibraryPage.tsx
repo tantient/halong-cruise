@@ -112,7 +112,12 @@ export function MediaLibraryPage() {
               disabled={!shipId || uploadMutation.isPending}
               onChange={(e) => {
                 const files = Array.from(e.target.files ?? []);
-                if (files.length > 0) uploadMutation.mutate(files);
+                if (files.length === 0) return;
+                if (!shipId) {
+                  toast.error("Hãy chờ danh sách tàu tải xong rồi chọn lại tệp");
+                  return;
+                }
+                uploadMutation.mutate(files);
               }}
             />
           </Field>
