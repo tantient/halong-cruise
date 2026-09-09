@@ -28,6 +28,8 @@ import { Route as LangContactRouteImport } from './routes/$lang.contact'
 import { Route as LangGalleryRouteImport } from './routes/$lang.gallery'
 import { Route as LangItinerariesRouteImport } from './routes/$lang.itineraries'
 import { Route as LangOffersRouteImport } from './routes/$lang.offers'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as CabinsIndexRouteImport } from './routes/cabins.index'
 import { Route as CabinsCabinIdRouteImport } from './routes/cabins.$cabinId'
 import { Route as DevSyncRouteImport } from './routes/dev.sync'
@@ -35,7 +37,11 @@ import { Route as ServicesServiceIdRouteImport } from './routes/services.$servic
 import { Route as LangCabinsIndexRouteImport } from './routes/$lang.cabins.index'
 import { Route as LangCabinsCabinIdRouteImport } from './routes/$lang.cabins.$cabinId'
 import { Route as LangServicesServiceIdRouteImport } from './routes/$lang.services.$serviceId'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_authenticated/admin.applications'
+import { Route as AuthenticatedAdminShipsIndexRouteImport } from './routes/_authenticated/admin.ships.index'
+import { Route as AuthenticatedAdminShipsShipIdRouteImport } from './routes/_authenticated/admin.ships.$shipId'
+import { Route as AuthenticatedAdminShipsNewRouteImport } from './routes/_authenticated/admin.ships.new'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -132,6 +138,16 @@ const LangOffersRoute = LangOffersRouteImport.update({
   path: '/offers',
   getParentRoute: () => LangRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin_/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CabinsIndexRoute = CabinsIndexRouteImport.update({
   id: '/cabins/',
   path: '/cabins/',
@@ -167,11 +183,34 @@ const LangServicesServiceIdRoute = LangServicesServiceIdRouteImport.update({
   path: '/services/$serviceId',
   getParentRoute: () => LangRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminApplicationsRoute =
   AuthenticatedAdminApplicationsRouteImport.update({
-    id: '/admin/applications',
-    path: '/admin/applications',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/applications',
+    path: '/applications',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminShipsIndexRoute =
+  AuthenticatedAdminShipsIndexRouteImport.update({
+    id: '/ships/',
+    path: '/ships/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminShipsShipIdRoute =
+  AuthenticatedAdminShipsShipIdRouteImport.update({
+    id: '/ships/$shipId',
+    path: '/ships/$shipId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminShipsNewRoute =
+  AuthenticatedAdminShipsNewRouteImport.update({
+    id: '/ships/new',
+    path: '/ships/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
@@ -197,6 +236,8 @@ export interface FileRoutesByFullPath {
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/itineraries': typeof LangItinerariesRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
@@ -206,7 +247,11 @@ export interface FileRoutesByFullPath {
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
+  '/admin/ships/new': typeof AuthenticatedAdminShipsNewRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/admin/ships/': typeof AuthenticatedAdminShipsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -225,6 +270,7 @@ export interface FileRoutesByTo {
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/itineraries': typeof LangItinerariesRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/admin/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
@@ -234,7 +280,11 @@ export interface FileRoutesByTo {
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/$lang/cabins': typeof LangCabinsIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
+  '/admin/ships/new': typeof AuthenticatedAdminShipsNewRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/admin/ships': typeof AuthenticatedAdminShipsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -256,6 +306,8 @@ export interface FileRoutesById {
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/itineraries': typeof LangItinerariesRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin_/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
@@ -265,7 +317,11 @@ export interface FileRoutesById {
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
+  '/_authenticated/admin/ships/new': typeof AuthenticatedAdminShipsNewRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/_authenticated/admin/ships/': typeof AuthenticatedAdminShipsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -287,6 +343,8 @@ export interface FileRouteTypes {
     | '/$lang/gallery'
     | '/$lang/itineraries'
     | '/$lang/offers'
+    | '/admin'
+    | '/admin/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
     | '/services/$serviceId'
@@ -296,7 +354,11 @@ export interface FileRouteTypes {
     | '/$lang/services/$serviceId'
     | '/admin/applications'
     | '/$lang/cabins/'
+    | '/admin/'
+    | '/admin/ships/$shipId'
+    | '/admin/ships/new'
     | '/api/public/media/$'
+    | '/admin/ships/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -315,6 +377,7 @@ export interface FileRouteTypes {
     | '/$lang/gallery'
     | '/$lang/itineraries'
     | '/$lang/offers'
+    | '/admin/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
     | '/services/$serviceId'
@@ -324,7 +387,11 @@ export interface FileRouteTypes {
     | '/$lang/services/$serviceId'
     | '/admin/applications'
     | '/$lang/cabins'
+    | '/admin'
+    | '/admin/ships/$shipId'
+    | '/admin/ships/new'
     | '/api/public/media/$'
+    | '/admin/ships'
   id:
     | '__root__'
     | '/'
@@ -345,6 +412,8 @@ export interface FileRouteTypes {
     | '/$lang/gallery'
     | '/$lang/itineraries'
     | '/$lang/offers'
+    | '/_authenticated/admin'
+    | '/admin_/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
     | '/services/$serviceId'
@@ -354,7 +423,11 @@ export interface FileRouteTypes {
     | '/$lang/services/$serviceId'
     | '/_authenticated/admin/applications'
     | '/$lang/cabins/'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/ships/$shipId'
+    | '/_authenticated/admin/ships/new'
     | '/api/public/media/$'
+    | '/_authenticated/admin/ships/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -370,6 +443,7 @@ export interface RootRouteChildren {
   OffersRoute: typeof OffersRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   CabinsCabinIdRoute: typeof CabinsCabinIdRoute
   DevSyncRoute: typeof DevSyncRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
@@ -512,6 +586,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangOffersRouteImport
       parentRoute: typeof LangRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/admin_/login': {
+      id: '/admin_/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cabins/': {
       id: '/cabins/'
       path: '/cabins'
@@ -561,12 +649,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangServicesServiceIdRouteImport
       parentRoute: typeof LangRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/applications': {
       id: '/_authenticated/admin/applications'
-      path: '/admin/applications'
+      path: '/applications'
       fullPath: '/admin/applications'
       preLoaderRoute: typeof AuthenticatedAdminApplicationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ships/': {
+      id: '/_authenticated/admin/ships/'
+      path: '/ships'
+      fullPath: '/admin/ships/'
+      preLoaderRoute: typeof AuthenticatedAdminShipsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ships/$shipId': {
+      id: '/_authenticated/admin/ships/$shipId'
+      path: '/ships/$shipId'
+      fullPath: '/admin/ships/$shipId'
+      preLoaderRoute: typeof AuthenticatedAdminShipsShipIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ships/new': {
+      id: '/_authenticated/admin/ships/new'
+      path: '/ships/new'
+      fullPath: '/admin/ships/new'
+      preLoaderRoute: typeof AuthenticatedAdminShipsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/api/public/media/$': {
       id: '/api/public/media/$'
@@ -578,12 +694,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
+interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminApplicationsRoute: typeof AuthenticatedAdminApplicationsRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminShipsShipIdRoute: typeof AuthenticatedAdminShipsShipIdRoute
+  AuthenticatedAdminShipsNewRoute: typeof AuthenticatedAdminShipsNewRoute
+  AuthenticatedAdminShipsIndexRoute: typeof AuthenticatedAdminShipsIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminShipsShipIdRoute: AuthenticatedAdminShipsShipIdRoute,
+  AuthenticatedAdminShipsNewRoute: AuthenticatedAdminShipsNewRoute,
+  AuthenticatedAdminShipsIndexRoute: AuthenticatedAdminShipsIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -630,6 +765,7 @@ const rootRouteChildren: RootRouteChildren = {
   OffersRoute: OffersRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AdminLoginRoute: AdminLoginRoute,
   CabinsCabinIdRoute: CabinsCabinIdRoute,
   DevSyncRoute: DevSyncRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
