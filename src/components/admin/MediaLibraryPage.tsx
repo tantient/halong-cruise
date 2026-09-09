@@ -112,6 +112,7 @@ export function MediaLibraryPage() {
               disabled={!shipId || uploadMutation.isPending}
               onChange={(e) => {
                 const files = Array.from(e.target.files ?? []);
+                console.log("[cms] picked files", files.length, "ship", shipId);
                 if (files.length > 0) uploadMutation.mutate(files);
               }}
             />
