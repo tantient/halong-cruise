@@ -74,7 +74,7 @@ export interface Translations {
     title: string;
     subtitle: string;
     name: string;
-    zalo: string;
+    phone: string;
     email: string;
     date: string;
     message: string;
