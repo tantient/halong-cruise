@@ -1,5 +1,5 @@
 import { LocalLink } from "@/lib/i18n/language-context";
-import { Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 
 import { ChronosLogo } from "./ChronosLogo";
 import { useSite } from "@/lib/platform";
