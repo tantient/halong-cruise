@@ -118,7 +118,7 @@ export interface Translations {
     openingsLabel: string;
     openingsTitle: string;
     openingsSubtitle: string;
-    contactZalo: string;
+    contactWhatsApp: string;
     sendEmail: string;
     ctaLabel: string;
     ctaTitle: string;
@@ -133,14 +133,12 @@ export interface Translations {
     title: string;
     subtitle: string;
     phone: string;
-    zalo: string;
     whatsapp: string;
     email: string;
     address: string;
     addressValue: string;
     hours: string;
     hoursValue: string;
-    chatZalo: string;
     chatWhatsApp: string;
     call: string;
     mapTitle: string;
