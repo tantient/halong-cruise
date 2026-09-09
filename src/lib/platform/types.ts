@@ -39,6 +39,7 @@ export interface ShipSettings {
   zalo: string | null;
   email: string | null;
   recruitEmail: string | null;
+  recruitZalo: string | null;
   facebook: string | null;
   instagram: string | null;
   tiktok: string | null;

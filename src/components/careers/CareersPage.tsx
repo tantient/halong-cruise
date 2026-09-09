@@ -15,6 +15,13 @@ function str(page: PublicPage | null, key: string): string {
   return typeof v === "string" ? v : "";
 }
 
+function phoneFromZaloUrl(url: string): string {
+  const digits = url.match(/zalo\.me\/(\d+)/)?.[1];
+  if (!digits) return "";
+  const local = digits.startsWith("84") ? `0${digits.slice(2)}` : digits;
+  return local.replace(/^(\d{4})(\d{3})(\d{3})$/, "$1 $2 $3");
+}
+
 /** Heritage careers template — positions, copy and contacts from the database. */
 export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
@@ -29,6 +36,8 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
   const emailLink = settings.recruitEmail
     ? `mailto:${settings.recruitEmail}?subject=${encodeURIComponent(page?.title ?? "Application")}`
     : null;
+  const recruitZalo = settings.recruitZalo;
+  const recruitZaloNumber = recruitZalo ? phoneFromZaloUrl(recruitZalo) : "";
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -92,14 +101,14 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                 <h2 className="mb-4 text-3xl tracking-[0.02em] text-card-foreground">{str(page, "cta_title")}</h2>
                 <p className="mb-8 text-chronos-stone/85">{str(page, "cta_subtitle")}</p>
                 <div className="flex flex-wrap gap-3">
-                  {settings.zalo ? (
+                  {recruitZalo ? (
                     <Button
                       asChild
                       className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
                     >
-                      <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
+                      <a href={recruitZalo} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="mr-2 h-4 w-4" />
-                        {tc.contactZalo}
+                        {tc.contactZalo}{recruitZaloNumber ? ` · ${recruitZaloNumber}` : ""}
                       </a>
                     </Button>
                   ) : null}

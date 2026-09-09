@@ -230,6 +230,7 @@ function SettingsTab({
     zalo: str(settings?.["zalo"]),
     email: str(settings?.["email"]),
     recruitEmail: str(settings?.["recruit_email"]),
+    recruitZalo: str(settings?.["recruit_zalo"]),
     facebook: str(settings?.["facebook"]),
     instagram: str(settings?.["instagram"]),
     tiktok: str(settings?.["tiktok"]),
@@ -259,6 +260,7 @@ function SettingsTab({
           <TextField label="Zalo" value={v.zalo} onChange={set("zalo")} />
           <TextField label="Email" value={v.email} onChange={set("email")} />
           <TextField label="Email tuyển dụng" value={v.recruitEmail} onChange={set("recruitEmail")} />
+          <TextField label="Zalo tuyển dụng" value={v.recruitZalo} onChange={set("recruitZalo")} />
         </div>
       </Card>
       <Card title="Mạng xã hội">

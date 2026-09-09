@@ -184,6 +184,7 @@ export async function getShipContext(
       zalo: st?.zalo ?? null,
       email: st?.email ?? null,
       recruitEmail: st?.recruit_email ?? null,
+      recruitZalo: st?.recruit_zalo ?? null,
       facebook: st?.facebook ?? null,
       instagram: st?.instagram ?? null,
       tiktok: st?.tiktok ?? null,
