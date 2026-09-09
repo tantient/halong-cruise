@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ServicePage } from "@/components/services/ServicePage";
+import { ExperienceDetailPage } from "@/components/experiences/ExperienceDetailPage";
 import {
   loadServiceBundle,
   notFoundHead,
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/services/$serviceId")({
 function ServiceRoute() {
   const { bundle } = Route.useLoaderData();
   const { serviceId } = Route.useParams();
-  return <ServicePage bundle={bundle} slug={serviceId} />;
+  return <ExperienceDetailPage bundle={bundle} slug={serviceId} />;
 }
 
 function PublicMessage({ text }: { text: string }) {

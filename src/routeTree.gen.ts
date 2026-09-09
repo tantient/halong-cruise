@@ -20,22 +20,28 @@ import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as OffersRouteImport } from './routes/offers'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TheShipRouteImport } from './routes/the-ship'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as LangAboutRouteImport } from './routes/$lang.about'
 import { Route as LangCareersRouteImport } from './routes/$lang.careers'
 import { Route as LangContactRouteImport } from './routes/$lang.contact'
 import { Route as LangGalleryRouteImport } from './routes/$lang.gallery'
 import { Route as LangOffersRouteImport } from './routes/$lang.offers'
+import { Route as LangTheShipRouteImport } from './routes/$lang.the-ship'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as CabinsIndexRouteImport } from './routes/cabins.index'
 import { Route as CabinsCabinIdRouteImport } from './routes/cabins.$cabinId'
 import { Route as DevSyncRouteImport } from './routes/dev.sync'
+import { Route as ExperiencesIndexRouteImport } from './routes/experiences.index'
+import { Route as ExperiencesServiceIdRouteImport } from './routes/experiences.$serviceId'
 import { Route as ItinerariesIndexRouteImport } from './routes/itineraries.index'
 import { Route as ItinerariesVoyageIdRouteImport } from './routes/itineraries.$voyageId'
 import { Route as ServicesServiceIdRouteImport } from './routes/services.$serviceId'
 import { Route as LangCabinsIndexRouteImport } from './routes/$lang.cabins.index'
 import { Route as LangCabinsCabinIdRouteImport } from './routes/$lang.cabins.$cabinId'
+import { Route as LangExperiencesIndexRouteImport } from './routes/$lang.experiences.index'
+import { Route as LangExperiencesServiceIdRouteImport } from './routes/$lang.experiences.$serviceId'
 import { Route as LangItinerariesIndexRouteImport } from './routes/$lang.itineraries.index'
 import { Route as LangItinerariesVoyageIdRouteImport } from './routes/$lang.itineraries.$voyageId'
 import { Route as LangServicesServiceIdRouteImport } from './routes/$lang.services.$serviceId'
@@ -103,6 +109,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TheShipRoute = TheShipRouteImport.update({
+  id: '/the-ship',
+  path: '/the-ship',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LangIndexRoute = LangIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -133,6 +144,11 @@ const LangOffersRoute = LangOffersRouteImport.update({
   path: '/offers',
   getParentRoute: () => LangRoute,
 } as any)
+const LangTheShipRoute = LangTheShipRouteImport.update({
+  id: '/the-ship',
+  path: '/the-ship',
+  getParentRoute: () => LangRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -156,6 +172,16 @@ const CabinsCabinIdRoute = CabinsCabinIdRouteImport.update({
 const DevSyncRoute = DevSyncRouteImport.update({
   id: '/dev/sync',
   path: '/dev/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperiencesIndexRoute = ExperiencesIndexRouteImport.update({
+  id: '/experiences/',
+  path: '/experiences/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExperiencesServiceIdRoute = ExperiencesServiceIdRouteImport.update({
+  id: '/experiences/$serviceId',
+  path: '/experiences/$serviceId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ItinerariesIndexRoute = ItinerariesIndexRouteImport.update({
@@ -183,6 +209,17 @@ const LangCabinsCabinIdRoute = LangCabinsCabinIdRouteImport.update({
   path: '/cabins/$cabinId',
   getParentRoute: () => LangRoute,
 } as any)
+const LangExperiencesIndexRoute = LangExperiencesIndexRouteImport.update({
+  id: '/experiences/',
+  path: '/experiences/',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangExperiencesServiceIdRoute =
+  LangExperiencesServiceIdRouteImport.update({
+    id: '/experiences/$serviceId',
+    path: '/experiences/$serviceId',
+    getParentRoute: () => LangRoute,
+  } as any)
 const LangItinerariesIndexRoute = LangItinerariesIndexRouteImport.update({
   id: '/itineraries/',
   path: '/itineraries/',
@@ -261,21 +298,26 @@ export interface FileRoutesByFullPath {
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/the-ship': typeof TheShipRoute
   '/$lang/about': typeof LangAboutRoute
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/$lang/the-ship': typeof LangTheShipRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
+  '/experiences/$serviceId': typeof ExperiencesServiceIdRoute
   '/itineraries/$voyageId': typeof ItinerariesVoyageIdRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
   '/$lang/': typeof LangIndexRoute
   '/cabins/': typeof CabinsIndexRoute
+  '/experiences/': typeof ExperiencesIndexRoute
   '/itineraries/': typeof ItinerariesIndexRoute
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
+  '/$lang/experiences/$serviceId': typeof LangExperiencesServiceIdRoute
   '/$lang/itineraries/$voyageId': typeof LangItinerariesVoyageIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
@@ -283,6 +325,7 @@ export interface FileRoutesByFullPath {
   '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
+  '/$lang/experiences/': typeof LangExperiencesIndexRoute
   '/$lang/itineraries/': typeof LangItinerariesIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -300,20 +343,25 @@ export interface FileRoutesByTo {
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/the-ship': typeof TheShipRoute
   '/$lang/about': typeof LangAboutRoute
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/$lang/the-ship': typeof LangTheShipRoute
   '/admin/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
+  '/experiences/$serviceId': typeof ExperiencesServiceIdRoute
   '/itineraries/$voyageId': typeof ItinerariesVoyageIdRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
   '/$lang': typeof LangIndexRoute
   '/cabins': typeof CabinsIndexRoute
+  '/experiences': typeof ExperiencesIndexRoute
   '/itineraries': typeof ItinerariesIndexRoute
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
+  '/$lang/experiences/$serviceId': typeof LangExperiencesServiceIdRoute
   '/$lang/itineraries/$voyageId': typeof LangItinerariesVoyageIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
@@ -321,6 +369,7 @@ export interface FileRoutesByTo {
   '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins': typeof LangCabinsIndexRoute
+  '/$lang/experiences': typeof LangExperiencesIndexRoute
   '/$lang/itineraries': typeof LangItinerariesIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -341,21 +390,26 @@ export interface FileRoutesById {
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/the-ship': typeof TheShipRoute
   '/$lang/about': typeof LangAboutRoute
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
   '/$lang/offers': typeof LangOffersRoute
+  '/$lang/the-ship': typeof LangTheShipRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/admin_/login': typeof AdminLoginRoute
   '/cabins/$cabinId': typeof CabinsCabinIdRoute
   '/dev/sync': typeof DevSyncRoute
+  '/experiences/$serviceId': typeof ExperiencesServiceIdRoute
   '/itineraries/$voyageId': typeof ItinerariesVoyageIdRoute
   '/services/$serviceId': typeof ServicesServiceIdRoute
   '/$lang/': typeof LangIndexRoute
   '/cabins/': typeof CabinsIndexRoute
+  '/experiences/': typeof ExperiencesIndexRoute
   '/itineraries/': typeof ItinerariesIndexRoute
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
+  '/$lang/experiences/$serviceId': typeof LangExperiencesServiceIdRoute
   '/$lang/itineraries/$voyageId': typeof LangItinerariesVoyageIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
@@ -363,6 +417,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
+  '/$lang/experiences/': typeof LangExperiencesIndexRoute
   '/$lang/itineraries/': typeof LangItinerariesIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -383,21 +438,26 @@ export interface FileRouteTypes {
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/the-ship'
     | '/$lang/about'
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
     | '/$lang/offers'
+    | '/$lang/the-ship'
     | '/admin'
     | '/admin/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
+    | '/experiences/$serviceId'
     | '/itineraries/$voyageId'
     | '/services/$serviceId'
     | '/$lang/'
     | '/cabins/'
+    | '/experiences/'
     | '/itineraries/'
     | '/$lang/cabins/$cabinId'
+    | '/$lang/experiences/$serviceId'
     | '/$lang/itineraries/$voyageId'
     | '/$lang/services/$serviceId'
     | '/admin/applications'
@@ -405,6 +465,7 @@ export interface FileRouteTypes {
     | '/admin/itineraries'
     | '/admin/media'
     | '/$lang/cabins/'
+    | '/$lang/experiences/'
     | '/$lang/itineraries/'
     | '/admin/'
     | '/admin/ships/$shipId'
@@ -422,20 +483,25 @@ export interface FileRouteTypes {
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/the-ship'
     | '/$lang/about'
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
     | '/$lang/offers'
+    | '/$lang/the-ship'
     | '/admin/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
+    | '/experiences/$serviceId'
     | '/itineraries/$voyageId'
     | '/services/$serviceId'
     | '/$lang'
     | '/cabins'
+    | '/experiences'
     | '/itineraries'
     | '/$lang/cabins/$cabinId'
+    | '/$lang/experiences/$serviceId'
     | '/$lang/itineraries/$voyageId'
     | '/$lang/services/$serviceId'
     | '/admin/applications'
@@ -443,6 +509,7 @@ export interface FileRouteTypes {
     | '/admin/itineraries'
     | '/admin/media'
     | '/$lang/cabins'
+    | '/$lang/experiences'
     | '/$lang/itineraries'
     | '/admin'
     | '/admin/ships/$shipId'
@@ -462,21 +529,26 @@ export interface FileRouteTypes {
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/the-ship'
     | '/$lang/about'
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
     | '/$lang/offers'
+    | '/$lang/the-ship'
     | '/_authenticated/admin'
     | '/admin_/login'
     | '/cabins/$cabinId'
     | '/dev/sync'
+    | '/experiences/$serviceId'
     | '/itineraries/$voyageId'
     | '/services/$serviceId'
     | '/$lang/'
     | '/cabins/'
+    | '/experiences/'
     | '/itineraries/'
     | '/$lang/cabins/$cabinId'
+    | '/$lang/experiences/$serviceId'
     | '/$lang/itineraries/$voyageId'
     | '/$lang/services/$serviceId'
     | '/_authenticated/admin/applications'
@@ -484,6 +556,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/itineraries'
     | '/_authenticated/admin/media'
     | '/$lang/cabins/'
+    | '/$lang/experiences/'
     | '/$lang/itineraries/'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/ships/$shipId'
@@ -504,12 +577,15 @@ export interface RootRouteChildren {
   OffersRoute: typeof OffersRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TheShipRoute: typeof TheShipRoute
   AdminLoginRoute: typeof AdminLoginRoute
   CabinsCabinIdRoute: typeof CabinsCabinIdRoute
   DevSyncRoute: typeof DevSyncRoute
+  ExperiencesServiceIdRoute: typeof ExperiencesServiceIdRoute
   ItinerariesVoyageIdRoute: typeof ItinerariesVoyageIdRoute
   ServicesServiceIdRoute: typeof ServicesServiceIdRoute
   CabinsIndexRoute: typeof CabinsIndexRoute
+  ExperiencesIndexRoute: typeof ExperiencesIndexRoute
   ItinerariesIndexRoute: typeof ItinerariesIndexRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
@@ -593,6 +669,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/the-ship': {
+      id: '/the-ship'
+      path: '/the-ship'
+      fullPath: '/the-ship'
+      preLoaderRoute: typeof TheShipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$lang/': {
       id: '/$lang/'
       path: '/'
@@ -635,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangOffersRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/the-ship': {
+      id: '/$lang/the-ship'
+      path: '/the-ship'
+      fullPath: '/$lang/the-ship'
+      preLoaderRoute: typeof LangTheShipRouteImport
+      parentRoute: typeof LangRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -670,6 +760,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/experiences/': {
+      id: '/experiences/'
+      path: '/experiences'
+      fullPath: '/experiences/'
+      preLoaderRoute: typeof ExperiencesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/experiences/$serviceId': {
+      id: '/experiences/$serviceId'
+      path: '/experiences/$serviceId'
+      fullPath: '/experiences/$serviceId'
+      preLoaderRoute: typeof ExperiencesServiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/itineraries/': {
       id: '/itineraries/'
       path: '/itineraries'
@@ -703,6 +807,20 @@ declare module '@tanstack/react-router' {
       path: '/cabins/$cabinId'
       fullPath: '/$lang/cabins/$cabinId'
       preLoaderRoute: typeof LangCabinsCabinIdRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/experiences/': {
+      id: '/$lang/experiences/'
+      path: '/experiences'
+      fullPath: '/$lang/experiences/'
+      preLoaderRoute: typeof LangExperiencesIndexRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/experiences/$serviceId': {
+      id: '/$lang/experiences/$serviceId'
+      path: '/experiences/$serviceId'
+      fullPath: '/$lang/experiences/$serviceId'
+      preLoaderRoute: typeof LangExperiencesServiceIdRouteImport
       parentRoute: typeof LangRoute
     }
     '/$lang/itineraries/': {
@@ -834,11 +952,14 @@ interface LangRouteChildren {
   LangContactRoute: typeof LangContactRoute
   LangGalleryRoute: typeof LangGalleryRoute
   LangOffersRoute: typeof LangOffersRoute
+  LangTheShipRoute: typeof LangTheShipRoute
   LangIndexRoute: typeof LangIndexRoute
   LangCabinsCabinIdRoute: typeof LangCabinsCabinIdRoute
+  LangExperiencesServiceIdRoute: typeof LangExperiencesServiceIdRoute
   LangItinerariesVoyageIdRoute: typeof LangItinerariesVoyageIdRoute
   LangServicesServiceIdRoute: typeof LangServicesServiceIdRoute
   LangCabinsIndexRoute: typeof LangCabinsIndexRoute
+  LangExperiencesIndexRoute: typeof LangExperiencesIndexRoute
   LangItinerariesIndexRoute: typeof LangItinerariesIndexRoute
 }
 
@@ -848,11 +969,14 @@ const LangRouteChildren: LangRouteChildren = {
   LangContactRoute: LangContactRoute,
   LangGalleryRoute: LangGalleryRoute,
   LangOffersRoute: LangOffersRoute,
+  LangTheShipRoute: LangTheShipRoute,
   LangIndexRoute: LangIndexRoute,
   LangCabinsCabinIdRoute: LangCabinsCabinIdRoute,
+  LangExperiencesServiceIdRoute: LangExperiencesServiceIdRoute,
   LangItinerariesVoyageIdRoute: LangItinerariesVoyageIdRoute,
   LangServicesServiceIdRoute: LangServicesServiceIdRoute,
   LangCabinsIndexRoute: LangCabinsIndexRoute,
+  LangExperiencesIndexRoute: LangExperiencesIndexRoute,
   LangItinerariesIndexRoute: LangItinerariesIndexRoute,
 }
 
@@ -870,12 +994,15 @@ const rootRouteChildren: RootRouteChildren = {
   OffersRoute: OffersRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TheShipRoute: TheShipRoute,
   AdminLoginRoute: AdminLoginRoute,
   CabinsCabinIdRoute: CabinsCabinIdRoute,
   DevSyncRoute: DevSyncRoute,
+  ExperiencesServiceIdRoute: ExperiencesServiceIdRoute,
   ItinerariesVoyageIdRoute: ItinerariesVoyageIdRoute,
   ServicesServiceIdRoute: ServicesServiceIdRoute,
   CabinsIndexRoute: CabinsIndexRoute,
+  ExperiencesIndexRoute: ExperiencesIndexRoute,
   ItinerariesIndexRoute: ItinerariesIndexRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }

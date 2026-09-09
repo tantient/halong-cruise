@@ -189,6 +189,70 @@ export function serviceHead(bundle: PublicServicesBundle, slug: string) {
   return { meta: seo.meta, links: seo.links };
 }
 
+/* ------------------------------------------------- experiences / the ship */
+
+/**
+ * The public Experiences and The Ship areas read the same service records
+ * (grouped for presentation) plus their own editorial page record.
+ */
+async function loadServiceArea(qc: QueryClient, pathname: string, pageSlug: string) {
+  const [bundle, pageBundle] = await Promise.all([
+    qc.ensureQueryData(publicQueries.servicesBundle(pathname)),
+    qc.ensureQueryData(publicQueries.pageBundle(pathname, pageSlug)).catch(() => null),
+  ]);
+  if (!bundle) throw notFound();
+  return { bundle, pageBundle };
+}
+
+export function loadExperiencesArea(qc: QueryClient, pathname: string) {
+  return loadServiceArea(qc, pathname, "experiences");
+}
+
+export function loadShipArea(qc: QueryClient, pathname: string) {
+  return loadServiceArea(qc, pathname, "the-ship");
+}
+
+function serviceAreaHead(
+  data: { bundle: PublicServicesBundle; pageBundle: PublicPageBundle | null },
+  path: string,
+) {
+  const { bundle, pageBundle } = data;
+  const { ship, language } = bundle;
+  const page =
+    pageBundle?.languages[language.language]?.page ??
+    pageBundle?.languages[ship.defaultLanguage]?.page ??
+    null;
+  const services = (bundle.languages[language.language] ?? bundle.languages[ship.defaultLanguage])?.services ?? [];
+  const cover = page?.media.cover?.url ?? services[0]?.media.cover?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path,
+    title: page?.title ?? null,
+    seoTitle: page?.seoTitle ?? null,
+    description: page?.intro ?? null,
+    seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+export function experiencesHead(data: { bundle: PublicServicesBundle; pageBundle: PublicPageBundle | null }) {
+  return serviceAreaHead(data, "/experiences");
+}
+
+export function shipHead(data: { bundle: PublicServicesBundle; pageBundle: PublicPageBundle | null }) {
+  return serviceAreaHead(data, "/the-ship");
+}
+
+/** `/experiences/<slug>` is an alias of the technical detail URL. */
+export function redirectExperienceSlug(pathname: string, slug: string) {
+  throw redirect({
+    href: pathname.replace(`/experiences/${slug}`, `/services/${slug}`),
+    statusCode: 301,
+    throw: true,
+  });
+}
+
 /* ----------------------------------------------------------------- offers */
 
 export async function loadOffersBundle(qc: QueryClient, pathname: string) {

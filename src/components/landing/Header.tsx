@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import { useServiceNav } from "@/lib/i18n/service-nav-context";
+import { EXPERIENCE_GROUP, publicGroup } from "@/components/experiences/grouping";
 import { useSite } from "@/lib/platform";
 import type { Lang } from "@/lib/translations";
 
@@ -16,7 +17,7 @@ interface HeaderProps {
   lang: Lang;
   setLang: (lang: Lang) => void;
   t: {
-    nav: { about: string; cabins: string; gallery: string; services: string; itineraries: string; offers: string; careers: string; quote: string; book: string; contact: string; more: string; spaces: string };
+    nav: { about: string; cabins: string; gallery: string; services: string; experiences: string; ship: string; itineraries: string; offers: string; careers: string; quote: string; book: string; contact: string; more: string; spaces: string };
   };
 }
 
@@ -44,15 +45,13 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     { href: "/contact", label: t.nav.contact },
   ];
 
-  // Menu entries come from the ship's published services (database-driven).
+  // Menu entries come from the ship's published records (database-driven).
+  // Public IA: things guests do live under Experiences; the vessel itself under
+  // The Ship, which is a single page (no dropdown).
   const serviceItems = useServiceNav(lang);
-  const groupTitles: Record<string, string> = { service: t.nav.services, space: t.nav.spaces };
-  const serviceGroups = Array.from(new Set(serviceItems.map((s) => s.group ?? "service"))).map((group) => ({
-    title: groupTitles[group] ?? t.nav.services,
-    links: serviceItems
-      .filter((s) => (s.group ?? "service") === group)
-      .map((s) => ({ href: `/services/${s.slug}`, label: s.label, desc: s.description ?? "" })),
-  }));
+  const experienceLinks = serviceItems
+    .filter((s) => publicGroup({ group: s.group }) === EXPERIENCE_GROUP)
+    .map((s) => ({ href: `/services/${s.slug}`, label: s.label }));
 
   const linkClasses = scrolled
     ? "text-chronos-sand-900/75 hover:text-chronos-sand-900"
@@ -96,39 +95,33 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           </LocalLink>
 
           <div className="group relative">
-            <button
+            <LocalLink
+              path="/experiences"
               className={`flex items-center gap-1 whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
             >
-              {t.nav.services}
+              {t.nav.experiences}
               <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-[34rem] -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-              <div className="grid grid-cols-2 gap-2 rounded-sm border border-chronos-ink/10 bg-chronos-ivory/98 p-3 shadow-lg backdrop-blur-md">
-                {serviceGroups.map((group) => (
-                  <div key={group.title}>
-                    <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink/70">
-                      {group.title}
-                    </p>
-                    {group.links.map((link) => (
-                      <LocalLink
-                        key={link.href}
-                        path={link.href}
-                        title={link.desc}
-                        className={dropdownLinkClasses}
-                      >
-                        <span className="block text-[12px] font-medium tracking-wide text-chronos-ink">
-                          {link.label}
-                        </span>
-                        <span className="mt-0.5 block text-xs leading-snug text-chronos-ink/75">
-                          {link.desc}
-                        </span>
-                      </LocalLink>
-                    ))}
-                  </div>
+            </LocalLink>
+            <div className="invisible absolute left-0 top-full z-50 w-56 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+              <div className="rounded-sm border border-chronos-ink/10 bg-chronos-ivory/98 p-2 shadow-lg backdrop-blur-md">
+                {experienceLinks.map((link) => (
+                  <LocalLink key={link.href} path={link.href} className={dropdownLinkClasses}>
+                    <span className="block text-[12px] font-medium tracking-wide text-chronos-ink">
+                      {link.label}
+                    </span>
+                  </LocalLink>
                 ))}
               </div>
             </div>
           </div>
+
+          <LocalLink
+            path="/the-ship"
+            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+          >
+            {t.nav.ship}
+          </LocalLink>
+
 
           <LocalLink
             path="/gallery"
@@ -217,30 +210,34 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                 {link.label}
               </LocalLink>
             ))}
-            {serviceGroups.map((group) => (
-              <div key={group.title} className="pt-1">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink/70">
-                  {group.title}
-                </p>
-                <div className="flex flex-col gap-3 border-l border-chronos-ink/10 pl-4">
-                  {group.links.map((link) => (
-                    <LocalLink
-                      key={link.href}
-                      path={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="block"
-                    >
-                      <span className="block text-sm tracking-wide text-chronos-ink/85">
-                        {link.label}
-                      </span>
-                      <span className="mt-0.5 block text-xs leading-snug text-chronos-ink/70">
-                        {link.desc}
-                      </span>
-                    </LocalLink>
-                  ))}
-                </div>
+            <div className="pt-1">
+              <LocalLink
+                path="/experiences"
+                onClick={() => setMobileOpen(false)}
+                className="mb-2 block text-sm font-medium tracking-wide text-chronos-ink/80"
+              >
+                {t.nav.experiences}
+              </LocalLink>
+              <div className="flex flex-col gap-3 border-l border-chronos-ink/10 pl-4">
+                {experienceLinks.map((link) => (
+                  <LocalLink
+                    key={link.href}
+                    path={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-sm tracking-wide text-chronos-ink/85"
+                  >
+                    {link.label}
+                  </LocalLink>
+                ))}
               </div>
-            ))}
+            </div>
+            <LocalLink
+              path="/the-ship"
+              onClick={() => setMobileOpen(false)}
+              className="text-sm font-medium tracking-wide text-chronos-ink/80"
+            >
+              {t.nav.ship}
+            </LocalLink>
             {navLinks.slice(2).map((link) => (
               <LocalLink
                 key={link.href}

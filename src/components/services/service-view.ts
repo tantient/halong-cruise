@@ -23,6 +23,8 @@ export interface ServiceView {
   intro: string;
   summary: string | null;
   group: string | null;
+  /** Layout key stored with the record, e.g. "editorial" | "panorama" | "intimate" | "nocturne". */
+  composition: string | null;
   openingHours: string | null;
   priceNote: string | null;
   highlights: ServiceHighlight[];
@@ -69,6 +71,7 @@ export function toServiceView(service: PublicService): ServiceView {
     intro: service.description ?? service.summary ?? "",
     summary: service.summary,
     group: str(meta["group"]),
+    composition: str(meta["composition"]),
     openingHours: service.openingHours,
     priceNote: service.priceNote,
     highlights: highlightList(meta),
