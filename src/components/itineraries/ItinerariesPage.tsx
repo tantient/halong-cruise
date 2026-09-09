@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Clock, Check, X, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, Moon, Sun } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
-import { useLanguage } from "@/components/landing/use-language";
+import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import { publicQueries, type PublicItinerariesBundle } from "@/lib/platform";
@@ -14,8 +13,9 @@ import { itineraryUi, type ItineraryUi } from "@/lib/i18n/ui-itineraries";
 import { itinerariesText, toItineraryView, type ItineraryView } from "./itinerary-view";
 
 /**
- * Heritage itineraries template. Every itinerary, day plan, image and piece of
- * editorial copy comes from the database through the public read layer.
+ * Voyage listing: an editorial side-by-side comparison of the ship's published
+ * voyages. Every factual field (name, duration, destination, description,
+ * highlights, day count, imagery) comes from the database.
  */
 export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
@@ -29,15 +29,18 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
   const copy = (key: string) => itinerariesText(page, key);
 
   const hero = itineraries[0]?.cover ?? null;
-  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
-  const [openId, setOpenId] = useState<string | null>(itineraries[0]?.id ?? null);
+  const adviceLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+
+  // Decision support only renders on factual, stored differences.
+  const comparable = itineraries.filter((it) => it.duration || it.dayPlan.length > 0);
+  const showComparison = comparable.length > 1;
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
       <Header lang={lang} setLang={setLang} t={t} />
 
       <main>
-        <section className="relative h-[60vh] min-h-[400px] w-full overflow-hidden">
+        <section className="relative h-[58vh] min-h-[380px] w-full overflow-hidden">
           {hero ? (
             <img
               src={hero.url}
@@ -47,43 +50,80 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
           ) : (
             <div className="h-full w-full bg-chronos-ink/80" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/25 to-chronos-ink/40" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
               <p className="eyebrow mb-5 text-chronos-gold">{copy("eyebrow")}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl">
                 {page?.title ?? ""}
               </h1>
-              <p className="mt-4 max-w-xl text-chronos-ivory/85">{page?.intro ?? ""}</p>
+              {page?.intro ? <p className="mt-4 max-w-xl text-chronos-ivory/85">{page.intro}</p> : null}
             </div>
           </div>
         </section>
 
-        <div className="mx-auto max-w-7xl space-y-16 px-6 py-24 lg:px-8 lg:py-32">
-          {itineraries.map((it, index) => (
-            <ItineraryCard
-              key={it.id}
-              it={it}
-              index={index}
-              ui={ui}
-              open={openId === it.id}
-              onToggle={() => setOpenId((prev) => (prev === it.id ? null : it.id))}
-            />
-          ))}
+        {/* Visual voyage comparison — two editorial panels of equal presence. */}
+        <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+          <div className="grid gap-px overflow-hidden border border-chronos-ink/10 bg-chronos-ink/10 lg:grid-cols-2">
+            {itineraries.map((it, index) => (
+              <VoyagePanel key={it.id} it={it} index={index} ui={ui} />
+            ))}
+          </div>
 
-          <Reveal className="border-t border-chronos-ink/10 pt-16 text-center">
-            <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink">{copy("ctaTitle")}</h2>
+          {showComparison ? (
+            <Reveal className="mt-20">
+              <p className="eyebrow mb-6 text-chronos-gold">{ui.whatsDifferent}</p>
+              <h2 className="mb-10 text-3xl tracking-[0.02em] text-chronos-ink">{ui.compareTitle}</h2>
+              <div className="overflow-hidden border border-chronos-ink/10">
+                {comparable.map((it, index) => (
+                  <div
+                    key={it.id}
+                    className={`grid gap-4 p-6 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:p-8 ${
+                      index % 2 === 1 ? "bg-chronos-warm/25" : "bg-white"
+                    }`}
+                  >
+                    <div>
+                      <h3 className="text-xl tracking-[0.02em] text-chronos-ink">{it.name}</h3>
+                      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-chronos-stone/85">
+                        {it.duration ? <Fact label={ui.duration} value={it.duration} /> : null}
+                        {it.dayPlan.length > 0 ? (
+                          <Fact label={ui.dayByDay} value={String(it.dayPlan.length)} />
+                        ) : null}
+                        {it.destination ? <Fact label={ui.destination} value={it.destination} /> : null}
+                      </div>
+                      {it.highlights.length > 0 ? (
+                        <p className="mt-3 text-sm text-chronos-stone/75">{it.highlights.join(" · ")}</p>
+                      ) : null}
+                    </div>
+                    <LocalLink
+                      path={`/itineraries/${it.slug}`}
+                      className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:text-chronos-gold"
+                    >
+                      {ui.exploreVoyage} <ArrowRight className="h-4 w-4" />
+                    </LocalLink>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          ) : null}
+        </section>
+
+        <Reveal className="border-t border-chronos-ink/10 px-6 py-20 text-center lg:py-24">
+          <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink">
+            {copy("ctaTitle") || ui.journeyStartsTitle}
+          </h2>
+          {copy("ctaBody") ? (
             <p className="mx-auto mb-8 max-w-xl text-chronos-stone/85">{copy("ctaBody")}</p>
-            <Button
-              asChild
-              className="btn-sheen rounded-none bg-chronos-gold px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
-            >
-              <a href={bookingLink} target="_blank" rel="noopener noreferrer">
-                {copy("ctaLabel") || t.itineraries.cta}
-              </a>
-            </Button>
-          </Reveal>
-        </div>
+          ) : null}
+          <Button
+            asChild
+            className="btn-sheen rounded-none bg-chronos-gold px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
+          >
+            <a href={adviceLink} target="_blank" rel="noopener noreferrer">
+              {copy("ctaLabel") || ui.requestAdvice}
+            </a>
+          </Button>
+        </Reveal>
       </main>
 
       <Footer t={t} />
@@ -91,133 +131,82 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
   );
 }
 
-function ItineraryCard({
-  it,
-  index,
-  ui,
-  open,
-  onToggle,
-}: {
-  it: ItineraryView;
-  index: number;
-  ui: ItineraryUi;
-  open: boolean;
-  onToggle: () => void;
-}) {
+function Fact({ label, value }: { label: string; value: string }) {
   return (
-    <Reveal>
-      <div className="overflow-hidden rounded-sm border border-chronos-ink/10 bg-white">
-        <div className="grid lg:grid-cols-[1.2fr_1fr]">
-          <div className="relative h-64 lg:h-auto">
-            {it.cover ? (
-              <img
-                src={it.cover.url}
-                alt={it.cover.alt || it.name}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="h-full w-full bg-chronos-warm/40" />
-            )}
-            {it.duration ? (
-              <div className="absolute left-5 top-5 rounded-sm bg-chronos-gold px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink">
-                {it.duration}
-              </div>
-            ) : null}
-          </div>
+    <span className="flex items-baseline gap-2">
+      <span className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-chronos-ink/60">{label}</span>
+      <span>{value}</span>
+    </span>
+  );
+}
 
-          <div className="p-8 lg:p-10">
-            <p className="eyebrow mb-4 text-chronos-gold">{String(index + 1).padStart(2, "0")}</p>
-            <h2 className="mb-4 text-3xl tracking-[0.02em] text-chronos-ink">{it.name}</h2>
-            <p className="mb-6 text-chronos-stone/85">{it.description}</p>
-
-            <div className="mb-6 grid gap-4 sm:grid-cols-2">
-              <div>
-                <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
-                  <Check className="h-3.5 w-3.5 text-chronos-gold" /> {ui.includes}
-                </p>
-                <ul className="space-y-1.5 text-sm text-chronos-stone/85">
-                  {it.includes.map((i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />
-                      {i}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
-                  <X className="h-3.5 w-3.5 text-chronos-stone/50" /> {ui.excludes}
-                </p>
-                <ul className="space-y-1.5 text-sm text-chronos-stone/70">
-                  {it.excludes.map((e) => (
-                    <li key={e} className="flex items-start gap-2">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-stone/50" />
-                      {e}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {it.timeline.length > 0 || it.highlights.length > 0 ? (
-              <button
-                onClick={onToggle}
-                className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:text-chronos-gold"
-              >
-                {open ? ui.collapse : ui.showTimeline}
-                {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              </button>
-            ) : null}
-          </div>
+function VoyagePanel({ it, index, ui }: { it: ItineraryView; index: number; ui: ItineraryUi }) {
+  return (
+    <Reveal delay={index * 90} className="bg-white">
+      <LocalLink path={`/itineraries/${it.slug}`} className="group block h-full">
+        <div className="relative aspect-[4/3] w-full overflow-hidden">
+          {it.cover ? (
+            <img
+              src={it.cover.url}
+              alt={it.cover.alt || it.name}
+              loading={index === 0 ? "eager" : "lazy"}
+              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+            />
+          ) : (
+            <div className="h-full w-full bg-chronos-warm/40" />
+          )}
+          {it.duration ? (
+            <span className="absolute left-6 top-6 bg-chronos-gold px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink">
+              {it.duration}
+            </span>
+          ) : null}
         </div>
 
-        {open ? (
-          <div className="border-t border-chronos-ink/10 bg-chronos-warm/20 p-8 lg:p-10">
-            <div className="grid gap-10 lg:grid-cols-2">
-              <div>
-                <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
-                  <Clock className="h-3.5 w-3.5 text-chronos-gold" /> {ui.duration}
-                </p>
-                <div className="space-y-4">
-                  {it.timeline.map((item) => (
-                    <div key={item.key} className="flex gap-4">
-                      <span className="w-14 shrink-0 text-sm font-semibold text-chronos-gold">{item.time}</span>
-                      <span className="text-sm text-chronos-stone/85">{item.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
-                  <Sparkles className="h-3.5 w-3.5 text-chronos-gold" /> {ui.highlights}
-                </p>
-                <ul className="grid gap-2 sm:grid-cols-2">
-                  {it.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-sm text-chronos-stone/85">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-                {it.gallery.length > 0 ? (
-                  <div className="mt-6 grid grid-cols-3 gap-3">
-                    {it.gallery.map((img) => (
-                      <img
-                        key={img.id}
-                        src={img.url}
-                        alt={img.alt || it.name}
-                        loading="lazy"
-                        className="aspect-[4/3] w-full rounded-sm object-cover"
-                      />
-                    ))}
-                  </div>
-                ) : null}
-              </div>
+        <div className="p-8 lg:p-10">
+          {it.destination ? <p className="eyebrow mb-4 text-chronos-gold">{it.destination}</p> : null}
+          <h2 className="mb-4 text-2xl tracking-[0.02em] text-chronos-ink sm:text-3xl">{it.name}</h2>
+
+          {it.days || it.nights || it.dayPlan.length > 0 ? (
+            <div className="mb-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-chronos-stone/85">
+              {it.days ? (
+                <span className="flex items-center gap-2">
+                  <Sun className="h-3.5 w-3.5 text-chronos-gold" />
+                  {it.days} {it.days === 1 ? ui.dayOne : ui.days}
+                </span>
+              ) : null}
+              {it.nights ? (
+                <span className="flex items-center gap-2">
+                  <Moon className="h-3.5 w-3.5 text-chronos-gold" />
+                  {it.nights} {it.nights === 1 ? ui.nightOne : ui.nights}
+                </span>
+              ) : null}
+              {it.departurePoint ? (
+                <span>
+                  {ui.departure}: {it.departurePoint}
+                </span>
+              ) : null}
             </div>
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+
+          {it.description ? <p className="mb-6 text-chronos-stone/85">{it.description}</p> : null}
+
+          {it.highlights.length > 0 ? (
+            <ul className="mb-8 space-y-2 text-sm text-chronos-stone/85">
+              {it.highlights.map((h) => (
+                <li key={h} className="flex items-start gap-2">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink group-hover:text-chronos-gold">
+            {ui.exploreVoyage}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </div>
+      </LocalLink>
     </Reveal>
   );
 }
