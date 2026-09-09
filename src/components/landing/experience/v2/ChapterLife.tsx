@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { AmbientStage } from "@/lib/experience/AmbientStage";
 import { useTimeState } from "@/lib/experience/time-context";
 import { LocalLink } from "@/lib/i18n/language-context";
 import { experienceUi } from "@/lib/i18n/ui-experience";
@@ -14,10 +15,12 @@ import {
 } from "@/lib/platform";
 
 import { SceneReveal } from "../motion";
-import { AmbientLink, Body, Eyebrow, stateText } from "./parts";
+import { Body, Eyebrow, stateText } from "./parts";
 
-interface LifeItem {
+/** One slot of the explorer: a single visual stage plus its editorial copy. */
+interface ExplorerSlot {
   key: string;
+  /** Short label in the slot rail (Suites, Dining, Sundeck, Wellness, …). */
   label: string;
   kind: string;
   title: string;
@@ -27,11 +30,36 @@ interface LifeItem {
   media: EntityMedia;
 }
 
+const MAX_SLOTS = 5;
+
+interface SlotConfig {
+  label: string;
+  cabin: string;
+  service: string;
+}
+
+function readSlots(section: PublicHomepageSection): SlotConfig[] {
+  const raw = section.configuration["slots"] as unknown;
+  if (!Array.isArray(raw)) return [];
+  const str = (v: unknown) => (typeof v === "string" ? v : "");
+  return (raw as unknown[])
+    .filter((s): s is Record<string, unknown> => Boolean(s) && typeof s === "object" && !Array.isArray(s))
+    .map((s) => ({ label: str(s["label"]), cabin: str(s["cabin"]), service: str(s["service"]) }));
+}
+
 /**
- * Chapter 3 — Life on Chronos. A teaser, not a catalogue: one full-bleed image
- * that changes inside the same viewport as the visitor moves between a few
- * suites and experiences. Which experiences lead is decided per time state in
- * the section's own configuration (`emphasis`), never in code.
+ * Chapter 3 — Life on Chronos, as an Experience Explorer.
+ *
+ * Not a card grid: one visual stage carries the chapter, and the content
+ * transitions inside the same experience as the visitor moves along the slot
+ * rail (Suites → Dining → Sundeck → Wellness → Activities). Which slots exist,
+ * in which order, is declared in the section's own `configuration.slots`
+ * (each slot points at a cabin or a service); with none declared it falls back
+ * to the ship's leading suite and experiences. Ordering per time state comes
+ * from `configuration.emphasis`. Every slot's visual is an ambient media slot,
+ * so a single slot can later be replaced with production photography or a short
+ * film — desktop, mobile, poster and per-time-state variants included — without
+ * changing this component.
  */
 export function ChapterLife({
   section,
@@ -47,19 +75,12 @@ export function ChapterLife({
   const ui = experienceUi(lang);
   const state = useTimeState();
 
-  const items = useMemo<LifeItem[]>(() => {
+  const slots = useMemo<ExplorerSlot[]>(() => {
     if (!section) return [];
-    const emphasis = section.configuration["emphasis"] as Record<string, unknown> | undefined;
-    const preferred = Array.isArray(emphasis?.[state])
-      ? (emphasis?.[state] as unknown[]).filter((s): s is string => typeof s === "string")
-      : [];
-    const rank = (slug: string) => {
-      const i = preferred.indexOf(slug);
-      return i === -1 ? preferred.length + 1 : i;
-    };
-    const suiteItems: LifeItem[] = cabins.slice(0, 2).map((c) => ({
+
+    const cabinSlot = (c: PublicCabin, label?: string): ExplorerSlot => ({
       key: `cabin-${c.id}`,
-      label: c.name,
+      label: label || c.name,
       kind: ui.suites,
       title: c.name,
       meta: [c.sizeSqm ? `${c.sizeSqm} m²` : null, c.maxGuests ? `${c.maxGuests} ${ui.guests}` : null, c.viewType]
@@ -68,26 +89,55 @@ export function ChapterLife({
       body: c.summary ?? c.description ?? "",
       href: `/cabins/${c.slug}`,
       media: c.media,
-    }));
-    const serviceItems: LifeItem[] = [...services]
+    });
+    const serviceSlot = (s: PublicService, label?: string): ExplorerSlot => ({
+      key: `service-${s.id}`,
+      label: label || s.name,
+      kind: s.category || ui.experiences,
+      title: s.name,
+      meta: [s.category, s.openingHours].filter(Boolean).join(" · "),
+      body: s.summary ?? s.description ?? "",
+      href: `/services/${s.slug}`,
+      media: s.media,
+    });
+
+    // 1. Declared slots win: they define the narrative order of the explorer.
+    const declared = readSlots(section)
+      .map((slot) => {
+        if (slot.cabin) {
+          const cabin = cabins.find((c) => c.slug === slot.cabin);
+          return cabin ? cabinSlot(cabin, slot.label) : null;
+        }
+        if (slot.service) {
+          const service = services.find((s) => s.slug === slot.service);
+          return service ? serviceSlot(service, slot.label) : null;
+        }
+        return null;
+      })
+      .filter((s): s is ExplorerSlot => s !== null);
+    if (declared.length) return declared.slice(0, MAX_SLOTS);
+
+    // 2. Fallback: the leading suite plus the experiences this hour favours.
+    const emphasis = section.configuration["emphasis"] as Record<string, unknown> | undefined;
+    const preferred = Array.isArray(emphasis?.[state])
+      ? (emphasis?.[state] as unknown[]).filter((s): s is string => typeof s === "string")
+      : [];
+    const rank = (slug: string) => {
+      const i = preferred.indexOf(slug);
+      return i === -1 ? preferred.length + 1 : i;
+    };
+    const suiteSlots = cabins.slice(0, 2).map((c) => cabinSlot(c));
+    const experienceSlots = [...services]
       .sort((a, b) => rank(a.slug) - rank(b.slug) || a.sortOrder - b.sortOrder)
-      .slice(0, 3)
-      .map((s) => ({
-        key: `service-${s.id}`,
-        label: s.name,
-        kind: ui.experiences,
-        title: s.name,
-        meta: [s.category, s.openingHours].filter(Boolean).join(" · "),
-        body: s.summary ?? s.description ?? "",
-        href: `/services/${s.slug}`,
-        media: s.media,
-      }));
-    return [...suiteItems, ...serviceItems];
+      .slice(0, MAX_SLOTS - suiteSlots.length)
+      .map((s) => serviceSlot(s));
+    return [...suiteSlots, ...experienceSlots].slice(0, MAX_SLOTS);
   }, [cabins, section, services, state, ui]);
 
   const [active, setActive] = useState(0);
-  if (!section || items.length === 0) return null;
-  const current = items[Math.min(active, items.length - 1)]!;
+  if (!section || slots.length === 0) return null;
+  const index = Math.min(active, slots.length - 1);
+  const current = slots[index]!;
 
   return (
     <section className="relative py-20 sm:py-28 lg:py-32">
@@ -108,26 +158,20 @@ export function ChapterLife({
         </div>
       </div>
 
-      {/* Full-bleed stage: content changes without leaving the viewport. */}
+      {/* One stage; the slot changes inside it, never leaving the viewport. */}
       <SceneReveal variant="mask" delay={200} className="mt-12 sm:mt-16">
         <div className="relative h-[78svh] min-h-[460px] w-full overflow-hidden">
-          {items.map((item, i) => {
-            const image = item.media.cover ?? item.media.gallery[0] ?? item.media.all[0] ?? null;
-            if (!image) return null;
-            return (
-              <img
-                key={item.key}
-                src={image.url}
-                alt={i === active ? (image.alt ?? item.title) : ""}
-                aria-hidden={i === active ? undefined : true}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1100ms] ease-out"
-                style={{ opacity: i === active ? 1 : 0, filter: "var(--amb-img)" }}
-              />
-            );
-          })}
-          <div aria-hidden className="absolute inset-0" style={{ background: "var(--amb-scrim)" }} />
+          {slots.map((slot, i) => (
+            <div
+              key={slot.key}
+              aria-hidden={i === index ? undefined : true}
+              className="absolute inset-0 transition-opacity duration-[1100ms] ease-out"
+              style={{ opacity: i === index ? 1 : 0 }}
+            >
+              {/* Mounted lazily: a slot only loads once it has been opened. */}
+              {i === index || i === 0 ? <AmbientStage media={slot.media} alt={slot.title} /> : null}
+            </div>
+          ))}
 
           <div className="relative z-10 flex h-full flex-col justify-end p-6 sm:p-10 lg:p-14">
             <div className="max-w-2xl">
@@ -155,19 +199,19 @@ export function ChapterLife({
             </div>
 
             <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/20 pt-5">
-              {items.map((item, i) => (
+              {slots.map((slot, i) => (
                 <button
-                  key={item.key}
+                  key={slot.key}
                   type="button"
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
                   onClick={() => setActive(i)}
-                  aria-current={i === active}
+                  aria-current={i === index}
                   className={`text-[0.66rem] uppercase tracking-[0.3em] transition-colors duration-300 ${
-                    i === active ? "text-white" : "text-white/50 hover:text-white/80"
+                    i === index ? "text-white" : "text-white/50 hover:text-white/80"
                   }`}
                 >
-                  {item.label}
+                  {slot.label}
                 </button>
               ))}
             </div>

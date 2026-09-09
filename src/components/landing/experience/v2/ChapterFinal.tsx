@@ -1,6 +1,6 @@
 "use client";
 
-import { AmbientImage } from "@/lib/experience/AmbientImage";
+import { AmbientStage } from "@/lib/experience/AmbientStage";
 import { textOf, type PublicHomepageSection } from "@/lib/platform";
 
 import { SceneReveal } from "../motion";
@@ -27,7 +27,7 @@ export function ChapterFinal({
 
   return (
     <section className="relative flex h-[88svh] min-h-[500px] w-full items-center justify-center overflow-hidden text-center">
-      <AmbientImage media={section.media} alt={shipName} />
+      <AmbientStage media={section.media} alt={shipName} />
       <div className="relative z-10 mx-auto w-full max-w-4xl px-6 lg:px-8">
         <SceneReveal variant="up" duration={1400}>
           <h2 className="font-display text-[2.7rem] leading-[0.98] font-normal text-white sm:text-6xl lg:text-[6rem]">
