@@ -36,6 +36,20 @@ export interface CabinUi {
   close: string;
   compareLoading: string;
   compareIntro: string;
+  explorer: string;
+  exploreSuite: string;
+  findSuite: string;
+  findSuiteCopy: string;
+  compareSuites: string;
+  requestRecommendation: string;
+  whySuite: string;
+  theSpace: string;
+  keyDetails: string;
+  compareOtherSuites: string;
+  suitableVoyages: string;
+  suitableVoyagesCopy: string;
+  exploreVoyages: string;
+  finalJourney: string;
   otherCabin: string;
   planArea: string;
   planTapHint: string;
@@ -72,6 +86,20 @@ const UI: Record<Lang, CabinUi> = {
     close: "Close",
     compareLoading: "Loading comparison data…",
     compareIntro: "Quick overview for this cabin category.",
+    explorer: "CABIN EXPLORER",
+    exploreSuite: "Explore this suite",
+    findSuite: "FIND YOUR SUITE",
+    findSuiteCopy: "Compare the details that matter, or let our team help you choose your space on board.",
+    compareSuites: "Compare suites",
+    requestRecommendation: "Request recommendation",
+    whySuite: "WHY THIS SUITE",
+    theSpace: "THE SPACE",
+    keyDetails: "KEY DETAILS",
+    compareOtherSuites: "COMPARE WITH OTHER SUITES",
+    suitableVoyages: "YOUR VOYAGE",
+    suitableVoyagesCopy: "Explore our published voyages and choose the journey that suits your time in Ha Long Bay.",
+    exploreVoyages: "Explore voyages",
+    finalJourney: "REQUEST YOUR JOURNEY",
     otherCabin: "Other cabin",
     planArea: "AREA",
     planTapHint: "Tap any area on the plan to see its name.",
@@ -106,6 +134,20 @@ const UI: Record<Lang, CabinUi> = {
     close: "Đóng",
     compareLoading: "Đang tải dữ liệu so sánh…",
     compareIntro: "Thông tin nhanh về hạng phòng này.",
+    explorer: "KHÁM PHÁ HẠNG PHÒNG",
+    exploreSuite: "Khám phá hạng phòng",
+    findSuite: "CHỌN HẠNG PHÒNG CỦA BẠN",
+    findSuiteCopy: "So sánh những thông tin quan trọng hoặc để đội ngũ của chúng tôi tư vấn không gian phù hợp.",
+    compareSuites: "So sánh hạng phòng",
+    requestRecommendation: "Nhận tư vấn",
+    whySuite: "ĐIỂM KHÁC BIỆT",
+    theSpace: "KHÔNG GIAN",
+    keyDetails: "THÔNG TIN CHÍNH",
+    compareOtherSuites: "SO SÁNH VỚI HẠNG PHÒNG KHÁC",
+    suitableVoyages: "HẢI TRÌNH CỦA BẠN",
+    suitableVoyagesCopy: "Khám phá các hải trình đang mở và chọn hành trình phù hợp với thời gian của bạn trên vịnh Hạ Long.",
+    exploreVoyages: "Khám phá hải trình",
+    finalJourney: "ĐỀ XUẤT HÀNH TRÌNH",
     otherCabin: "Hạng phòng khác",
     planArea: "KHU VỰC",
     planTapHint: "Chạm vào từng khu vực trên sơ đồ để xem tên khu vực.",
