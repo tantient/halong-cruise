@@ -92,14 +92,14 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                 <h2 className="mb-4 text-3xl tracking-[0.02em] text-card-foreground">{str(page, "cta_title")}</h2>
                 <p className="mb-8 text-chronos-stone/85">{str(page, "cta_subtitle")}</p>
                 <div className="flex flex-wrap gap-3">
-                  {settings.whatsapp ? (
+                  {settings.zalo ? (
                     <Button
                       asChild
                       className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
                     >
-                      <a href={settings.whatsapp} target="_blank" rel="noopener noreferrer">
+                      <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="mr-2 h-4 w-4" />
-                        {tc.contactWhatsApp}
+                        {tc.contactZalo}
                       </a>
                     </Button>
                   ) : null}
