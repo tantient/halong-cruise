@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Check, X, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, Check, X, Sparkles, ChevronDown, ChevronUp, ArrowRight } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
-import { useLanguage } from "@/components/landing/use-language";
+import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import { publicQueries, type PublicItinerariesBundle } from "@/lib/platform";
@@ -160,15 +160,23 @@ function ItineraryCard({
               </div>
             </div>
 
-            {it.timeline.length > 0 || it.highlights.length > 0 ? (
-              <button
-                onClick={onToggle}
-                className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:text-chronos-gold"
+            <div className="flex flex-wrap items-center gap-6">
+              {it.timeline.length > 0 || it.highlights.length > 0 ? (
+                <button
+                  onClick={onToggle}
+                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:text-chronos-gold"
+                >
+                  {open ? ui.collapse : ui.showTimeline}
+                  {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </button>
+              ) : null}
+              <LocalLink
+                path={`/itineraries/${it.slug}`}
+                className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-gold hover:text-chronos-ink"
               >
-                {open ? ui.collapse : ui.showTimeline}
-                {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-              </button>
-            ) : null}
+                {ui.exploreJourney} <ArrowRight className="h-4 w-4" />
+              </LocalLink>
+            </div>
           </div>
         </div>
 
