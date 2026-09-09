@@ -3,7 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { publicQueries, type PublicHomepageBundle } from "@/lib/platform";
-import { ExperienceHome } from "./experience/ExperienceHome";
+import { ExperienceHomeV2 } from "./experience/v2/ExperienceHomeV2";
 import { useLanguage } from "./use-language";
 
 /**
@@ -19,5 +19,5 @@ export function LandingPage({ bundle }: { bundle: PublicHomepageBundle }) {
 
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
 
-  return <ExperienceHome bundle={b} data={perLang} lang={lang} setLang={setLang} t={t} />;
+  return <ExperienceHomeV2 bundle={b} data={perLang} lang={lang} setLang={setLang} t={t} />;
 }
