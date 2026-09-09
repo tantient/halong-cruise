@@ -140,7 +140,8 @@ export function CuratedGallery({
 }) {
   if (images.length === 0) return null;
   const [dominant, ...rest] = images;
-  const supporting = rest.slice(0, 4);
+  // Cap at three so the supporting column matches the dominant frame height.
+  const supporting = rest.slice(0, 3);
 
   const Frame = ({ image, index, className }: { image: MediaItem; index: number; className: string }) =>
     onOpen ? (
