@@ -45,19 +45,13 @@ function toUiLang(language: LanguageCode): Lang {
   return language === "vi" ? "vi" : "en";
 }
 
-export function LanguageProvider({
-  config,
-  children,
-}: {
-  /** Language config of the resolved ship (from the root loader). */
-  config: ShipLanguageConfig | null;
-  children: ReactNode;
-}) {
+/** Single place where the language rules turn into a context value. */
+function useLanguageValue(config: ShipLanguageConfig | null): LanguageContextValue {
   const router = useRouter();
   const location = useRouterState({ select: (s) => s.location });
   const pathname = location.pathname;
 
-  const value = useMemo<LanguageContextValue>(() => {
+  return useMemo<LanguageContextValue>(() => {
     const defaultLanguage = config?.defaultLanguage ?? PLATFORM_DEFAULT_LANGUAGE;
     const languages = config?.enabledLanguages ?? [defaultLanguage];
     const requested = normalizeLanguage(splitLanguagePath(pathname).language);
@@ -78,15 +72,32 @@ export function LanguageProvider({
       t: getT(toUiLang(lang)),
     };
   }, [config, pathname, location.searchStr, router]);
+}
+
+export function LanguageProvider({
+  config,
+  children,
+}: {
+  /** Language config of the resolved ship (from the root loader). */
+  config: ShipLanguageConfig | null;
+  children: ReactNode;
+}) {
+  const value = useLanguageValue(config);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
+/**
+ * Language for the current URL. Falls back to the URL-derived language when no
+ * provider is above the consumer (e.g. a transient dev reload) instead of
+ * throwing and blanking the page.
+ */
 export function useLanguage(): LanguageContextValue {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used inside <LanguageProvider>");
-  return ctx;
+  const fallback = useLanguageValue(null);
+  return ctx ?? fallback;
 }
+
 
 /**
  * Language-aware internal link. `path` is always the unprefixed app path;
