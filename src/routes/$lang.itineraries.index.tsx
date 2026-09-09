@@ -4,7 +4,7 @@ import { ItinerariesPage } from "@/components/itineraries/ItinerariesPage";
 import { itinerariesHead, loadItinerariesBundle, notFoundHead, publicErrorComponents } from "@/lib/routes/public-pages";
 
 /** Language-prefixed variant of `/itineraries`. */
-export const Route = createFileRoute("/$lang/itineraries")({
+export const Route = createFileRoute("/$lang/itineraries/")({
   loader: async ({ context, location }) => ({
     bundle: await loadItinerariesBundle(context.queryClient, location.pathname),
   }),

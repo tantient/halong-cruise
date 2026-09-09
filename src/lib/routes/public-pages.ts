@@ -113,6 +113,7 @@ export const publicErrorComponents = {
   domain: "This site is not configured for this domain.",
   cabin: "This cabin is not available.",
   service: "This service is not available.",
+  itinerary: "This voyage is not available.",
   generic: "Something went wrong loading this page. Please try again.",
 };
 
@@ -133,6 +134,30 @@ export function itinerariesHead(bundle: PublicItinerariesBundle) {
     seoTitle: page?.seoTitle ?? null,
     description: page?.intro ?? null,
     seoDescription: page?.seoDescription ?? null,
+    image: cover,
+    type: "website",
+  });
+  return { meta: seo.meta, links: seo.links };
+}
+
+/** Voyage detail reads the same bundle; an unknown slug 404s (no fallback). */
+export async function loadItineraryBundle(qc: QueryClient, pathname: string, slug: string) {
+  const bundle = await qc.ensureQueryData(publicQueries.itinerariesBundle(pathname));
+  if (!bundle) throw notFound();
+  const data = bundle.languages[bundle.language.language] ?? bundle.languages[bundle.ship.defaultLanguage];
+  if (!data?.itineraries.some((i) => i.slug === slug)) throw notFound();
+  return bundle;
+}
+
+export function itineraryHead(bundle: PublicItinerariesBundle, slug: string) {
+  const { ship, language, languages } = bundle;
+  const data = languages[language.language] ?? languages[ship.defaultLanguage];
+  const itinerary = data?.itineraries.find((i) => i.slug === slug) ?? null;
+  const cover = itinerary?.media.cover?.url ?? itinerary?.media.all[0]?.url ?? null;
+  const seo = buildSeo(ship, language.language, {
+    path: `/itineraries/${slug}`,
+    title: itinerary?.name ?? null,
+    description: itinerary?.summary ?? itinerary?.description ?? null,
     image: cover,
     type: "website",
   });
