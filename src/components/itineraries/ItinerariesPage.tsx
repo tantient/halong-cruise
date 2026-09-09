@@ -37,7 +37,16 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
   const primary = ordered[0] ?? null;
   const extended = ordered.slice(1);
 
-  const heroImage = page?.media?.hero?.[0] ?? page?.media?.cover ?? primary?.cover ?? null;
+  // Hero must not repeat the signature voyage image; prefer distinct page media.
+  const pageMedia = [...(page?.media?.hero ?? []), page?.media?.cover, ...(page?.media?.gallery ?? [])].filter(
+    (m): m is NonNullable<typeof m> => Boolean(m),
+  );
+  const heroImage =
+    pageMedia.find((m) => m.id !== primary?.cover?.id) ??
+    primary?.gallery.find((m) => m.id !== primary?.cover?.id) ??
+    pageMedia[0] ??
+    primary?.cover ??
+    null;
   const adviceLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
 
   return (
@@ -182,7 +191,7 @@ function ExtendedVoyage({ it, ui }: { it: ItineraryView; ui: ItineraryUi }) {
   return (
     <section className="pb-8">
       <div className="mx-auto max-w-7xl lg:px-8">
-        <div className="lg:grid lg:grid-cols-12 lg:items-end">
+        <div className="lg:grid lg:grid-cols-12 lg:items-center">
           <Reveal className="lg:col-span-8">
             <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/9] lg:aspect-[21/10]">
               {image ? (
@@ -200,9 +209,9 @@ function ExtendedVoyage({ it, ui }: { it: ItineraryView; ui: ItineraryUi }) {
 
           <Reveal
             delay={120}
-            className="relative z-10 px-6 lg:col-span-5 lg:col-start-8 lg:-mb-10 lg:px-0"
+            className="relative z-10 px-6 lg:col-span-5 lg:col-start-8 lg:translate-y-10 lg:px-0"
           >
-            <div className="bg-chronos-ivory pt-10 lg:p-10 lg:pr-0">
+            <div className="bg-chronos-ivory pt-10 lg:py-12 lg:pl-12">
               <p className="eyebrow mb-4 text-chronos-gold">{ui.stayLonger}</p>
               <h2 className="text-3xl leading-tight tracking-[0.02em] text-chronos-ink sm:text-4xl">{title}</h2>
               {it.destination ? (
