@@ -32,8 +32,8 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
     ...(cabin.view ? [{ label: ui.view, value: cabin.view }] : []),
     ...(cabin.roomCount ? [{ label: ui.cabinsCount, value: ui.rooms(cabin.roomCount) }] : []),
   ];
-  const heroImage = cabin.cover;
-  const gallery = cabin.gallery.filter((media, index, all) => all.findIndex((item) => item.id === media.id) === index);
+  const heroImage = cabin.cover ?? cabin.gallery[0] ?? null;
+  const gallery = cabin.gallery.filter((media, index, all) => media.id !== heroImage?.id && all.findIndex((item) => item.id === media.id) === index);
   const spaceImages = gallery.slice(0, 3);
   const galleryImages = gallery.slice(3).length ? gallery.slice(3) : gallery;
 

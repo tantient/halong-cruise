@@ -27,12 +27,13 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
   const [activeSlug, setActiveSlug] = useState(cabins[0]?.slug ?? "");
   const [compareCabin, setCompareCabin] = useState<CabinView | null>(null);
   const active = cabins.find((cabin) => cabin.slug === activeSlug) ?? cabins[0] ?? null;
+  const activeImage = active?.cover ?? active?.gallery[0] ?? null;
 
   useEffect(() => {
     if (active && !cabins.some((cabin) => cabin.slug === activeSlug)) setActiveSlug(active.slug);
   }, [active, activeSlug, cabins]);
 
-  const heroImage = cabins[0]?.cover ?? null;
+  const heroImage = cabins.find((cabin) => cabin.cover)?.cover ?? cabins.find((cabin) => cabin.gallery.length)?.gallery[0] ?? null;
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -72,7 +73,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
 
               <article className="grid overflow-hidden border border-chronos-ink/10 bg-card lg:min-h-[620px] lg:grid-cols-[minmax(0,1.55fr)_minmax(330px,0.75fr)]">
                 <div className="relative min-h-[360px] overflow-hidden bg-chronos-ink/10 lg:min-h-full">
-                  {active.cover ? <img key={active.cover.id} src={active.cover.url} alt={active.cover.alt ?? active.name} className="absolute inset-0 h-full w-full animate-in fade-in object-cover duration-500 motion-reduce:animate-none" /> : null}
+                  {activeImage ? <img key={activeImage.id} src={activeImage.url} alt={activeImage.alt ?? active.name} className="absolute inset-0 h-full w-full animate-in fade-in object-cover duration-500 motion-reduce:animate-none" /> : null}
                   <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/55 via-transparent to-transparent lg:hidden" />
                 </div>
                 <div className="flex flex-col justify-between p-7 sm:p-10 lg:p-12">
