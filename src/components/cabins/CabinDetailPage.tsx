@@ -52,10 +52,10 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
         </div></div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:px-8 lg:py-28">
+      {cabin.description || cabin.highlights.length ? <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[0.8fr_1.2fr] lg:px-8 lg:py-28">
         <Reveal><p className="eyebrow text-chronos-gold">{ui.whySuite}</p><h2 className="mt-4 text-3xl tracking-[0.02em] text-chronos-ink sm:text-4xl">{cabin.name}</h2></Reveal>
-        <Reveal><p className="text-lg leading-relaxed text-chronos-stone/85">{cabin.description}</p>{cabin.highlights.length ? <ul className="mt-8 grid gap-4 sm:grid-cols-2">{cabin.highlights.slice(0, 3).map((highlight) => <li key={highlight} className="flex items-start gap-3 border-t border-chronos-ink/10 pt-4 text-sm text-chronos-stone/85"><Check className="mt-0.5 h-4 w-4 shrink-0 text-chronos-gold" />{highlight}</li>)}</ul> : null}</Reveal>
-      </section>
+        <Reveal>{cabin.description ? <p className="text-lg leading-relaxed text-chronos-stone/85">{cabin.description}</p> : null}{cabin.highlights.length ? <ul className="mt-8 grid gap-4 sm:grid-cols-2">{cabin.highlights.slice(0, 3).map((highlight) => <li key={highlight} className="flex items-start gap-3 border-t border-chronos-ink/10 pt-4 text-sm text-chronos-stone/85"><Check className="mt-0.5 h-4 w-4 shrink-0 text-chronos-gold" />{highlight}</li>)}</ul> : null}</Reveal>
+      </section> : null}
 
       {spaceImages.length ? <section className="bg-chronos-ink py-20 lg:py-28"><div className="mx-auto max-w-7xl px-6 lg:px-8"><Reveal className="mb-10"><p className="eyebrow text-chronos-gold">{ui.theSpace}</p></Reveal><div className="grid gap-4 lg:grid-cols-[1.45fr_0.75fr] lg:grid-rows-2">{spaceImages.map((media, index) => <Reveal key={media.id} className={index === 0 ? "lg:row-span-2" : ""}><img src={media.url} alt={media.alt ?? `${cabin.name} ${index + 1}`} loading="lazy" className={`w-full object-cover ${index === 0 ? "aspect-[4/3] h-full lg:aspect-auto" : "aspect-[16/10]"}`} /></Reveal>)}</div></div></section> : null}
 
