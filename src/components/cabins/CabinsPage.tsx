@@ -58,7 +58,8 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
           <Reveal className="mb-10 max-w-2xl">
             <p className="eyebrow mb-4 text-chronos-gold">{ui.explorer}</p>
             <h2 className="text-3xl tracking-[0.02em] text-chronos-ink sm:text-4xl">{copy("list_title")}</h2>
-            <p className="mt-4 text-chronos-stone/85">{copy("list_subtitle")}</p>
+            <h3 className="mt-5 text-lg font-medium tracking-[0.02em] text-chronos-ink/80">{ui.categoriesHeading}</h3>
+            <p className="mt-3 text-chronos-stone/85">{copy("list_subtitle")}</p>
           </Reveal>
 
           {active ? (
