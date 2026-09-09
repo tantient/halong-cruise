@@ -46,6 +46,7 @@ export interface CabinUi {
   theSpace: string;
   keyDetails: string;
   compareOtherSuites: string;
+  categoriesHeading: string;
   suitableVoyages: string;
   suitableVoyagesCopy: string;
   exploreVoyages: string;
