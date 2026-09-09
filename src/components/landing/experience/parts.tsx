@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { useIsCompact, usePrefersReducedMotion, useScrollProgress } from "./motion";
+import { useIsCompact, useParallax, usePrefersReducedMotion } from "./motion";
 
 /** Chapter marker: a hairline, the chapter number and the time of day. */
 export function Chapter({
@@ -53,25 +53,19 @@ export function ParallaxImage({
   const compact = useIsCompact();
   const active = !reduced;
   const shift = compact ? strength * 0.35 : strength;
-  const { ref, progress } = useScrollProgress<HTMLDivElement>(active);
+  const { wrapRef, targetRef } = useParallax<HTMLDivElement, HTMLImageElement>(shift, active);
 
   return (
-    <div ref={ref} className={`relative overflow-hidden ${className}`}>
+    <div ref={wrapRef} className={`relative overflow-hidden ${className}`}>
       <img
+        ref={targetRef}
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         className={`h-full w-full object-cover ${imgClassName}`}
-        style={
-          active
-            ? {
-                transform: `translate3d(0, ${((progress - 0.5) * -shift).toFixed(2)}px, 0) scale(1.08)`,
-                willChange: "transform",
-              }
-            : undefined
-        }
+        style={active ? { transform: "scale(1.08)", willChange: "transform" } : undefined}
       />
       {children}
     </div>

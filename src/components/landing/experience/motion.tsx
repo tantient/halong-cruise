@@ -163,3 +163,60 @@ export function SceneReveal({
     </Tag>
   );
 }
+
+/**
+ * Parallax without React re-renders: the scroll handler writes the transform
+ * straight onto the target element, and only while it is on screen.
+ */
+export function useParallax<T extends HTMLElement, U extends HTMLElement>(
+  strength: number,
+  enabled = true,
+) {
+  const wrapRef = useRef<T | null>(null);
+  const targetRef = useRef<U | null>(null);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const target = targetRef.current;
+    if (!wrap || !target || !enabled) return;
+
+    let visible = true;
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const rect = wrap.getBoundingClientRect();
+      const total = rect.height + window.innerHeight;
+      const p = total > 0 ? (window.innerHeight - rect.top) / total : 0;
+      const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
+      target.style.transform = `translate3d(0, ${((clamped - 0.5) * -strength).toFixed(2)}px, 0) scale(1.08)`;
+    };
+    const onScroll = () => {
+      if (visible && !frame) frame = window.requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    let io: IntersectionObserver | undefined;
+    if (typeof IntersectionObserver !== "undefined") {
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) visible = e.isIntersecting;
+          if (visible) onScroll();
+        },
+        { rootMargin: "20% 0px 20% 0px" },
+      );
+      io.observe(wrap);
+    }
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      io?.disconnect();
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [enabled, strength]);
+
+  return { wrapRef, targetRef } as const;
+}
