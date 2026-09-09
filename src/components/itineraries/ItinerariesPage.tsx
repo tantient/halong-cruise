@@ -29,7 +29,7 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
   const copy = (key: string) => itinerariesText(page, key);
 
   const hero = itineraries[0]?.cover ?? null;
-  const bookingLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
+  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
   const [openId, setOpenId] = useState<string | null>(itineraries[0]?.id ?? null);
 
   return (

@@ -27,7 +27,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
   const others = perLang.others.map(toCabinLink);
   const page = perLang.page;
   const totalCabins = b.ship.ship.totalCabins;
-  const quoteLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
+  const quoteLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
 
   const areaDisplay = cabin.vip ? `${cabin.areaValue} ${ui.totalPrivateAreaSuffix}` : cabin.areaValue;
 

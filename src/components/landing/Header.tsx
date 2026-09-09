@@ -25,7 +25,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
   const { languages } = useLanguage();
   const site = useSite();
   // Booking destination of the resolved ship (falls back to its Zalo channel).
-  const bookingLink = site?.settings.bookingUrl ?? site?.settings.zalo ?? "#";
+  const bookingLink = site?.settings.bookingUrl ?? site?.settings.whatsapp ?? site?.settings.zalo ?? "#";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
