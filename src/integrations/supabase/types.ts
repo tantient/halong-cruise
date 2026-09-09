@@ -1029,6 +1029,7 @@ export type Database = {
           id: string
           instagram: string | null
           recruit_email: string | null
+          recruit_zalo: string | null
           ship_id: string
           tiktok: string | null
           translations: Json
@@ -1051,6 +1052,7 @@ export type Database = {
           id?: string
           instagram?: string | null
           recruit_email?: string | null
+          recruit_zalo?: string | null
           ship_id: string
           tiktok?: string | null
           translations?: Json
@@ -1073,6 +1075,7 @@ export type Database = {
           id?: string
           instagram?: string | null
           recruit_email?: string | null
+          recruit_zalo?: string | null
           ship_id?: string
           tiktok?: string | null
           translations?: Json
