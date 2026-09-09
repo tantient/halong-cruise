@@ -63,7 +63,6 @@ export interface Translations {
     subtitle: string;
     name: string;
     phone: string;
-    zalo: string;
     email: string;
     date: string;
     message: string;
@@ -75,7 +74,6 @@ export interface Translations {
     title: string;
     subtitle: string;
     name: string;
-    phone: string;
     zalo: string;
     email: string;
     date: string;
