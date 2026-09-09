@@ -42,7 +42,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
   const vipCabins = cabins.filter((c) => c.vip);
   const areaNote = cabins.find((c) => c.areaNote)?.areaNote ?? null;
   const heroImage = cabins[0]?.cover ?? null;
-  const quoteLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
+  const quoteLink = b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
   const [compareCabin, setCompareCabin] = useState<CabinView | null>(null);
 
   const areaLabel = (c: CabinView) => (c.vip ? ui.totalPrivateArea : ui.area);

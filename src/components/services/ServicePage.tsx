@@ -40,7 +40,7 @@ export function ServicePage({ bundle, slug }: { bundle: PublicServicesBundle; sl
     [service],
   );
   const hero = images[0];
-  const quoteLink = b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
+  const quoteLink = b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? b.ship.settings.bookingUrl ?? "#";
 
   return (
     <div className="min-h-screen bg-chronos-ivory">

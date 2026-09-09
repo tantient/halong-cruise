@@ -39,7 +39,7 @@ export function OffersPage({ bundle }: { bundle: PublicOffersBundle }) {
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
   const { offers, page } = perLang;
   const hero = page?.media.cover ?? offers[0]?.media.cover ?? null;
-  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.zalo ?? "#";
+  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
