@@ -1,6 +1,6 @@
 "use client";
 
-import { AmbientImage } from "@/lib/experience/AmbientImage";
+import { AmbientStage } from "@/lib/experience/AmbientStage";
 import { useTimeState } from "@/lib/experience/time-context";
 import { textOf, type PublicHomepageSection } from "@/lib/platform";
 
@@ -29,7 +29,7 @@ export function ChapterSignature({
 
   return (
     <section className="relative flex h-[92svh] min-h-[520px] w-full items-center overflow-hidden">
-      <AmbientImage media={section.media} alt={shipName} zoom />
+      <AmbientStage media={section.media} alt={shipName} zoom />
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
         <div className="max-w-3xl">
           <SceneReveal variant="fade">
