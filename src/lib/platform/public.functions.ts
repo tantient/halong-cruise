@@ -18,6 +18,7 @@ import type {
   PublicCabin,
   PublicCabinFull,
   PublicHomepage,
+  PublicItinerary,
   PublicItineraryFull,
   PublicJobPosition,
   PublicOffer,
@@ -77,6 +78,12 @@ export interface PublicHomepageLanguageData {
   homepage: PublicHomepage;
   /** Published job positions (slug + localized title) for homepage recruit widgets. */
   jobs: Pick<PublicJobPosition, "id" | "slug" | "title">[];
+  /** Published cabins of the ship, for homepage showcases. */
+  cabins: PublicCabin[];
+  /** Published itineraries of the ship, for homepage voyage scenes. */
+  itineraries: PublicItinerary[];
+  /** Published services of the ship, for homepage experience scenes. */
+  services: PublicService[];
 }
 
 export interface PublicHomepageBundle {
@@ -96,16 +103,32 @@ export const getPublicHomepageBundle = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PublicHomepageBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
-    const { getHomepage, listJobPositions } = await import("./content.server");
+    const { getHomepage, listJobPositions, listCabins, listItineraries, listServices } = await import("./content.server");
     const entries = await Promise.all(
       s.context.enabledLanguages.map(async (language) => {
         const scope = { ...s.scope, language };
-        const [homepage, jobs] = await Promise.all([getHomepage(scope), listJobPositions(scope)]);
-        return [language, { homepage, jobs: jobs.map((j) => ({ id: j.id, slug: j.slug, title: j.title })) }] as const;
+        const [homepage, jobs, cabins, itineraries, services] = await Promise.all([
+          getHomepage(scope),
+          listJobPositions(scope),
+          listCabins(scope),
+          listItineraries(scope),
+          listServices(scope),
+        ]);
+        return [
+          language,
+          {
+            homepage,
+            jobs: jobs.map((j) => ({ id: j.id, slug: j.slug, title: j.title })),
+            cabins,
+            itineraries,
+            services,
+          },
+        ] as const;
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
   });
+
 
 export const getPublicCabins = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
