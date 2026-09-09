@@ -8,16 +8,17 @@ import { Button } from "@/components/ui/button";
 const NAV: { label: string; to?: string; soon?: boolean }[] = [
   { label: "Tổng quan", to: "/admin" },
   { label: "Tàu / Website", to: "/admin/ships" },
+  { label: "Thư viện ảnh", to: "/admin/media" },
+  { label: "Phòng nghỉ", to: "/admin/cabins" },
+  { label: "Hải trình", to: "/admin/itineraries" },
   { label: "Hồ sơ ứng tuyển", to: "/admin/applications" },
-  { label: "Phòng nghỉ", soon: true },
-  { label: "Hải trình", soon: true },
   { label: "Dịch vụ", soon: true },
   { label: "Ưu đãi", soon: true },
   { label: "Trang nội dung", soon: true },
-  { label: "Thư viện ảnh", soon: true },
   { label: "Tuyển dụng", soon: true },
   { label: "Khách hỏi giá", soon: true },
 ];
+
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();

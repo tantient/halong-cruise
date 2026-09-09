@@ -39,6 +39,9 @@ import { Route as LangCabinsCabinIdRouteImport } from './routes/$lang.cabins.$ca
 import { Route as LangServicesServiceIdRouteImport } from './routes/$lang.services.$serviceId'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_authenticated/admin.applications'
+import { Route as AuthenticatedAdminCabinsRouteImport } from './routes/_authenticated/admin.cabins'
+import { Route as AuthenticatedAdminItinerariesRouteImport } from './routes/_authenticated/admin.itineraries'
+import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminShipsIndexRouteImport } from './routes/_authenticated/admin.ships.index'
 import { Route as AuthenticatedAdminShipsShipIdRouteImport } from './routes/_authenticated/admin.ships.$shipId'
 import { Route as AuthenticatedAdminShipsNewRouteImport } from './routes/_authenticated/admin.ships.new'
@@ -194,6 +197,23 @@ const AuthenticatedAdminApplicationsRoute =
     path: '/applications',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminCabinsRoute =
+  AuthenticatedAdminCabinsRouteImport.update({
+    id: '/cabins',
+    path: '/cabins',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminItinerariesRoute =
+  AuthenticatedAdminItinerariesRouteImport.update({
+    id: '/itineraries',
+    path: '/itineraries',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminMediaRoute = AuthenticatedAdminMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
 const AuthenticatedAdminShipsIndexRoute =
   AuthenticatedAdminShipsIndexRouteImport.update({
     id: '/ships/',
@@ -246,6 +266,9 @@ export interface FileRoutesByFullPath {
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
+  '/admin/cabins': typeof AuthenticatedAdminCabinsRoute
+  '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
+  '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -279,6 +302,9 @@ export interface FileRoutesByTo {
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/admin/applications': typeof AuthenticatedAdminApplicationsRoute
+  '/admin/cabins': typeof AuthenticatedAdminCabinsRoute
+  '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
+  '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins': typeof LangCabinsIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -316,6 +342,9 @@ export interface FileRoutesById {
   '/$lang/cabins/$cabinId': typeof LangCabinsCabinIdRoute
   '/$lang/services/$serviceId': typeof LangServicesServiceIdRoute
   '/_authenticated/admin/applications': typeof AuthenticatedAdminApplicationsRoute
+  '/_authenticated/admin/cabins': typeof AuthenticatedAdminCabinsRoute
+  '/_authenticated/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
+  '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/ships/$shipId': typeof AuthenticatedAdminShipsShipIdRoute
@@ -353,6 +382,9 @@ export interface FileRouteTypes {
     | '/$lang/cabins/$cabinId'
     | '/$lang/services/$serviceId'
     | '/admin/applications'
+    | '/admin/cabins'
+    | '/admin/itineraries'
+    | '/admin/media'
     | '/$lang/cabins/'
     | '/admin/'
     | '/admin/ships/$shipId'
@@ -386,6 +418,9 @@ export interface FileRouteTypes {
     | '/$lang/cabins/$cabinId'
     | '/$lang/services/$serviceId'
     | '/admin/applications'
+    | '/admin/cabins'
+    | '/admin/itineraries'
+    | '/admin/media'
     | '/$lang/cabins'
     | '/admin'
     | '/admin/ships/$shipId'
@@ -422,6 +457,9 @@ export interface FileRouteTypes {
     | '/$lang/cabins/$cabinId'
     | '/$lang/services/$serviceId'
     | '/_authenticated/admin/applications'
+    | '/_authenticated/admin/cabins'
+    | '/_authenticated/admin/itineraries'
+    | '/_authenticated/admin/media'
     | '/$lang/cabins/'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/ships/$shipId'
@@ -663,6 +701,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminApplicationsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/cabins': {
+      id: '/_authenticated/admin/cabins'
+      path: '/cabins'
+      fullPath: '/admin/cabins'
+      preLoaderRoute: typeof AuthenticatedAdminCabinsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/itineraries': {
+      id: '/_authenticated/admin/itineraries'
+      path: '/itineraries'
+      fullPath: '/admin/itineraries'
+      preLoaderRoute: typeof AuthenticatedAdminItinerariesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/media': {
+      id: '/_authenticated/admin/media'
+      path: '/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AuthenticatedAdminMediaRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/ships/': {
       id: '/_authenticated/admin/ships/'
       path: '/ships'
@@ -696,6 +755,9 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminApplicationsRoute: typeof AuthenticatedAdminApplicationsRoute
+  AuthenticatedAdminCabinsRoute: typeof AuthenticatedAdminCabinsRoute
+  AuthenticatedAdminItinerariesRoute: typeof AuthenticatedAdminItinerariesRoute
+  AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminShipsShipIdRoute: typeof AuthenticatedAdminShipsShipIdRoute
   AuthenticatedAdminShipsNewRoute: typeof AuthenticatedAdminShipsNewRoute
@@ -704,6 +766,9 @@ interface AuthenticatedAdminRouteChildren {
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminApplicationsRoute: AuthenticatedAdminApplicationsRoute,
+  AuthenticatedAdminCabinsRoute: AuthenticatedAdminCabinsRoute,
+  AuthenticatedAdminItinerariesRoute: AuthenticatedAdminItinerariesRoute,
+  AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminShipsShipIdRoute: AuthenticatedAdminShipsShipIdRoute,
   AuthenticatedAdminShipsNewRoute: AuthenticatedAdminShipsNewRoute,
