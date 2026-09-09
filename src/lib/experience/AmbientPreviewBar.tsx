@@ -14,7 +14,7 @@ export function AmbientPreviewBar() {
   const options = [{ key: "auto" as const, label: "Auto" }, ...TIME_STATES.map((s) => ({ key: s, label: s }))];
 
   return (
-    <div className="fixed bottom-4 left-4 z-[60] flex items-center gap-1 rounded-full border border-white/15 bg-black/70 px-1.5 py-1 text-[0.6rem] uppercase tracking-[0.2em] text-white/70 backdrop-blur-md">
+    <div className="fixed bottom-4 left-4 z-[60] flex max-w-[calc(100vw-2rem)] flex-wrap items-center gap-1 rounded-2xl border border-white/15 bg-black/70 px-1.5 py-1 text-[0.6rem] uppercase tracking-[0.2em] text-white/70 backdrop-blur-md">
       <span className="px-2 text-white/40">preview</span>
       {options.map((o) => {
         const active = o.key === "auto" ? auto : !auto && state === o.key;
