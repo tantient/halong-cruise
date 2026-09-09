@@ -118,7 +118,7 @@ export interface Translations {
     openingsLabel: string;
     openingsTitle: string;
     openingsSubtitle: string;
-    contactZalo: string;
+    contactWhatsApp: string;
     sendEmail: string;
     ctaLabel: string;
     ctaTitle: string;
@@ -133,14 +133,12 @@ export interface Translations {
     title: string;
     subtitle: string;
     phone: string;
-    zalo: string;
     whatsapp: string;
     email: string;
     address: string;
     addressValue: string;
     hours: string;
     hoursValue: string;
-    chatZalo: string;
     chatWhatsApp: string;
     call: string;
     mapTitle: string;
@@ -287,33 +285,31 @@ const translations: Record<Lang, Translations> = {
     careers: {
       label: "TUYỂN DỤNG",
       title: "Gia nhập đội ngũ",
-      subtitle: "Cơ hội làm việc trên du thuyền 6 sao tại vịnh Hạ Long – Lan Hạ. Liên hệ trực tiếp qua Zalo hoặc email.",
+      subtitle: "Cơ hội làm việc trên du thuyền 6 sao tại vịnh Hạ Long – Lan Hạ. Liên hệ trực tiếp qua WhatsApp hoặc email.",
       openingsLabel: "VỊ TRÍ MỞ",
       openingsTitle: "Đang tuyển dụng",
-      openingsSubtitle: "Xem các vị trí đang tuyển và liên hệ bộ phận nhân sự qua Zalo hoặc email bên dưới.",
-      contactZalo: "Liên hệ Zalo",
+      openingsSubtitle: "Xem các vị trí đang tuyển và liên hệ bộ phận nhân sự qua WhatsApp hoặc email bên dưới.",
+      contactWhatsApp: "Nhắn WhatsApp",
       sendEmail: "Gửi Email",
       ctaLabel: "LIÊN HỆ",
       ctaTitle: "Bạn chưa tìm thấy vị trí phù hợp?",
-      ctaSubtitle: "Gửi hồ sơ hoặc nhắn tin Zalo, đội ngũ của chúng tôi sẽ phản hồi trong 24 giờ.",
+      ctaSubtitle: "Gửi hồ sơ hoặc nhắn tin WhatsApp, đội ngũ của chúng tôi sẽ phản hồi trong 24 giờ.",
       processLabel: "Quy trình",
-      processText: "Liên hệ qua Zalo/Email → Gửi CV → Phỏng vấn → Nhận offer.",
+      processText: "Liên hệ qua WhatsApp/Email → Gửi CV → Phỏng vấn → Nhận offer.",
       locationLabel: "Địa điểm làm việc",
       locationText: "Cảng tàu khách quốc tế Hạ Long, TP. Hạ Long, Quảng Ninh.",
     },
     contact: {
       label: "LIÊN HỆ",
       title: "Kết nối cùng chúng tôi",
-      subtitle: "Đội ngũ tư vấn sẵn sàng hỗ trợ bạn 24/7 qua điện thoại, Zalo, WhatsApp hoặc email.",
-      phone: "Hotline / Zalo / WhatsApp",
-      zalo: "Zalo",
+      subtitle: "Đội ngũ tư vấn sẵn sàng hỗ trợ bạn 24/7 qua điện thoại, WhatsApp hoặc email.",
+      phone: "Hotline / WhatsApp",
       whatsapp: "WhatsApp",
       email: "Email",
       address: "Địa chỉ",
       addressValue: "Cảng tàu khách quốc tế Hạ Long, TP. Hạ Long, Quảng Ninh",
       hours: "Giờ làm việc",
       hoursValue: "Hàng ngày · 08:00 – 21:00",
-      chatZalo: "Nhắn tin Zalo",
       chatWhatsApp: "Nhắn tin WhatsApp",
       call: "Gọi ngay",
       mapTitle: "Vị trí bến tàu",
@@ -458,33 +454,31 @@ const translations: Record<Lang, Translations> = {
     careers: {
       label: "CAREERS",
       title: "Join the crew",
-      subtitle: "Career opportunities aboard a six-star cruise in Ha Long Bay and Lan Ha Bay. Contact us directly via Zalo or email.",
+      subtitle: "Career opportunities aboard a six-star cruise in Ha Long Bay and Lan Ha Bay. Contact us directly via WhatsApp or email.",
       openingsLabel: "OPEN POSITIONS",
       openingsTitle: "Now hiring",
-      openingsSubtitle: "Review the open roles and contact our HR team via Zalo or email below.",
-      contactZalo: "Contact via Zalo",
+      openingsSubtitle: "Review the open roles and contact our HR team via WhatsApp or email below.",
+      contactWhatsApp: "Message on WhatsApp",
       sendEmail: "Send Email",
       ctaLabel: "GET IN TOUCH",
       ctaTitle: "Can't find the right role?",
-      ctaSubtitle: "Send your CV or message us on Zalo — our team will reply within 24 hours.",
+      ctaSubtitle: "Send your CV or message us on WhatsApp — our team will reply within 24 hours.",
       processLabel: "Process",
-      processText: "Contact via Zalo/Email → Submit CV → Interview → Receive offer.",
+      processText: "Contact via WhatsApp/Email → Submit CV → Interview → Receive offer.",
       locationLabel: "Work location",
       locationText: "Ha Long International Cruise Port, Ha Long City, Quang Ninh.",
     },
     contact: {
       label: "CONTACT",
       title: "Get in touch",
-      subtitle: "Our concierge team is available 24/7 by phone, Zalo, WhatsApp or email.",
-      phone: "Hotline / Zalo / WhatsApp",
-      zalo: "Zalo",
+      subtitle: "Our concierge team is available 24/7 by phone, WhatsApp or email.",
+      phone: "Hotline / WhatsApp",
       whatsapp: "WhatsApp",
       email: "Email",
       address: "Address",
       addressValue: "Ha Long International Cruise Port, Ha Long City, Quang Ninh",
       hours: "Opening hours",
       hoursValue: "Daily · 08:00 – 21:00",
-      chatZalo: "Chat on Zalo",
       chatWhatsApp: "Chat on WhatsApp",
       call: "Call now",
       mapTitle: "Port location",

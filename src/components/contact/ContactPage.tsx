@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 
@@ -87,9 +87,6 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
     settings.email
       ? { icon: Mail, label: t.contact.email, value: settings.email, href: `mailto:${settings.email}` }
       : null,
-    settings.zalo
-      ? { icon: MessageCircle, label: t.contact.zalo, value: phoneDisplay ?? settings.zalo, href: settings.zalo }
-      : null,
     settings.address
       ? { icon: MapPin, label: t.contact.address, value: settings.address, href: settings.googleMaps ?? null }
       : null,
@@ -153,21 +150,10 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              {settings.zalo ? (
-                <Button
-                  asChild
-                  className="btn-sheen rounded-none bg-chronos-gold px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
-                >
-                  <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
-                    {t.contact.chatZalo}
-                  </a>
-                </Button>
-              ) : null}
               {settings.whatsapp ? (
                 <Button
                   asChild
-                  variant="outline"
-                  className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
+                  className="btn-sheen rounded-none bg-chronos-gold px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
                 >
                   <a href={settings.whatsapp} target="_blank" rel="noopener noreferrer">
                     <WhatsAppIcon className="mr-2 h-4 w-4" />

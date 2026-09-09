@@ -1,5 +1,5 @@
 import { LocalLink } from "@/lib/i18n/language-context";
-import { Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 
 import { ChronosLogo } from "./ChronosLogo";
 import { useSite } from "@/lib/platform";
@@ -40,7 +40,6 @@ export function Footer({ t }: FooterProps) {
   const socials = [
     { label: "Facebook", href: site?.settings.facebook, Icon: Facebook },
     { label: "Instagram", href: site?.settings.instagram, Icon: Instagram },
-    { label: "Zalo", href: site?.settings.zalo, Icon: MessageCircle },
     { label: "WhatsApp", href: site?.settings.whatsapp, Icon: WhatsAppIcon },
   ].filter((s): s is { label: string; href: string; Icon: typeof Facebook } => Boolean(s.href));
 
