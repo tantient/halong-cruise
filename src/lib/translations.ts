@@ -5,6 +5,8 @@ export interface Translations {
     about: string;
     cabins: string;
     services: string;
+    experiences: string;
+    ship: string;
     gallery: string;
     itineraries: string;
     offers: string;
@@ -167,6 +169,8 @@ const translations: Record<Lang, Translations> = {
       about: "Giới thiệu",
       cabins: "Phòng nghỉ",
       services: "Dịch vụ",
+      experiences: "Trải nghiệm",
+      ship: "Du thuyền",
       gallery: "Thư viện ảnh",
       itineraries: "Hải trình",
       offers: "Ưu đãi",
@@ -338,6 +342,8 @@ const translations: Record<Lang, Translations> = {
       about: "About",
       cabins: "Cabins",
       services: "Services",
+      experiences: "Experiences",
+      ship: "The Ship",
       gallery: "Gallery",
       itineraries: "Itineraries",
       offers: "Offers",

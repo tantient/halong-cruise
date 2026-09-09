@@ -29,6 +29,8 @@ export const STATIC_PUBLIC_PATHS: Array<{ path: string; changefreq: SitemapUrl["
   { path: "/cabins", changefreq: "weekly", priority: "0.9" },
   { path: "/itineraries", changefreq: "weekly", priority: "0.9" },
   { path: "/offers", changefreq: "weekly", priority: "0.8" },
+  { path: "/experiences", changefreq: "monthly", priority: "0.8" },
+  { path: "/the-ship", changefreq: "monthly", priority: "0.8" },
   { path: "/gallery", changefreq: "monthly", priority: "0.8" },
   { path: "/about", changefreq: "monthly", priority: "0.7" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
