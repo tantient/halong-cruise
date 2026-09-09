@@ -35,6 +35,12 @@ export interface ItineraryUi {
   journeyStartsTitle: string;
   requestAdvice: string;
   backToVoyages: string;
+  /** Listing narrative. */
+  signatureEyebrow: string;
+  exploreJourney: string;
+  moreTime: string;
+  stayLonger: string;
+  discoverExtended: string;
 }
 
 const EN: ItineraryUi = {
@@ -65,6 +71,11 @@ const EN: ItineraryUi = {
   journeyStartsTitle: "Your journey starts here",
   requestAdvice: "Request advice",
   backToVoyages: "All voyages",
+  signatureEyebrow: "The Chronos journey",
+  exploreJourney: "Explore the journey",
+  moreTime: "More time on the bay",
+  stayLonger: "Stay a little longer",
+  discoverExtended: "Discover the extended journey",
 };
 
 const DICT: Partial<Record<string, ItineraryUi>> = {
@@ -97,6 +108,11 @@ const DICT: Partial<Record<string, ItineraryUi>> = {
     journeyStartsTitle: "Hành trình của bạn bắt đầu từ đây",
     requestAdvice: "Nhận tư vấn",
     backToVoyages: "Tất cả hành trình",
+    signatureEyebrow: "Hành trình Chronos",
+    exploreJourney: "Khám phá hành trình",
+    moreTime: "Thêm thời gian trên vịnh",
+    stayLonger: "Ở lại lâu hơn một chút",
+    discoverExtended: "Khám phá hành trình dài hơn",
   },
   ko: {
     duration: "소요 시간",
@@ -126,6 +142,11 @@ const DICT: Partial<Record<string, ItineraryUi>> = {
     journeyStartsTitle: "여행은 여기에서 시작됩니다",
     requestAdvice: "상담 요청",
     backToVoyages: "전체 항해",
+    signatureEyebrow: "크로노스의 여정",
+    exploreJourney: "여정 살펴보기",
+    moreTime: "만에서 더 긴 시간",
+    stayLonger: "조금 더 머무르기",
+    discoverExtended: "연장 여정 살펴보기",
   },
   ru: {
     duration: "Продолжительность",
@@ -155,6 +176,11 @@ const DICT: Partial<Record<string, ItineraryUi>> = {
     journeyStartsTitle: "Ваше путешествие начинается здесь",
     requestAdvice: "Получить консультацию",
     backToVoyages: "Все маршруты",
+    signatureEyebrow: "Путешествие Chronos",
+    exploreJourney: "Смотреть маршрут",
+    moreTime: "Больше времени в бухте",
+    stayLonger: "Останьтесь немного дольше",
+    discoverExtended: "Смотреть продлённый маршрут",
   },
   "zh-CN": {
     duration: "时长",
@@ -184,6 +210,11 @@ const DICT: Partial<Record<string, ItineraryUi>> = {
     journeyStartsTitle: "旅程从这里开始",
     requestAdvice: "获取建议",
     backToVoyages: "全部航程",
+    signatureEyebrow: "Chronos 之旅",
+    exploreJourney: "探索这段旅程",
+    moreTime: "在湾上多留一些时间",
+    stayLonger: "多留一晚",
+    discoverExtended: "探索延长航程",
   },
 };
 
