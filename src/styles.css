@@ -379,3 +379,33 @@
   background-color: color-mix(in oklab, var(--chronos-deep) 40%, transparent);
   backdrop-filter: blur(12px);
 }
+
+/* Sợi chỉ dẫn hướng cuộn ở cảnh mở màn */
+@utility scroll-thread {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--chronos-ivory) 85%, transparent),
+    transparent
+  );
+  animation: scroll-thread-pulse 2.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  transform-origin: top;
+}
+
+@keyframes scroll-thread-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleY(0.55);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-thread {
+    animation: none;
+    opacity: 0.6;
+  }
+}
