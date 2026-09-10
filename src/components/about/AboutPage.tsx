@@ -51,6 +51,7 @@ function items(page: PublicPage | null, key: string, totalCabins: number | null)
 /** Heritage about template — all copy and imagery come from the database. */
 export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
+  const cta = journeyCtaUi(lang);
   const { data } = useSuspenseQuery({
     ...publicQueries.pageBundle(href("/about"), "about"),
     initialData: bundle,

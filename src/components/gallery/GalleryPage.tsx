@@ -24,6 +24,7 @@ function str(page: PublicPage | null, key: string): string {
  */
 export function GalleryPage({ bundle }: { bundle: PublicGalleryBundle }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
+  const cta = journeyCtaUi(lang);
   const { data } = useSuspenseQuery({ ...publicQueries.galleryBundle(href("/gallery")), initialData: bundle });
   const b = data ?? bundle;
 
