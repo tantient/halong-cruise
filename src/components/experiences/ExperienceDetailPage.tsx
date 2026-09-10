@@ -240,21 +240,24 @@ function VenueBlock({
   onOpen: () => void;
 }) {
   const facts = venueFacts(venue, ui);
+  // A venue without photography stays a text block instead of an empty frame.
   return (
-    <Reveal className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-      <button
-        type="button"
-        onClick={onOpen}
-        className={`group overflow-hidden ${reverse ? "lg:order-2" : ""}`}
-        aria-label={venue.name}
-      >
-        <Img
-          image={venue.cover}
-          alt={venue.name}
-          className="aspect-[4/3] w-full transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
-        />
-      </button>
-      <div className={reverse ? "lg:order-1" : ""}>
+    <Reveal className={`grid items-center gap-8 lg:gap-16 ${venue.cover ? "lg:grid-cols-2" : ""}`}>
+      {venue.cover ? (
+        <button
+          type="button"
+          onClick={onOpen}
+          className={`group overflow-hidden ${reverse ? "lg:order-2" : ""}`}
+          aria-label={venue.name}
+        >
+          <Img
+            image={venue.cover}
+            alt={venue.name}
+            className="aspect-[4/3] w-full transition-transform duration-[1400ms] ease-out group-hover:scale-[1.04]"
+          />
+        </button>
+      ) : null}
+      <div className={reverse && venue.cover ? "lg:order-1" : ""}>
         <h3 className={`text-xl leading-tight tracking-[0.02em] sm:text-3xl ${dark ? "text-chronos-ivory" : "text-chronos-ink"}`}>
           {venue.name}
         </h3>
