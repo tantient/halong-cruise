@@ -50,6 +50,7 @@ import { Route as AuthenticatedAdminApplicationsRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminCabinsRouteImport } from './routes/_authenticated/admin.cabins'
 import { Route as AuthenticatedAdminItinerariesRouteImport } from './routes/_authenticated/admin.itineraries'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
+import { Route as AuthenticatedAdminVenuesRouteImport } from './routes/_authenticated/admin.venues'
 import { Route as AuthenticatedAdminShipsIndexRouteImport } from './routes/_authenticated/admin.ships.index'
 import { Route as AuthenticatedAdminShipsShipIdRouteImport } from './routes/_authenticated/admin.ships.$shipId'
 import { Route as AuthenticatedAdminShipsNewRouteImport } from './routes/_authenticated/admin.ships.new'
@@ -263,6 +264,12 @@ const AuthenticatedAdminMediaRoute = AuthenticatedAdminMediaRouteImport.update({
   path: '/media',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminVenuesRoute =
+  AuthenticatedAdminVenuesRouteImport.update({
+    id: '/venues',
+    path: '/venues',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminShipsIndexRoute =
   AuthenticatedAdminShipsIndexRouteImport.update({
     id: '/ships/',
@@ -324,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/admin/cabins': typeof AuthenticatedAdminCabinsRoute
   '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
+  '/admin/venues': typeof AuthenticatedAdminVenuesRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
   '/$lang/experiences/': typeof LangExperiencesIndexRoute
   '/$lang/itineraries/': typeof LangItinerariesIndexRoute
@@ -368,6 +376,7 @@ export interface FileRoutesByTo {
   '/admin/cabins': typeof AuthenticatedAdminCabinsRoute
   '/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
+  '/admin/venues': typeof AuthenticatedAdminVenuesRoute
   '/$lang/cabins': typeof LangCabinsIndexRoute
   '/$lang/experiences': typeof LangExperiencesIndexRoute
   '/$lang/itineraries': typeof LangItinerariesIndexRoute
@@ -416,6 +425,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/cabins': typeof AuthenticatedAdminCabinsRoute
   '/_authenticated/admin/itineraries': typeof AuthenticatedAdminItinerariesRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
+  '/_authenticated/admin/venues': typeof AuthenticatedAdminVenuesRoute
   '/$lang/cabins/': typeof LangCabinsIndexRoute
   '/$lang/experiences/': typeof LangExperiencesIndexRoute
   '/$lang/itineraries/': typeof LangItinerariesIndexRoute
@@ -464,6 +474,7 @@ export interface FileRouteTypes {
     | '/admin/cabins'
     | '/admin/itineraries'
     | '/admin/media'
+    | '/admin/venues'
     | '/$lang/cabins/'
     | '/$lang/experiences/'
     | '/$lang/itineraries/'
@@ -508,6 +519,7 @@ export interface FileRouteTypes {
     | '/admin/cabins'
     | '/admin/itineraries'
     | '/admin/media'
+    | '/admin/venues'
     | '/$lang/cabins'
     | '/$lang/experiences'
     | '/$lang/itineraries'
@@ -555,6 +567,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/cabins'
     | '/_authenticated/admin/itineraries'
     | '/_authenticated/admin/media'
+    | '/_authenticated/admin/venues'
     | '/$lang/cabins/'
     | '/$lang/experiences/'
     | '/$lang/itineraries/'
@@ -879,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMediaRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/venues': {
+      id: '/_authenticated/admin/venues'
+      path: '/venues'
+      fullPath: '/admin/venues'
+      preLoaderRoute: typeof AuthenticatedAdminVenuesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/ships/': {
       id: '/_authenticated/admin/ships/'
       path: '/ships'
@@ -915,6 +935,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminCabinsRoute: typeof AuthenticatedAdminCabinsRoute
   AuthenticatedAdminItinerariesRoute: typeof AuthenticatedAdminItinerariesRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
+  AuthenticatedAdminVenuesRoute: typeof AuthenticatedAdminVenuesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminShipsShipIdRoute: typeof AuthenticatedAdminShipsShipIdRoute
   AuthenticatedAdminShipsNewRoute: typeof AuthenticatedAdminShipsNewRoute
@@ -926,6 +947,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminCabinsRoute: AuthenticatedAdminCabinsRoute,
   AuthenticatedAdminItinerariesRoute: AuthenticatedAdminItinerariesRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
+  AuthenticatedAdminVenuesRoute: AuthenticatedAdminVenuesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   AuthenticatedAdminShipsShipIdRoute: AuthenticatedAdminShipsShipIdRoute,
   AuthenticatedAdminShipsNewRoute: AuthenticatedAdminShipsNewRoute,
