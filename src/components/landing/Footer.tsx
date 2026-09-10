@@ -13,6 +13,8 @@ interface FooterProps {
       itineraries: string;
       cabins: string;
       services: string;
+      experiences: string;
+      ship: string;
       gallery: string;
       offers: string;
       contact: string;
