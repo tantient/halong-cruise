@@ -42,7 +42,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
     <main>
       <section className="relative h-[72vh] min-h-[520px] overflow-hidden">
         {heroImage ? <img src={heroImage.url} alt={heroImage.alt ?? cabin.name} className="h-full w-full object-cover" /> : <div className="h-full w-full bg-chronos-ink/20" />}
-        <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/90 via-chronos-ink/25 to-chronos-ink/35" />
+        <div className="hero-local-scrim absolute inset-0" />
         <div className="absolute inset-0 flex items-end"><div className="mx-auto w-full max-w-7xl px-6 pb-12 lg:px-8 lg:pb-16">
           <LocalLink path="/cabins" className="mb-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-gold"><ChevronLeft className="h-4 w-4" />{ui.eyebrowCabins}</LocalLink>
           {cabin.code ? <p className="mb-3 text-xs uppercase tracking-[0.24em] text-chronos-gold">{cabin.code}</p> : null}

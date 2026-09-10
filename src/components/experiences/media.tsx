@@ -60,15 +60,15 @@ export function HeroMedia({
       }`}
     >
       <Img image={image} alt={title} className="h-full w-full" priority />
-      <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/90 via-chronos-ink/35 to-chronos-ink/45" />
+      <div className="hero-local-scrim absolute inset-0" />
       <div className="absolute inset-0 flex items-end">
         <div className="mx-auto w-full max-w-7xl px-6 pb-14 sm:pb-20 lg:px-8">
           {eyebrow ? <p className="eyebrow mb-4 text-chronos-gold">{eyebrow}</p> : null}
-          <h1 className="max-w-3xl text-[2rem] leading-[1.1] tracking-[0.02em] text-chronos-ivory sm:text-5xl lg:text-6xl">
+          <h1 className="image-copy-shadow max-w-3xl text-[2rem] leading-[1.1] tracking-[0.02em] text-chronos-ivory sm:text-5xl lg:text-6xl">
             {title}
           </h1>
           {tagline ? (
-            <p className="mt-5 max-w-xl text-base text-chronos-ivory/85 sm:text-lg">{tagline}</p>
+            <p className="image-copy-shadow mt-5 max-w-xl text-base text-chronos-ivory/95 sm:text-lg">{tagline}</p>
           ) : null}
         </div>
       </div>
@@ -91,7 +91,7 @@ export function PanoramaBand({
       <Img image={image} alt={alt} className="h-[52vh] w-full sm:h-[62vh] lg:h-[72vh]" />
       {children ? (
         <>
-          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/20 to-transparent" />
+          <div className="hero-local-scrim absolute inset-0" />
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-6 pb-10 lg:px-8">{children}</div>
         </>
       ) : null}

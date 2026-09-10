@@ -47,7 +47,7 @@ export function ItineraryDetailPage({ bundle, slug }: { bundle: PublicItinerarie
           ) : (
             <div className="h-full w-full bg-chronos-ink/80" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/90 via-chronos-ink/30 to-chronos-ink/40" />
+          <div className="hero-local-scrim absolute inset-0" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
               <LocalLink
