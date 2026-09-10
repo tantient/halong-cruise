@@ -8,7 +8,6 @@ import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { publicQueries, type PublicPage, type PublicPageBundle } from "@/lib/platform";
-import { pageText } from "@/components/cabins/cabin-view";
 
 const featureIcons: LucideIcon[] = [Waves, ChefHat, ConciergeBell, Anchor];
 const valueIcons: LucideIcon[] = [Heart, ShieldCheck, Leaf, Anchor];
@@ -82,7 +81,7 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
               <p className="eyebrow mb-5 text-chronos-gold">{str(page, "eyebrow")}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl lg:text-6xl">
-                {pageText(page, "__title__", totalCabins) || fill(page?.title ?? "", totalCabins)}
+                {fill(page?.title ?? "", totalCabins)}
               </h1>
             </div>
           </div>
