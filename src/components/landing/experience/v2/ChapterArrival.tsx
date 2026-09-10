@@ -45,9 +45,9 @@ export function ChapterArrival({
           </SceneReveal>
         ) : null}
         <SceneReveal variant="up" delay={350} duration={1500}>
-          <h1 className="mt-8 font-display text-3xl font-normal uppercase leading-[1.2] tracking-[0.18em] text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-4xl lg:text-5xl">
-            <span className="block">{title}</span>
-            {accent ? <span className="block">{accent}</span> : null}
+          <h1 className="mt-8 font-display text-2xl font-normal uppercase leading-[1.25] tracking-[0.1em] text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-3xl sm:tracking-[0.18em] lg:text-5xl">
+            <span className="block whitespace-nowrap">{title}</span>
+            {accent ? <span className="block whitespace-nowrap">{accent}</span> : null}
           </h1>
         </SceneReveal>
         <div className="mt-8 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
