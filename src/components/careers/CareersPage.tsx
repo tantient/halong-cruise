@@ -95,7 +95,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
           </div>
 
           <Reveal className="mt-20 rounded-sm border border-border bg-card p-8 lg:p-12">
-            <div className="grid gap-10 lg:grid-cols-2">
+            <div className="grid gap-10 lg:grid-cols-2 [&>*]:min-w-0">
               <div>
                 <p className="eyebrow mb-3 text-chronos-gold">{str(page, "cta_label")}</p>
                 <h2 className="mb-4 text-3xl tracking-[0.02em] text-card-foreground">{str(page, "cta_title")}</h2>
@@ -104,7 +104,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                   {recruitZalo ? (
                     <Button
                       asChild
-                      className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
+                      className="btn-sheen h-auto max-w-full whitespace-normal rounded-none bg-chronos-gold px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
                     >
                       <a href={recruitZalo} target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="mr-2 h-4 w-4" />
@@ -116,7 +116,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                     <Button
                       asChild
                       variant="outline"
-                      className="rounded-none border-chronos-ink/15 px-6 text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:bg-chronos-ink/5"
+                      className="h-auto max-w-full whitespace-normal rounded-none border-chronos-ink/15 px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-card-foreground hover:bg-chronos-ink/5"
                     >
                       <a href={emailLink}>
                         <Mail className="mr-2 h-4 w-4" />
