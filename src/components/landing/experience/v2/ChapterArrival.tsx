@@ -37,20 +37,17 @@ export function ChapterArrival({
       <AmbientStage media={section?.media} alt={shipName} priority zoom raw scrim={false} />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 sm:pb-24 lg:px-8 lg:pb-28">
-        <SceneReveal variant="fade" delay={150} duration={1400}>
-          <span className="block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-white/75">
-            {tagline}
-          </span>
-        </SceneReveal>
+        {tagline ? (
+          <SceneReveal variant="fade" delay={150} duration={1400}>
+            <span className="block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-white/75">
+              {tagline}
+            </span>
+          </SceneReveal>
+        ) : null}
         <SceneReveal variant="up" delay={350} duration={1500}>
-          <h1 className="mt-6 font-display text-[3.4rem] leading-[0.92] font-normal tracking-tight text-white sm:text-7xl lg:text-[8.2rem]">
-            {title}
-            {accent ? (
-              <>
-                {" "}
-                <span className="italic text-white/85">{accent}</span>
-              </>
-            ) : null}
+          <h1 className="mt-8 font-display text-2xl font-normal uppercase leading-[1.25] tracking-[0.1em] text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-3xl sm:tracking-[0.18em] lg:text-5xl">
+            <span className="block whitespace-nowrap">{title}</span>
+            {accent ? <span className="block whitespace-nowrap">{accent}</span> : null}
           </h1>
         </SceneReveal>
         <div className="mt-8 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
