@@ -1,35 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ExperienceDetailPage } from "@/components/experiences/ExperienceDetailPage";
-import {
-  loadServiceBundle,
-  notFoundHead,
-  publicErrorComponents,
-  serviceHead,
-} from "@/lib/routes/public-pages";
+import { notFoundHead, redirectServiceSlug } from "@/lib/routes/public-pages";
 
-/** Service detail in the ship's default language (no URL prefix). */
+/** Retired URL: `/services/<slug>` → its Experiences (or The Ship) home (301). */
 export const Route = createFileRoute("/services/$serviceId")({
-  loader: async ({ context, location, params }) => ({
-    bundle: await loadServiceBundle(context.queryClient, location.pathname, params.serviceId),
-  }),
-  head: ({ loaderData, params }) =>
-    loaderData ? serviceHead(loaderData.bundle, params.serviceId) : notFoundHead,
-  component: ServiceRoute,
-  notFoundComponent: () => <PublicMessage text={publicErrorComponents.service} />,
-  errorComponent: () => <PublicMessage text={publicErrorComponents.generic} />,
+  loader: ({ location, params }) => redirectServiceSlug(location.pathname, params.serviceId),
+  head: () => notFoundHead,
+  component: () => null,
 });
-
-function ServiceRoute() {
-  const { bundle } = Route.useLoaderData();
-  const { serviceId } = Route.useParams();
-  return <ExperienceDetailPage bundle={bundle} slug={serviceId} />;
-}
-
-function PublicMessage({ text }: { text: string }) {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-8 text-center">
-      <p className="text-muted-foreground">{text}</p>
-    </main>
-  );
-}

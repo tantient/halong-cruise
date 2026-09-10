@@ -47,7 +47,7 @@ export async function buildSitemapUrls(ctx: ShipContext): Promise<SitemapUrl[]> 
     ...STATIC_PUBLIC_PATHS,
     ...slugs.cabins.map((s) => ({ path: `/cabins/${s}`, changefreq: "monthly" as const, priority: "0.7" })),
     ...slugs.itineraries.map((s) => ({ path: `/itineraries/${s}`, changefreq: "monthly" as const, priority: "0.8" })),
-    ...slugs.services.map((s) => ({ path: `/services/${s}`, changefreq: "monthly" as const, priority: "0.6" })),
+    ...slugs.experienceCategories.map((s) => ({ path: `/experiences/${s}`, changefreq: "monthly" as const, priority: "0.6" })),
   ];
 
   const abs = (p: string) => `${ctx.origin}${p}`;

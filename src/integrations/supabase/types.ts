@@ -1170,6 +1170,104 @@ export type Database = {
         }
         Relationships: []
       }
+      venues: {
+        Row: {
+          access_type: string | null
+          area_sqm: number | null
+          capacity: number | null
+          capacity_unit: string
+          category: string
+          commercial_name: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          function_text: string | null
+          functional_name: string
+          id: string
+          location: string | null
+          parent_key: string | null
+          published_at: string | null
+          ship_id: string
+          show_area: boolean
+          show_capacity: boolean
+          show_public: boolean
+          sort_order: number
+          spec_note: string | null
+          stable_key: string
+          status: string
+          summary: string | null
+          translations: Json
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          access_type?: string | null
+          area_sqm?: number | null
+          capacity?: number | null
+          capacity_unit?: string
+          category: string
+          commercial_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          function_text?: string | null
+          functional_name: string
+          id?: string
+          location?: string | null
+          parent_key?: string | null
+          published_at?: string | null
+          ship_id: string
+          show_area?: boolean
+          show_capacity?: boolean
+          show_public?: boolean
+          sort_order?: number
+          spec_note?: string | null
+          stable_key: string
+          status?: string
+          summary?: string | null
+          translations?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          access_type?: string | null
+          area_sqm?: number | null
+          capacity?: number | null
+          capacity_unit?: string
+          category?: string
+          commercial_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          function_text?: string | null
+          functional_name?: string
+          id?: string
+          location?: string | null
+          parent_key?: string | null
+          published_at?: string | null
+          ship_id?: string
+          show_area?: boolean
+          show_capacity?: boolean
+          show_public?: boolean
+          sort_order?: number
+          spec_note?: string | null
+          stable_key?: string
+          status?: string
+          summary?: string | null
+          translations?: Json
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venues_ship_id_fkey"
+            columns: ["ship_id"]
+            isOneToOne: false
+            referencedRelation: "ships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

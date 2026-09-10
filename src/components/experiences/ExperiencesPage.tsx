@@ -1,12 +1,12 @@
 "use client";
 
 /**
- * Experiences landing — "Life aboard Chronos".
+ * Experiences landing — "Life aboard".
  *
- * An editorial sequence, not a catalogue: every experience of the resolved ship
- * is rendered with the composition stored on its own record, so no two blocks
- * repeat and adding/removing an experience needs no code change. All copy and
- * media come from the database.
+ * An editorial sequence, not a catalogue: every experience category of the
+ * resolved ship is rendered with the composition stored on its own record, and
+ * each chapter names the real venues that belong to that category. All copy,
+ * figures and media come from the database.
  */
 
 import { useMemo } from "react";
@@ -20,9 +20,10 @@ import { Button } from "@/components/ui/button";
 import { pageText } from "@/components/cabins/cabin-view";
 import { toServiceView, type ServiceView } from "@/components/services/service-view";
 import { groupServices } from "./grouping";
+import { venueListItems, venuesInCategory, type VenueView } from "./venue-view";
 import { CuratedGallery, EditorialPair, FeatureList, HeroMedia, Img, PanoramaBand, SectionHeading } from "./media";
 import { experienceUi } from "@/lib/i18n/ui-experiences";
-import { publicQueries, type PublicPageBundle, type PublicServicesBundle } from "@/lib/platform";
+import { publicQueries, type PublicPageBundle, type PublicServicesBundle, type PublicVenue } from "@/lib/platform";
 
 export function ExperiencesPage({
   bundle,
@@ -41,6 +42,7 @@ export function ExperiencesPage({
   const b = data ?? bundle;
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
   const views = useMemo(() => perLang.services.map(toServiceView), [perLang]);
+  const venues: PublicVenue[] = perLang.venues ?? [];
   const { experiences } = groupServices(views);
 
   const page =
@@ -66,7 +68,13 @@ export function ExperiencesPage({
         />
 
         {experiences.map((exp, i) => (
-          <ExperienceChapter key={exp.slug} view={exp} index={i} ui={ui} />
+          <ExperienceChapter
+            key={exp.slug}
+            view={exp}
+            index={i}
+            ui={ui}
+            venues={venuesInCategory(venues, exp.category)}
+          />
         ))}
 
         <Reveal className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
@@ -105,26 +113,31 @@ export function ExperiencesPage({
   );
 }
 
-/** One experience, composed according to the layout key on its own record. */
+
+/** One experience category, composed according to the layout key on its record. */
 function ExperienceChapter({
   view,
   index,
   ui,
+  venues,
 }: {
   view: ServiceView;
   index: number;
   ui: ReturnType<typeof experienceUi>;
+  venues: VenueView[];
 }) {
   const composition = view.composition ?? (index % 2 === 0 ? "editorial" : "panorama");
+  const items = venues.length > 0 ? venueListItems(venues, ui) : view.highlights;
   const link = (
     <LocalLink
-      path={`/services/${view.slug}`}
+      path={`/experiences/${view.slug}`}
       className="mt-8 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-chronos-gold transition-opacity hover:opacity-80"
     >
       {ui.discover} — {view.name}
       <span aria-hidden="true">→</span>
     </LocalLink>
   );
+  const venueImages = venues.map((v) => v.cover).filter((m): m is NonNullable<typeof m> => m !== null);
 
   if (composition === "panorama") {
     return (
@@ -142,7 +155,7 @@ function ExperienceChapter({
           <Reveal className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             <p className="text-base leading-relaxed text-chronos-stone/90 sm:text-lg">{view.intro}</p>
             <div>
-              <FeatureList items={view.highlights.slice(0, 2)} columns={1} />
+              <FeatureList items={items.slice(0, 3)} columns={1} />
               {link}
             </div>
           </Reveal>
@@ -157,12 +170,20 @@ function ExperienceChapter({
         <div className="mx-auto max-w-3xl px-6 text-center lg:px-8">
           <SectionHeading eyebrow={view.eyebrow} title={view.name} lead={view.intro} align="center" />
           <div className="mt-12 grid gap-3 sm:grid-cols-2">
-            {[view.cover, view.gallery.find((g) => g.id !== view.cover?.id) ?? null].map((img, i) => (
+            {(venueImages.length > 1
+              ? venueImages.slice(0, 2)
+              : [view.cover, view.gallery.find((g) => g.id !== view.cover?.id) ?? null]
+            ).map((img, i) => (
               <div key={img?.id ?? i} className="overflow-hidden">
                 <Img image={img} alt={view.name} className="h-[38vh] w-full sm:h-[46vh]" />
               </div>
             ))}
           </div>
+          {items.length > 0 ? (
+            <div className="mt-12 text-left">
+              <FeatureList items={items} columns={2} />
+            </div>
+          ) : null}
           {link}
         </div>
       </section>
@@ -173,14 +194,12 @@ function ExperienceChapter({
     return (
       <section className="bg-chronos-ink py-16 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <SectionHeading
-            eyebrow={view.eyebrow}
-            title={view.name}
-            lead={view.intro}
-            tone="dark"
-          />
+          <SectionHeading eyebrow={view.eyebrow} title={view.name} lead={view.intro} tone="dark" />
           <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {[view.cover, ...view.gallery.filter((g) => g.id !== view.cover?.id)]
+            {(venueImages.length > 0
+              ? venueImages
+              : [view.cover, ...view.gallery.filter((g) => g.id !== view.cover?.id)]
+            )
               .slice(0, 4)
               .map((img, i) => (
                 <div key={img?.id ?? i} className="overflow-hidden">
@@ -192,8 +211,23 @@ function ExperienceChapter({
                 </div>
               ))}
           </div>
+          {items.length > 0 ? (
+            <div className="mt-12 grid gap-x-12 gap-y-8 sm:grid-cols-2">
+              {items.map((item, i) => (
+                <div key={item.title} className="border-t border-chronos-ivory/15 pt-5">
+                  <p className="mb-2 text-xs tracking-[0.28em] text-chronos-gold">
+                    {String(i + 1).padStart(2, "0")}
+                  </p>
+                  <p className="text-base tracking-wide text-chronos-ivory">{item.title}</p>
+                  {item.description ? (
+                    <p className="mt-2 text-sm leading-relaxed text-chronos-ivory/75">{item.description}</p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
           <LocalLink
-            path={`/services/${view.slug}`}
+            path={`/experiences/${view.slug}`}
             className="mt-10 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-chronos-gold transition-opacity hover:opacity-80"
           >
             {ui.discover} — {view.name}
@@ -217,12 +251,21 @@ function ExperienceChapter({
             <p className="mt-4 text-base text-chronos-stone/85 sm:text-lg">{view.tagline}</p>
           ) : null}
           <p className="mt-6 text-base leading-relaxed text-chronos-stone/90">{view.intro}</p>
+          {items.length > 0 ? (
+            <div className="mt-8">
+              <FeatureList items={items} columns={1} />
+            </div>
+          ) : null}
           {link}
         </EditorialPair>
-        {view.gallery.length > 1 ? (
+        {venueImages.length > 1 || view.gallery.length > 1 ? (
           <div className="mt-10">
             <CuratedGallery
-              images={view.gallery.filter((g) => g.id !== view.cover?.id).slice(0, 3)}
+              images={
+                venueImages.length > 1
+                  ? venueImages.slice(0, 3)
+                  : view.gallery.filter((g) => g.id !== view.cover?.id).slice(0, 3)
+              }
               alt={view.name}
             />
           </div>

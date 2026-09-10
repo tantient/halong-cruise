@@ -192,6 +192,38 @@ export interface PublicService {
   media: EntityMedia;
 }
 
+/**
+ * A real, named place aboard the ship (restaurant, bar, pool, treatment room,
+ * function room …). Venues belong to an experience category and carry their own
+ * factual data; `showPublic` / `showArea` / `showCapacity` decide what the
+ * public site is allowed to state, so figures can be stored without publishing.
+ */
+export interface PublicVenue {
+  id: string;
+  /** Stable identity, never renamed when the commercial name changes. */
+  key: string;
+  /** Experience category the venue belongs to (matches a service slug/category). */
+  category: string;
+  /** Key of the venue this one sits inside (e.g. treatment rooms inside the spa). */
+  parentKey: string | null;
+  functionalName: string;
+  commercialName: string | null;
+  location: string | null;
+  areaSqm: number | null;
+  capacity: number | null;
+  capacityUnit: string;
+  specNote: string | null;
+  functionText: string | null;
+  accessType: string | null;
+  summary: string | null;
+  description: string | null;
+  showPublic: boolean;
+  showArea: boolean;
+  showCapacity: boolean;
+  sortOrder: number;
+  media: EntityMedia;
+}
+
 export interface PublicOffer {
   id: string;
   slug: string;

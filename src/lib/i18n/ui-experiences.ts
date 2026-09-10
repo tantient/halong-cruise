@@ -25,6 +25,14 @@ export interface ExperienceUi {
   aboveWater: string;
   exploreCabins: string;
   exploreExperiences: string;
+  /** Venues aboard */
+  aboard: string;
+  venues: string;
+  location: string;
+  area: string;
+  upTo: string;
+  guests: string;
+  onboardFacilities: string;
 }
 
 const EN: ExperienceUi = {
@@ -44,6 +52,13 @@ const EN: ExperienceUi = {
   aboveWater: "Life above the water",
   exploreCabins: "Explore cabins",
   exploreExperiences: "Explore experiences",
+  aboard: "Aboard",
+  venues: "Where it happens",
+  location: "Location",
+  area: "",
+  upTo: "up to",
+  guests: "guests",
+  onboardFacilities: "Onboard facilities",
 };
 
 const DICT: Partial<Record<string, ExperienceUi>> = {
@@ -65,6 +80,13 @@ const DICT: Partial<Record<string, ExperienceUi>> = {
     aboveWater: "Đời sống trên mặt nước",
     exploreCabins: "Xem phòng nghỉ",
     exploreExperiences: "Xem trải nghiệm",
+    aboard: "Trên tàu",
+    venues: "Những không gian",
+    location: "Vị trí",
+    area: "",
+    upTo: "tối đa",
+    guests: "khách",
+    onboardFacilities: "Tiện ích trên tàu",
   },
 };
 
