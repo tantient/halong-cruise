@@ -65,10 +65,10 @@ function prepare(raw: string, viewBox?: string): string {
 
 const SVG = {
   stacked: prepare(stackedSrc),
-  stackedPlain: prepare(stackedSrc, "90 151 920 575"),
+  stackedPlain: prepare(stackedSrc, "187 299 1923 1199"),
   mark: prepare(markSrc),
   wordmark: prepare(wordmarkSrc),
-  wordmarkPlain: prepare(wordmarkSrc, "69 109 920 104"),
+  wordmarkPlain: prepare(wordmarkSrc, "133 275 1923 214"),
 };
 
 /** Wrapper cho SVG nội tuyến: giữ nét ở mọi kích thước, ăn màu currentColor. */
