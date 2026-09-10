@@ -14,12 +14,13 @@ export function ChapterFinal({
   section,
   shipName,
   primaryPath,
-  secondaryPath,
+  secondaryHref,
 }: {
   section: PublicHomepageSection | undefined;
   shipName: string;
   primaryPath: string;
-  secondaryPath: string;
+  /** "Request your journey" behaves like every other request CTA: the chat channel. */
+  secondaryHref: string;
 }) {
   if (!section) return null;
   const cta = textOf(section, "cta");
@@ -51,7 +52,7 @@ export function ChapterFinal({
               </AmbientLink>
             ) : null}
             {ctaSecondary ? (
-              <AmbientLink path={secondaryPath} tone="onImage" variant="outline">
+              <AmbientLink href={secondaryHref} tone="onImage" variant="outline">
                 {ctaSecondary}
               </AmbientLink>
             ) : null}

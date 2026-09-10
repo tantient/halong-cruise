@@ -121,7 +121,7 @@ export function ChapterJourney({
                   </p>
                 ) : null}
                 <div className="mt-5">
-                  <AmbientLink path={`/itineraries`} variant="text">
+                  <AmbientLink path={`/itineraries/${it.slug}`} variant="text">
                     {textOf(section, "cta") || ui.viewAll}
                   </AmbientLink>
                 </div>
