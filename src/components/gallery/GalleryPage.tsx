@@ -7,7 +7,9 @@ import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
-import { galleryAllLabel } from "@/lib/i18n/ui-forms";
+import { galleryAllLabel, journeyCtaUi } from "@/lib/i18n/ui-forms";
+import { Button } from "@/components/ui/button";
+import { LocalLink } from "@/lib/i18n/language-context";
 import { publicQueries, type PublicGalleryBundle, type PublicPage } from "@/lib/platform";
 import { Lightbox } from "./Lightbox";
 
@@ -101,6 +103,24 @@ export function GalleryPage({ bundle }: { bundle: PublicGalleryBundle }) {
             ))}
           </div>
         </div>
+
+        <section className="border-t border-chronos-ink/10 py-20 lg:py-24">
+          <Reveal className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-4 px-6 sm:flex-row sm:gap-5 lg:px-8">
+            <Button
+              asChild
+              className="btn-sheen w-full rounded-none bg-chronos-gold px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90 sm:w-auto"
+            >
+              <LocalLink path="/itineraries">{cta.exploreVoyages}</LocalLink>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full rounded-none border-chronos-ink/20 px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 sm:w-auto"
+            >
+              <LocalLink path="/cabins">{cta.exploreSuites}</LocalLink>
+            </Button>
+          </Reveal>
+        </section>
       </main>
 
       <Lightbox
