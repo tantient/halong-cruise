@@ -12,3 +12,8 @@
 - [x] Audit and correct the global bright-luxury visual baseline without redesigning public pages.
 - [x] Recalibrate Homepage Morning/Day/Golden/Night ambience while preserving the time engine and five chapters.
 - [x] Verify the requested EN/VI public-page matrix across desktop, laptop, and mobile.
+- [x] Model real onboard outlets as tenant-scoped venue data with stable keys and publish flags.
+- [x] Rebuild public Experiences around seven venue categories, with The Ship holding non-experience spaces.
+- [x] Redirect legacy `/services/:slug` URLs and update navigation, sitemap, and homepage links.
+- [x] Add admin editing for venues (names, location, specs, visibility flags, translations, photos).
+- [x] Verify EN/VI desktop/mobile on all Experiences pages, The Ship, redirects, 404, and sitemap.

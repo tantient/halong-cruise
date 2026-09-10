@@ -341,6 +341,7 @@ export async function listVenues(scope: ReadScope): Promise<PublicVenue[]> {
     .from("venues")
     .select(VENUE_COLUMNS)
     .eq("ship_id", scope.shipId)
+    .eq("status", "published")
     .order("category")
     .order("sort_order");
   if (error) throw error;

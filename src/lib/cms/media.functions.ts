@@ -19,6 +19,7 @@ export const MEDIA_ENTITY_TYPES = [
   "cabin",
   "itinerary",
   "service",
+  "venue",
   "offer",
   "ship_page",
   "job_position",
