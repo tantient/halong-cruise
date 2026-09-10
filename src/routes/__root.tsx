@@ -114,6 +114,10 @@ function AutoRefreshOnNewDeployment() {
       if (document.visibilityState === "visible") void checkVersion();
     };
 
+    // Also check right away: a tab restored from a stale cached document would
+    // otherwise keep showing an old deployment until it is hidden and revisited.
+    void checkVersion();
+
     window.addEventListener("pageshow", onPageShow);
     document.addEventListener("visibilitychange", onVisibilityChange);
     return () => {
