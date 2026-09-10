@@ -11,4 +11,4 @@
 - [x] Render the opening Homepage Hero from raw media with no colour grading or full-frame overlay.
 - [x] Audit and correct the global bright-luxury visual baseline without redesigning public pages.
 - [x] Recalibrate Homepage Morning/Day/Golden/Night ambience while preserving the time engine and five chapters.
-- [ ] Verify the requested EN/VI public-page matrix across desktop, laptop, and mobile.
+- [x] Verify the requested EN/VI public-page matrix across desktop, laptop, and mobile.
