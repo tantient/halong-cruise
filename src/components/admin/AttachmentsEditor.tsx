@@ -14,7 +14,7 @@ import {
   updateAttachmentAdmin,
 } from "@/lib/cms/media.functions";
 
-type EntityType = "cabin" | "itinerary";
+type EntityType = "cabin" | "itinerary" | "venue";
 
 /** Attach / order / detach library images for one content record. */
 export function AttachmentsEditor({
