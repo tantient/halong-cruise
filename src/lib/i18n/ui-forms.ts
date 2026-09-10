@@ -53,3 +53,24 @@ const GALLERY_ALL: Partial<Record<string, string>> = {
 export function galleryAllLabel(language: Lang | string): string {
   return GALLERY_ALL[language] ?? GALLERY_ALL["en"]!;
 }
+
+/**
+ * Shared closing-CTA labels for pages whose own copy has no next step
+ * (About, Gallery). Destinations are the existing Voyages / Cabins pages.
+ */
+export interface JourneyCtaUi {
+  exploreVoyages: string;
+  exploreSuites: string;
+}
+
+const JOURNEY_CTA: Partial<Record<string, JourneyCtaUi>> = {
+  en: { exploreVoyages: "Explore voyages", exploreSuites: "Explore suites" },
+  vi: { exploreVoyages: "Khám phá hải trình", exploreSuites: "Khám phá phòng nghỉ" },
+  ko: { exploreVoyages: "항해 살펴보기", exploreSuites: "객실 살펴보기" },
+  ru: { exploreVoyages: "Смотреть маршруты", exploreSuites: "Смотреть каюты" },
+  "zh-CN": { exploreVoyages: "探索航程", exploreSuites: "探索客房" },
+};
+
+export function journeyCtaUi(language: Lang | string): JourneyCtaUi {
+  return JOURNEY_CTA[language] ?? JOURNEY_CTA["en"]!;
+}

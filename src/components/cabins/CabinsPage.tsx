@@ -33,6 +33,17 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
     if (active && !cabins.some((cabin) => cabin.slug === activeSlug)) setActiveSlug(active.slug);
   }, [active, activeSlug, cabins]);
 
+  // `/cabins?compare=<slug>` (from a cabin detail page) opens the comparison
+  // for that suite directly instead of dropping the visitor at the top.
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("compare");
+    if (!slug) return;
+    const target = cabins.find((cabin) => cabin.slug === slug);
+    if (!target) return;
+    setActiveSlug(target.slug);
+    setCompareCabin(target);
+  }, [cabins]);
+
   const heroImage = cabins.find((cabin) => cabin.cover)?.cover ?? cabins.find((cabin) => cabin.gallery.length)?.gallery[0] ?? null;
 
   return (
