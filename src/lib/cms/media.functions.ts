@@ -65,7 +65,10 @@ function safeSegment(value: string) {
 }
 
 const MEDIA_COLUMNS =
-  "id,ship_id,storage_path,alt,caption,width,height,mime_type,category,sort_order,is_featured,translations,created_at";
+  "id,ship_id,storage_path,alt,caption,width,height,mime_type,category,sort_order,is_featured,translations,created_at,show_in_gallery,gallery_category,gallery_display_order";
+
+/** Public gallery groups (ids match the gallery page's own category ids). */
+export const GALLERY_CATEGORIES = ["ship", "suites", "dining", "experiences", "life_on_board"] as const;
 
 export interface AdminMediaItem {
   id: string;
@@ -82,6 +85,9 @@ export interface AdminMediaItem {
   isFeatured: boolean;
   translations: Record<string, Record<string, string>>;
   usedBy: number;
+  showInGallery: boolean;
+  galleryCategory: string | null;
+  galleryDisplayOrder: number;
 }
 
 /** Whole media library of one ship, with how many places each asset is used. */
@@ -119,6 +125,9 @@ export const listMediaAdmin = createServerFn({ method: "GET" })
       isFeatured: m.is_featured,
       translations: (m.translations ?? {}) as Record<string, Record<string, string>>,
       usedBy: uses.get(m.id) ?? 0,
+      showInGallery: m.show_in_gallery,
+      galleryCategory: m.gallery_category,
+      galleryDisplayOrder: m.gallery_display_order,
     }));
 
     const categories = [...new Set(items.map((i) => i.category))].sort();
@@ -204,6 +213,14 @@ export const updateMediaAdmin = createServerFn({ method: "POST" })
         sortOrder: z.number().int().min(0).max(9999),
         isFeatured: z.boolean().optional(),
         translations: translationMap,
+        showInGallery: z.boolean().optional(),
+        galleryCategory: z
+          .string()
+          .trim()
+          .max(60)
+          .optional()
+          .transform((v) => (v && v.length > 0 ? v : null)),
+        galleryDisplayOrder: z.number().int().min(0).max(9999).optional(),
       })
       .parse(raw),
   )
@@ -217,6 +234,9 @@ export const updateMediaAdmin = createServerFn({ method: "POST" })
         sort_order: data.sortOrder,
         is_featured: data.isFeatured ?? false,
         translations: cleanTranslations(data.translations),
+        show_in_gallery: data.showInGallery ?? false,
+        gallery_category: data.galleryCategory,
+        gallery_display_order: data.galleryDisplayOrder ?? data.sortOrder,
       })
       .eq("id", data.mediaId)
       .eq("ship_id", data.shipId);

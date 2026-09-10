@@ -579,11 +579,14 @@ export type Database = {
           category: string
           created_at: string
           created_by: string | null
+          gallery_category: string | null
+          gallery_display_order: number
           height: number | null
           id: string
           is_featured: boolean
           mime_type: string | null
           ship_id: string
+          show_in_gallery: boolean
           sort_order: number
           storage_path: string
           translations: Json
@@ -597,11 +600,14 @@ export type Database = {
           category?: string
           created_at?: string
           created_by?: string | null
+          gallery_category?: string | null
+          gallery_display_order?: number
           height?: number | null
           id?: string
           is_featured?: boolean
           mime_type?: string | null
           ship_id: string
+          show_in_gallery?: boolean
           sort_order?: number
           storage_path: string
           translations?: Json
@@ -615,11 +621,14 @@ export type Database = {
           category?: string
           created_at?: string
           created_by?: string | null
+          gallery_category?: string | null
+          gallery_display_order?: number
           height?: number | null
           id?: string
           is_featured?: boolean
           mime_type?: string | null
           ship_id?: string
+          show_in_gallery?: boolean
           sort_order?: number
           storage_path?: string
           translations?: Json

@@ -521,13 +521,13 @@ export const getPublicGalleryBundle = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PublicGalleryBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
-    const { getPage, listMediaInCategories } = await import("./content.server");
+    const { getPage, listGalleryMedia } = await import("./content.server");
     const entries = await Promise.all(
       s.context.enabledLanguages.map(async (language) => {
         const scope = { ...s.scope, language };
         const page = await getPage(scope, "gallery");
         const categories = galleryCategories(page);
-        const images = await listMediaInCategories(
+        const images = await listGalleryMedia(
           scope,
           categories.map((c) => c.id),
         );

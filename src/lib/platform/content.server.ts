@@ -107,6 +107,39 @@ export async function listMediaInCategories(scope: ReadScope, categories?: strin
   );
 }
 
+/**
+ * Curated public gallery images: only assets an admin flagged with
+ * `show_in_gallery`, grouped by `gallery_category` and ordered by
+ * `gallery_display_order`. Categories come from the page copy, so the group
+ * order stays data-driven per ship.
+ */
+export async function listGalleryMedia(scope: ReadScope, categories?: string[]) {
+  const db = getPublicDb();
+  const { data, error } = await db
+    .from("media")
+    .select(`${MEDIA_COLUMNS},gallery_category,gallery_display_order`)
+    .eq("ship_id", scope.shipId)
+    .eq("show_in_gallery", true)
+    .order("gallery_display_order")
+    .order("sort_order");
+  if (error) throw error;
+  const rows = (data ?? []) as (MediaRow & {
+    gallery_category: string | null;
+    gallery_display_order: number;
+  })[];
+  const items = rows
+    .filter((m) => !categories || categories.length === 0 || (m.gallery_category && categories.includes(m.gallery_category)))
+    .map((m) => ({
+      ...toMediaItem(m, "gallery", m.gallery_display_order, scope.language, scope.defaultLanguage),
+      category: m.gallery_category ?? m.category,
+    }));
+  if (!categories || categories.length === 0) return items;
+  const rank = new Map(categories.map((c, i) => [c, i]));
+  return items.sort(
+    (a, b) => (rank.get(a.category) ?? 99) - (rank.get(b.category) ?? 99) || a.sortOrder - b.sortOrder,
+  );
+}
+
 /* ----------------------------------------------------------------- cabins */
 
 const CABIN_COLUMNS =

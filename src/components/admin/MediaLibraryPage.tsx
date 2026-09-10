@@ -5,15 +5,25 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, Field, TextField } from "@/components/admin/admin-ui";
+import { Card, Field, SelectField, TextField } from "@/components/admin/admin-ui";
 import { ShipScopeBar } from "@/components/admin/ShipScopeBar";
 import { useShipScope } from "@/components/admin/use-ship-scope";
 import {
   deleteMediaAdmin,
+  GALLERY_CATEGORIES,
   listMediaAdmin,
   updateMediaAdmin,
   type AdminMediaItem,
 } from "@/lib/cms/media.functions";
+
+/** Vietnamese admin labels for the public gallery groups. */
+const GALLERY_CATEGORY_LABELS: Record<(typeof GALLERY_CATEGORIES)[number], string> = {
+  ship: "Du thuyền",
+  suites: "Phòng nghỉ",
+  dining: "Ẩm thực",
+  experiences: "Trải nghiệm",
+  life_on_board: "Cuộc sống trên tàu",
+};
 import { uploadMediaAdmin } from "@/lib/cms/media.functions";
 
 function toBase64(file: File): Promise<string> {
@@ -193,6 +203,9 @@ function MediaEditDialog({
   const [caption, setCaption] = useState(item.caption ?? "");
   const [category, setCategory] = useState(item.category);
   const [sortOrder, setSortOrder] = useState(String(item.sortOrder));
+  const [showInGallery, setShowInGallery] = useState(item.showInGallery);
+  const [galleryCategory, setGalleryCategory] = useState(item.galleryCategory ?? "");
+  const [galleryOrder, setGalleryOrder] = useState(String(item.galleryDisplayOrder));
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -206,6 +219,9 @@ function MediaEditDialog({
           sortOrder: Number(sortOrder) || 0,
           isFeatured: item.isFeatured,
           translations: item.translations,
+          showInGallery,
+          galleryCategory: showInGallery ? galleryCategory : "",
+          galleryDisplayOrder: Number(galleryOrder) || 0,
         },
       }),
     onSuccess: () => {
@@ -232,6 +248,35 @@ function MediaEditDialog({
           <TextField label="Chú thích" value={caption} onChange={setCaption} />
           <TextField label="Nhóm ảnh" value={category} onChange={setCategory} />
           <TextField label="Thứ tự" value={sortOrder} onChange={setSortOrder} type="number" />
+        </div>
+
+        <div className="mt-5 space-y-4 rounded-md border border-border p-4">
+          <label className="flex items-center gap-2 text-sm font-medium">
+            <input
+              type="checkbox"
+              className="size-4"
+              checked={showInGallery}
+              onChange={(e) => setShowInGallery(e.target.checked)}
+            />
+            Hiện ảnh này trong Thư viện ảnh trên website
+          </label>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <SelectField
+              label="Nhóm trong thư viện website"
+              value={galleryCategory}
+              onChange={setGalleryCategory}
+              options={[
+                { value: "", label: "— chọn nhóm —" },
+                ...GALLERY_CATEGORIES.map((id) => ({ value: id, label: GALLERY_CATEGORY_LABELS[id] })),
+              ]}
+            />
+            <TextField
+              label="Thứ tự trong thư viện"
+              value={galleryOrder}
+              onChange={setGalleryOrder}
+              type="number"
+            />
+          </div>
         </div>
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <Button
