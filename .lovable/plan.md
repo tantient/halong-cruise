@@ -1,39 +1,36 @@
-# Chân trang khác nhau giữa xem thử và trang thật
+# Vì sao chân trang bạn thấy khác nhau
 
-## Chuyện gì đang xảy ra
+## Kết quả kiểm tra thực tế
 
-Hai ảnh không phải hai phiên bản website khác nhau. Chúng là cùng một trang, nhưng đang ở hai chế độ hiển thị:
+Tôi vừa mở trực tiếp chronoscruise.com bằng trình duyệt sạch, cả chế độ sáng và chế độ tối:
 
-- Khung xem thử: chế độ sáng (nút ở đầu trang là hình mặt trăng).
-- Trang thật của bạn: chế độ tối (nút ở đầu trang là hình mặt trời).
+- Logo chân trang có đầy đủ trong cả hai chế độ, màu mực đậm, hiện rõ.
+- Nền trang là màu trắng ngà sáng, giống hệt khung xem thử.
+- Nút chuyển chế độ hiển thị hình mặt trăng, đúng như bản xem thử.
+- Chế độ tối của máy không làm trang đổi màu; trang luôn ở bảng màu sáng đã duyệt.
 
-Ở chế độ tối, logo chân trang được đặt sang màu trắng ngà. Nhưng nền của trang đã được chỉnh sang bảng màu sáng sang trọng đã duyệt, nên logo trắng nằm trên nền kem gần như biến mất. Đó là lý do "logo đâu" và màu sắc trông lệch nhẹ.
+Nghĩa là bản đang chạy trên chronoscruise.com giống bản xem thử. Ảnh bạn gửi (nền kem, nút mặt trời, mất logo chân trang) là một **bản cũ còn lưu trong trình duyệt của bạn** — đúng vấn đề bộ đệm đã gặp trước đây. Đó cũng là lý do cửa sổ ẩn danh luôn hiện đúng.
+
+Trang thật hiện đã trả về đúng thiết lập "không lưu bộ đệm trang", nên sau một lần tải mới là dứt điểm.
 
 ## Đề xuất
 
-Bỏ chế độ tối, để website luôn hiển thị đúng bảng màu sáng sang trọng đã duyệt:
+Không sửa gì về màu sắc hay logo — vì bản đang chạy đã đúng. Việc cần làm là ép bản cũ trong trình duyệt bạn nhả ra, và giảm khả năng lặp lại:
 
-- Bỏ nút chuyển sáng/tối ở đầu trang và trong menu điện thoại.
-- Trang luôn chạy chế độ sáng, không phụ thuộc cài đặt máy của khách.
-- Logo chân trang cố định màu mực đậm, luôn rõ.
+1. Bạn tải lại trang bằng cách nhấn giữ Ctrl (Windows) hoặc Cmd + Shift (Mac) rồi bấm tải lại một lần, để trình duyệt bỏ bản cũ.
+2. Nếu vẫn còn, tôi sẽ xuất bản lại một lần để đẩy phiên bản mới nhất, buộc mọi trình duyệt tự nhận bản mới nhờ cơ chế kiểm tra phiên bản đã có sẵn.
 
-Kết quả: mọi khách, mọi máy đều thấy giống hệt khung xem thử của bạn.
+## Nếu bạn muốn chắc chắn hơn nữa
 
-Nếu bạn muốn giữ nút sáng/tối thì cần một việc lớn hơn: làm lại toàn bộ bảng màu cho chế độ tối để nền thật sự tối. Nói mình biết nếu bạn muốn hướng đó.
+Tôi có thể bổ sung một lớp bảo hiểm nhỏ, không đổi giao diện:
 
-## Việc sẽ làm
-
-- Chân trang: logo dùng tông cố định trên nền sáng thay vì tự đổi theo chế độ.
-- Bỏ nút chuyển chế độ khỏi đầu trang (cả bản máy tính và bản điện thoại).
-- Ép giao diện luôn ở chế độ sáng trong phần khởi tạo chủ đề, không đọc cài đặt hệ thống.
-- Kiểm tra lại chân trang, đầu trang và các trang chính bằng cả tiếng Anh và tiếng Việt, trên máy tính và điện thoại, ở cả hai cài đặt hệ thống sáng/tối.
-- Không đổi bố cục, nội dung, dữ liệu, hình ảnh hay logo gốc.
-
-Sau khi xong, bạn cần bấm xuất bản để trang thật cập nhật.
+- Kiểm tra phiên bản ngay khi trang vừa mở, chứ không chỉ khi quay lại tab, để bản cũ tự làm mới trong vài giây.
+- Logo chân trang dùng tông cố định cho nền sáng, để dù về sau có bật chế độ tối cũng không bao giờ bị chìm.
 
 ## Chi tiết kỹ thuật
 
-- `src/components/landing/Footer.tsx`: `tone="auto"` → `tone="onLight"`.
-- `src/components/theme-provider.tsx` + `themeInitScript`: khóa `light`, bỏ đọc `prefers-color-scheme` và giá trị `dark` đã lưu trong localStorage.
-- `src/components/landing/Header.tsx`: bỏ `ThemeToggle` ở nav desktop và menu mobile.
-- Giữ nguyên `src/assets/logo/*.svg`, khoảng cách header, và Time-of-Day của trang chủ.
+- Đã xác nhận trên bản live: `cache-control: no-cache, must-revalidate, max-age=0` cho tài liệu HTML.
+- DOM chân trang live có `[role=img]` với `color: oklch(0.18 0.018 85)`, 4 `svg`; `document.documentElement.className` rỗng ở cả hai `color_scheme`, nên `dark:` không kích hoạt.
+- Lớp bảo hiểm (tùy chọn): trong `AutoRefreshOnNewDeployment` (`src/routes/__root.tsx`) gọi `checkVersion()` một lần lúc mount, cạnh các listener `pageshow`/`visibilitychange` hiện có.
+- Lớp bảo hiểm (tùy chọn): `src/components/landing/Footer.tsx` đổi `tone="auto"` sang `tone="onLight"`.
+- Không đổi bố cục, nội dung, dữ liệu, logo gốc, khoảng cách header hay Time-of-Day trang chủ.
