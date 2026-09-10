@@ -8,7 +8,7 @@ import { Footer } from "@/components/landing/Footer";
 import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
-import { publicQueries, type PublicCabinBundle } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type PublicCabinBundle } from "@/lib/platform";
 import { cabinUi } from "@/lib/i18n/ui-cabins";
 import { pageText, toCabinLink, toCabinView } from "./cabin-view";
 import { DeckPlan, DeckPlanProvider } from "./DeckPlan";
@@ -22,7 +22,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
   const cabin = toCabinView(perLang.cabin);
   const others = perLang.others.map(toCabinLink);
   const page = perLang.page;
-  const quoteLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const quoteLink = enquiryUrl(b.ship.settings, { subject: cabin.name, shipName: b.ship.ship.displayName, language: lang });
   const areaDisplay = cabin.areaValue ? (cabin.vip ? `${cabin.areaValue} ${ui.totalPrivateAreaSuffix}` : cabin.areaValue) : "";
   const specs = [
     ...(areaDisplay ? [{ label: cabin.vip ? ui.totalPrivateArea : ui.area, value: areaDisplay }] : []),
@@ -69,7 +69,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
       {galleryImages.length ? <section className="border-y border-chronos-ink/10 py-20 lg:py-28"><div className="mx-auto max-w-7xl px-6 lg:px-8"><Reveal><p className="eyebrow mb-8 text-chronos-gold">{ui.eyebrowGallery}</p><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">{galleryImages.map((media, index) => <img key={`${media.id}-${index}`} src={media.url} alt={media.alt ?? `${cabin.name} ${index + 1}`} loading="lazy" className={`w-full object-cover ${index % 3 === 0 ? "aspect-[16/10] lg:col-span-8" : "aspect-[4/3] lg:col-span-4"}`} />)}</div></Reveal></div></section> : null}
 
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-        {others.length ? <Reveal><div className="mb-8 flex items-end justify-between gap-5"><div><p className="eyebrow text-chronos-gold">{ui.compareOtherSuites}</p></div><LocalLink path="/cabins" className="shrink-0 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ink">{ui.compareSuites}</LocalLink></div><div className="flex snap-x gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">{others.map((other) => <LocalLink key={other.slug} path={`/cabins/${other.slug}`} className="group min-w-[78vw] snap-start border border-chronos-ink/10 bg-card sm:min-w-[330px] lg:min-w-[380px]">{other.cover ? <img src={other.cover.url} alt={other.cover.alt ?? other.name} loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] motion-reduce:transition-none" /> : <div className="aspect-[16/10] bg-chronos-ink/10" />}<div className="p-5"><p className="text-xl text-card-foreground">{other.name}</p>{other.meta ? <p className="mt-2 text-sm text-chronos-stone/70">{other.meta}</p> : null}</div></LocalLink>)}</div></Reveal> : null}
+        {others.length ? <Reveal><div className="mb-8 flex items-end justify-between gap-5"><div><p className="eyebrow text-chronos-gold">{ui.compareOtherSuites}</p></div><LocalLink path={`/cabins?compare=${cabin.slug}#cabin-explorer`} className="shrink-0 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ink">{ui.compareSuites}</LocalLink></div><div className="flex snap-x gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">{others.map((other) => <LocalLink key={other.slug} path={`/cabins/${other.slug}`} className="group min-w-[78vw] snap-start border border-chronos-ink/10 bg-card sm:min-w-[330px] lg:min-w-[380px]">{other.cover ? <img src={other.cover.url} alt={other.cover.alt ?? other.name} loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] motion-reduce:transition-none" /> : <div className="aspect-[16/10] bg-chronos-ink/10" />}<div className="p-5"><p className="text-xl text-card-foreground">{other.name}</p>{other.meta ? <p className="mt-2 text-sm text-chronos-stone/70">{other.meta}</p> : null}</div></LocalLink>)}</div></Reveal> : null}
 
         <Reveal className="mt-20 grid gap-7 border-y border-chronos-ink/10 py-12 lg:grid-cols-[1fr_auto] lg:items-center"><div><p className="eyebrow text-chronos-gold">{ui.suitableVoyages}</p><p className="mt-3 max-w-2xl text-chronos-stone/85">{ui.suitableVoyagesCopy}</p></div><Button asChild variant="outline" className="w-fit rounded-none border-chronos-ink/20 px-6 text-xs font-semibold uppercase tracking-[0.16em]"><LocalLink path="/itineraries">{ui.exploreVoyages}<ArrowRight className="ml-2 h-4 w-4" /></LocalLink></Button></Reveal>
 

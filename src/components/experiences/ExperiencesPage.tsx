@@ -23,7 +23,7 @@ import { groupServices } from "./grouping";
 import { venueListItems, venuesInCategory, type VenueView } from "./venue-view";
 import { CuratedGallery, EditorialPair, FeatureList, HeroMedia, Img, PanoramaBand, SectionHeading } from "./media";
 import { experienceUi } from "@/lib/i18n/ui-experiences";
-import { publicQueries, type PublicPageBundle, type PublicServicesBundle, type PublicVenue } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type PublicPageBundle, type PublicServicesBundle, type PublicVenue } from "@/lib/platform";
 
 export function ExperiencesPage({
   bundle,
