@@ -266,6 +266,15 @@ export function redirectServiceSlug(pathname: string, slug: string) {
   });
 }
 
+/** Retired area root `/services` (and `/vi/services`) → the Experiences landing. */
+export function redirectServicesBase(pathname: string) {
+  throw redirect({
+    href: pathname.replace(/\/services\/?$/, "/experiences"),
+    statusCode: 301,
+    throw: true,
+  });
+}
+
 /* ----------------------------------------------------------------- offers */
 
 export async function loadOffersBundle(qc: QueryClient, pathname: string) {
