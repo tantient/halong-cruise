@@ -29,7 +29,6 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
   const copy = (key: string) => itinerariesText(page, key);
 
   const hero = itineraries[0]?.cover ?? null;
-  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
   const [openId, setOpenId] = useState<string | null>(itineraries[0]?.id ?? null);
 
   return (
@@ -78,9 +77,7 @@ export function ItinerariesPage({ bundle }: { bundle: PublicItinerariesBundle })
               asChild
               className="btn-sheen rounded-none bg-chronos-gold px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
             >
-              <a href={bookingLink} target="_blank" rel="noopener noreferrer">
-                {copy("ctaLabel") || t.itineraries.cta}
-              </a>
+              <LocalLink path="/contact">{copy("ctaLabel") || t.itineraries.cta}</LocalLink>
             </Button>
           </Reveal>
         </div>

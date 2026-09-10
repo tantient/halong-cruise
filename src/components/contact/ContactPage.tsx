@@ -161,6 +161,17 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                   </a>
                 </Button>
               ) : null}
+              {settings.zalo ? (
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-none border-chronos-ink/20 px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5"
+                >
+                  <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
+                    {t.contact.chatZalo}
+                  </a>
+                </Button>
+              ) : null}
               {phoneTel ? (
                 <Button
                   asChild

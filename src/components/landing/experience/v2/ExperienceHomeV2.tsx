@@ -1,6 +1,6 @@
 "use client";
 
-import { sectionOfType, type EntityMedia, type MediaItem, type PublicHomepageBundle } from "@/lib/platform";
+import { enquiryUrl, sectionOfType, type EntityMedia, type MediaItem, type PublicHomepageBundle } from "@/lib/platform";
 import type { PublicHomepageLanguageData } from "@/lib/platform";
 import type { Lang, Translations } from "@/lib/translations";
 import { AmbientPreviewBar } from "@/lib/experience/AmbientPreviewBar";
@@ -75,7 +75,10 @@ export function ExperienceHomeV2({
             section={final}
             shipName={shipName}
             primaryPath="/itineraries"
-            secondaryPath="/contact"
+            secondaryHref={enquiryUrl(bundle.ship.settings, {
+              shipName: bundle.ship.ship.displayName,
+              language: lang,
+            })}
           />
         </main>
         <Footer t={t} />

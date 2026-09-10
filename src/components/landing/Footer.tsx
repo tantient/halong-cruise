@@ -13,6 +13,8 @@ interface FooterProps {
       itineraries: string;
       cabins: string;
       services: string;
+      experiences: string;
+      ship: string;
       gallery: string;
       offers: string;
       contact: string;
@@ -43,10 +45,22 @@ export function Footer({ t }: FooterProps) {
     { label: "WhatsApp", href: site?.settings.whatsapp, Icon: WhatsAppIcon },
   ].filter((s): s is { label: string; href: string; Icon: typeof Facebook } => Boolean(s.href));
 
-  const quickLinks: { label: string; to: string; params?: Record<string, string> }[] = [
+  // Onward navigation: the pages a visitor actually needs from anywhere.
+  const quickLinks: { label: string; to: string }[] = [
+    { label: t.nav.itineraries, to: "/itineraries" },
+    { label: t.nav.cabins, to: "/cabins" },
+    { label: t.nav.experiences, to: "/experiences" },
+    { label: t.nav.ship, to: "/the-ship" },
+    { label: t.nav.gallery, to: "/gallery" },
     { label: t.nav.offers, to: "/offers" },
     { label: t.nav.about, to: "/about" },
+    { label: t.nav.contact, to: "/contact" },
   ];
+
+  // Contact details come from ship settings, never from presentation copy.
+  const phoneDisplay = site?.settings.hotlineDisplay ?? site?.settings.hotline ?? null;
+  const phoneTel = (site?.settings.hotline ?? site?.settings.hotlineDisplay ?? "").replace(/[^\d+]/g, "");
+  const email = site?.settings.email ?? null;
 
   return (
     <footer className="border-t border-chronos-sand-300/20 bg-chronos-ivory">
@@ -77,6 +91,21 @@ export function Footer({ t }: FooterProps) {
               </LocalLink>
             ))}
           </nav>
+
+          {phoneDisplay || email ? (
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs tracking-[0.12em] text-chronos-sand-700">
+              {phoneDisplay ? (
+                <a href={`tel:${phoneTel}`} className="transition-colors hover:text-chronos-sand-500">
+                  {phoneDisplay}
+                </a>
+              ) : null}
+              {email ? (
+                <a href={`mailto:${email}`} className="transition-colors hover:text-chronos-sand-500">
+                  {email}
+                </a>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="flex gap-6">
             {socials.map(({ label, href, Icon }) => (

@@ -10,7 +10,7 @@ import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { publicQueries, type PublicCabinsBundle } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type PublicCabinsBundle } from "@/lib/platform";
 import { cabinUi, type CabinUi } from "@/lib/i18n/ui-cabins";
 import { pageText, toCabinView, type CabinView } from "./cabin-view";
 
@@ -23,7 +23,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
   const cabins = perLang.cabins.map(toCabinView);
   const page = perLang.page;
   const copy = (key: string) => pageText(page, key, b.ship.ship.totalCabins);
-  const quoteLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const quoteLink = enquiryUrl(b.ship.settings, { shipName: b.ship.ship.displayName, language: lang });
   const [activeSlug, setActiveSlug] = useState(cabins[0]?.slug ?? "");
   const [compareCabin, setCompareCabin] = useState<CabinView | null>(null);
   const active = cabins.find((cabin) => cabin.slug === activeSlug) ?? cabins[0] ?? null;
@@ -32,6 +32,17 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
   useEffect(() => {
     if (active && !cabins.some((cabin) => cabin.slug === activeSlug)) setActiveSlug(active.slug);
   }, [active, activeSlug, cabins]);
+
+  // `/cabins?compare=<slug>` (from a cabin detail page) opens the comparison
+  // for that suite directly instead of dropping the visitor at the top.
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("compare");
+    if (!slug) return;
+    const target = cabins.find((cabin) => cabin.slug === slug);
+    if (!target) return;
+    setActiveSlug(target.slug);
+    setCompareCabin(target);
+  }, [cabins]);
 
   const heroImage = cabins.find((cabin) => cabin.cover)?.cover ?? cabins.find((cabin) => cabin.gallery.length)?.gallery[0] ?? null;
 
@@ -112,7 +123,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
         </section>
       </main>
       <Footer t={t} />
-      <CabinCompareDialog cabin={compareCabin} open={!!compareCabin} onClose={() => setCompareCabin(null)} ui={ui} quoteLink={quoteLink} />
+      <CabinCompareDialog cabin={compareCabin} open={!!compareCabin} onClose={() => setCompareCabin(null)} ui={ui} quoteLink={compareCabin ? enquiryUrl(b.ship.settings, { subject: compareCabin.name, shipName: b.ship.ship.displayName, language: lang }) : quoteLink} />
     </div>
   );
 }

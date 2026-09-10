@@ -10,7 +10,7 @@ import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import { useServiceNav } from "@/lib/i18n/service-nav-context";
 import { EXPERIENCE_GROUP, publicGroup } from "@/components/experiences/grouping";
-import { useSite } from "@/lib/platform";
+import { enquiryUrl, useSite } from "@/lib/platform";
 import type { Lang } from "@/lib/translations";
 
 interface HeaderProps {
@@ -26,7 +26,9 @@ export function Header({ lang, setLang, t }: HeaderProps) {
   const { languages } = useLanguage();
   const site = useSite();
   // Booking destination of the resolved ship (falls back to WhatsApp, then Zalo).
-  const bookingLink = site?.settings.bookingUrl ?? site?.settings.whatsapp ?? site?.settings.zalo ?? "#";
+  const bookingLink = site
+    ? enquiryUrl(site.settings, { shipName: site.ship.displayName, language: lang })
+    : "#";
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 

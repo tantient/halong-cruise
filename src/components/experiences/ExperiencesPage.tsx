@@ -23,7 +23,7 @@ import { groupServices } from "./grouping";
 import { venueListItems, venuesInCategory, type VenueView } from "./venue-view";
 import { CuratedGallery, EditorialPair, FeatureList, HeroMedia, Img, PanoramaBand, SectionHeading } from "./media";
 import { experienceUi } from "@/lib/i18n/ui-experiences";
-import { publicQueries, type PublicPageBundle, type PublicServicesBundle, type PublicVenue } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type PublicPageBundle, type PublicServicesBundle, type PublicVenue } from "@/lib/platform";
 
 export function ExperiencesPage({
   bundle,
@@ -52,8 +52,7 @@ export function ExperiencesPage({
   const copy = (key: string) => pageText(page, key, b.ship.ship.totalCabins);
 
   const hero = experiences[0]?.cover ?? views[0]?.cover ?? null;
-  const requestLink =
-    b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const requestLink = enquiryUrl(b.ship.settings, { shipName: b.ship.ship.displayName, language: lang });
 
   return (
     <div className="min-h-screen bg-chronos-ivory">

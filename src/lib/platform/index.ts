@@ -13,6 +13,7 @@ export * from "./language";
 export * from "./seo";
 export { mediaUrl, groupMedia, emptyEntityMedia, SHIP_MEDIA_BUCKET, MEDIA_ROUTE_PREFIX } from "./media";
 export * from "./section-text";
+export * from "./enquiry";
 export * from "./public.functions";
 export * from "./forms.functions";
 export { SiteProvider, useSite } from "./site-context";

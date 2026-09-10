@@ -9,7 +9,7 @@ import { Footer } from "@/components/landing/Footer";
 import { LocalLink, useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
-import { publicQueries, type MediaItem, type PublicItinerariesBundle } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type MediaItem, type PublicItinerariesBundle } from "@/lib/platform";
 import { itineraryUi, type ItineraryUi } from "@/lib/i18n/ui-itineraries";
 import { toItineraryView, type DayView, type ItineraryView } from "./itinerary-view";
 
@@ -32,7 +32,7 @@ export function ItineraryDetailPage({ bundle, slug }: { bundle: PublicItinerarie
   const views = useMemo(() => perLang.itineraries.map(toItineraryView), [perLang]);
   const it: ItineraryView = views.find((v) => v.slug === slug) ?? views[0]!;
 
-  const enquiryLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const enquiryLink = enquiryUrl(b.ship.settings, { subject: it.name, shipName: b.ship.ship.displayName, language: lang });
   const hero = it.cover;
 
   return (

@@ -69,11 +69,14 @@ export function Body({
 /** Quiet, cinematic link button. */
 export function AmbientLink({
   path,
+  href,
   children,
   tone = "ambient",
   variant = "outline",
 }: {
-  path: string;
+  path?: string;
+  /** External destination (chat channel); wins over `path` when set. */
+  href?: string;
   children: ReactNode;
   tone?: "ambient" | "onImage";
   variant?: "outline" | "solid" | "text";
@@ -92,8 +95,16 @@ export function AmbientLink({
         : tone === "onImage"
           ? "border border-white/45 px-7 py-4 text-white hover:border-white hover:bg-white/10"
           : "border border-[color:var(--amb-line)] px-7 py-4 text-[color:var(--amb-fg)] hover:border-[color:var(--amb-fg)]";
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={`${base} ${style}`}>
+        {children}
+        <span aria-hidden>&rarr;</span>
+      </a>
+    );
+  }
   return (
-    <LocalLink path={path} className={`${base} ${style}`}>
+    <LocalLink path={path ?? "/"} className={`${base} ${style}`}>
       {children}
       <span aria-hidden>&rarr;</span>
     </LocalLink>
