@@ -52,8 +52,7 @@ export function ExperiencesPage({
   const copy = (key: string) => pageText(page, key, b.ship.ship.totalCabins);
 
   const hero = experiences[0]?.cover ?? views[0]?.cover ?? null;
-  const requestLink =
-    b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const requestLink = enquiryUrl(b.ship.settings, { shipName: b.ship.ship.displayName, language: lang });
 
   return (
     <div className="min-h-screen bg-chronos-ivory">

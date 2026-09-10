@@ -23,7 +23,7 @@ import { nextInGroup, publicGroup, SHIP_GROUP } from "./grouping";
 import { venueFacts, venuesInCategory, type VenueView } from "./venue-view";
 import { CuratedGallery, HeroMedia, Img, SectionHeading } from "./media";
 import { experienceUi } from "@/lib/i18n/ui-experiences";
-import { publicQueries, type MediaItem, type PublicServicesBundle } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type MediaItem, type PublicServicesBundle } from "@/lib/platform";
 
 export function ExperienceDetailPage({ bundle, slug }: { bundle: PublicServicesBundle; slug: string }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
@@ -59,8 +59,7 @@ export function ExperienceDetailPage({ bundle, slug }: { bundle: PublicServicesB
     return out;
   }, [view, venues]);
 
-  const requestLink =
-    b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  const requestLink = enquiryUrl(b.ship.settings, { subject: view.name, shipName: b.ship.ship.displayName, language: lang });
   const extraImages = images.filter((m) => !venues.some((v) => v.cover?.id === m.id) && m.id !== view.cover?.id);
 
   return (

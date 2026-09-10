@@ -8,7 +8,7 @@ import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
-import { publicQueries, type PublicOffer, type PublicOffersBundle, type PublicPage } from "@/lib/platform";
+import { enquiryUrl, publicQueries, type PublicOffer, type PublicOffersBundle, type PublicPage } from "@/lib/platform";
 
 /** Editorial copy of the offers page. */
 function copyOf(page: PublicPage | null, key: string): string {
@@ -39,7 +39,10 @@ export function OffersPage({ bundle }: { bundle: PublicOffersBundle }) {
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
   const { offers, page } = perLang;
   const hero = page?.media.cover ?? offers[0]?.media.cover ?? null;
-  const bookingLink = b.ship.settings.bookingUrl ?? b.ship.settings.whatsapp ?? b.ship.settings.zalo ?? "#";
+  // General enquiry for the closing CTA; each offer card carries its own name.
+  const bookingLink = enquiryUrl(b.ship.settings, { shipName: b.ship.ship.displayName, language: lang });
+  const offerLink = (offer: PublicOffer) =>
+    enquiryUrl(b.ship.settings, { subject: offer.name, shipName: b.ship.ship.displayName, language: lang });
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -76,7 +79,7 @@ export function OffersPage({ bundle }: { bundle: PublicOffersBundle }) {
               index={index}
               termsLabel={t.offers.terms}
               cta={t.offers.cta}
-              bookingLink={bookingLink}
+              bookingLink={offerLink(offer)}
             />
           ))}
 
