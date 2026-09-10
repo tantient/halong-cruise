@@ -75,7 +75,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           <ChronosLogo
             showTagline={false}
             size="md"
-            tone={scrolled ? "auto" : "onDark"}
+            tone={scrolled ? "onLight" : "onDark"}
             aria-label="Chronos Cruise"
           />
         </LocalLink>
