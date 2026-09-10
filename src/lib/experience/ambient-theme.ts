@@ -32,12 +32,12 @@ export const AMBIENT: Record<TimeState, AmbientTheme> = {
     wash:
       "radial-gradient(120% 80% at 50% 0%, oklch(0.99 0.012 210 / 0.95) 0%, oklch(0.965 0.008 215 / 0.6) 45%, transparent 100%)",
     fg: "oklch(0.30 0.02 240)",
-    muted: "oklch(0.52 0.02 235)",
+    muted: "oklch(0.43 0.02 235)",
     line: "oklch(0.30 0.02 240 / 0.16)",
     accent: "oklch(0.62 0.05 225)",
     scrim:
-      "linear-gradient(to top, oklch(0.20 0.02 240 / 0.82) 0%, oklch(0.22 0.02 240 / 0.42) 48%, oklch(0.28 0.02 240 / 0.40) 100%), linear-gradient(to right, oklch(0.20 0.02 240 / 0.48) 0%, oklch(0.20 0.02 240 / 0.10) 62%, transparent 100%)",
-    imageFilter: "saturate(0.92) brightness(1.05) contrast(0.97)",
+      "linear-gradient(to top, oklch(0.20 0.02 240 / 0.72) 0%, oklch(0.22 0.02 240 / 0.22) 38%, transparent 68%), linear-gradient(to right, oklch(0.20 0.02 240 / 0.30) 0%, transparent 64%)",
+    imageFilter: "saturate(1.02) brightness(1.08) contrast(1.02)",
     onImage: "light",
   },
   day: {
@@ -45,12 +45,12 @@ export const AMBIENT: Record<TimeState, AmbientTheme> = {
     wash:
       "radial-gradient(120% 90% at 70% 0%, oklch(1 0 0 / 0.9) 0%, oklch(0.96 0.012 205 / 0.55) 50%, transparent 100%)",
     fg: "oklch(0.24 0.02 250)",
-    muted: "oklch(0.48 0.02 245)",
+    muted: "oklch(0.40 0.02 245)",
     line: "oklch(0.24 0.02 250 / 0.16)",
     accent: "oklch(0.55 0.08 235)",
     scrim:
-      "linear-gradient(to top, oklch(0.16 0.02 250 / 0.80) 0%, oklch(0.18 0.02 250 / 0.36) 52%, oklch(0.20 0.02 250 / 0.34) 100%), linear-gradient(to right, oklch(0.16 0.02 250 / 0.46) 0%, oklch(0.16 0.02 250 / 0.08) 62%, transparent 100%)",
-    imageFilter: "saturate(1.05) brightness(1.02) contrast(1.03)",
+      "linear-gradient(to top, oklch(0.16 0.02 250 / 0.70) 0%, oklch(0.18 0.02 250 / 0.20) 38%, transparent 68%), linear-gradient(to right, oklch(0.16 0.02 250 / 0.28) 0%, transparent 64%)",
+    imageFilter: "saturate(1.06) brightness(1.06) contrast(1.04)",
     onImage: "light",
   },
   golden: {
@@ -58,12 +58,12 @@ export const AMBIENT: Record<TimeState, AmbientTheme> = {
     wash:
       "radial-gradient(130% 95% at 50% 100%, oklch(0.90 0.075 68 / 0.75) 0%, oklch(0.95 0.03 80 / 0.5) 45%, transparent 100%)",
     fg: "oklch(0.28 0.03 55)",
-    muted: "oklch(0.50 0.035 60)",
+    muted: "oklch(0.42 0.03 60)",
     line: "oklch(0.28 0.03 55 / 0.18)",
     accent: "oklch(0.66 0.10 62)",
     scrim:
-      "linear-gradient(to top, oklch(0.20 0.03 50 / 0.82) 0%, oklch(0.26 0.04 55 / 0.34) 50%, oklch(0.28 0.05 60 / 0.36) 100%), linear-gradient(to right, oklch(0.20 0.03 50 / 0.44) 0%, oklch(0.20 0.03 50 / 0.08) 62%, transparent 100%)",
-    imageFilter: "saturate(1.08) brightness(1.02) contrast(1.02)",
+      "linear-gradient(to top, oklch(0.20 0.03 50 / 0.72) 0%, oklch(0.26 0.04 55 / 0.20) 38%, transparent 68%), linear-gradient(to right, oklch(0.20 0.03 50 / 0.28) 0%, transparent 64%)",
+    imageFilter: "saturate(1.10) brightness(1.04) contrast(1.03)",
     onImage: "light",
   },
   night: {
@@ -75,8 +75,8 @@ export const AMBIENT: Record<TimeState, AmbientTheme> = {
     line: "oklch(0.94 0.012 90 / 0.18)",
     accent: "oklch(0.82 0.075 88)",
     scrim:
-      "linear-gradient(to top, oklch(0.10 0.015 265 / 0.90) 0%, oklch(0.12 0.015 265 / 0.56) 50%, oklch(0.12 0.015 265 / 0.66) 100%), linear-gradient(to right, oklch(0.10 0.015 265 / 0.50) 0%, oklch(0.10 0.015 265 / 0.12) 62%, transparent 100%)",
-    imageFilter: "saturate(0.95) brightness(0.82) contrast(1.06)",
+      "linear-gradient(to top, oklch(0.10 0.015 265 / 0.80) 0%, oklch(0.12 0.015 265 / 0.30) 40%, transparent 70%), linear-gradient(to right, oklch(0.10 0.015 265 / 0.34) 0%, transparent 64%)",
+    imageFilter: "saturate(1.02) brightness(0.94) contrast(1.05)",
     onImage: "light",
   },
 };

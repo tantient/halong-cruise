@@ -67,7 +67,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? "bg-chronos-ivory/95 shadow-sm backdrop-blur-md"
-          : "bg-transparent"
+          : "bg-gradient-to-b from-chronos-ink/45 via-chronos-ink/16 to-transparent"
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">

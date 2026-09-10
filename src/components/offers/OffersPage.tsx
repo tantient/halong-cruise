@@ -56,7 +56,7 @@ export function OffersPage({ bundle }: { bundle: PublicOffersBundle }) {
           ) : (
             <div className="h-full w-full bg-chronos-ink/80" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/85 via-chronos-ink/30 to-chronos-ink/40" />
+          <div className="hero-local-scrim absolute inset-0" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
               <p className="eyebrow mb-5 text-chronos-gold">{copyOf(page, "eyebrow")}</p>

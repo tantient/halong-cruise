@@ -41,7 +41,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
       <main>
         <section className="relative h-[64vh] min-h-[440px] w-full overflow-hidden">
           {heroImage ? <img src={heroImage.url} alt={copy("hero_alt") || heroImage.alt || b.ship.ship.displayName} className="h-full w-full object-cover" /> : <div className="h-full w-full bg-chronos-ink/20" />}
-          <div className="absolute inset-0 bg-gradient-to-t from-chronos-ink/90 via-chronos-ink/25 to-chronos-ink/35" />
+          <div className="hero-local-scrim absolute inset-0" />
           <div className="absolute inset-0 flex items-end">
             <div className="mx-auto w-full max-w-7xl px-6 pb-14 lg:px-8 lg:pb-20">
               <p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowCabins}</p>

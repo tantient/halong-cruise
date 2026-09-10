@@ -149,7 +149,7 @@ export function AmbientSurface({ children }: { children: ReactNode }) {
   const { state } = useTimeOfDay();
   return (
     <div
-      className="relative min-h-screen transition-[background-color] duration-[2000ms] ease-out"
+      className="relative min-h-screen overflow-x-clip transition-[background-color] duration-[2000ms] ease-out"
       style={{ ...ambientVars(state), backgroundColor: "var(--amb-bg)", color: "var(--amb-fg)" }}
       data-ambient={state}
     >
