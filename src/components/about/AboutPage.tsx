@@ -8,6 +8,7 @@ import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { publicQueries, type PublicPage, type PublicPageBundle } from "@/lib/platform";
+import { pageText } from "@/components/cabins/cabin-view";
 
 const featureIcons: LucideIcon[] = [Waves, ChefHat, ConciergeBell, Anchor];
 const valueIcons: LucideIcon[] = [Heart, ShieldCheck, Leaf, Anchor];
@@ -17,13 +18,18 @@ interface Item {
   desc: string;
 }
 
-function str(page: PublicPage | null, key: string): string {
+/** Resolves `{total}` placeholders against the ship's cabin inventory. */
+function fill(s: string, totalCabins: number | null): string {
+  return totalCabins === null ? s : s.replace(/\{total\}/g, String(totalCabins));
+}
+
+function str(page: PublicPage | null, key: string, totalCabins: number | null = null): string {
   const v = page?.text[key];
-  return typeof v === "string" ? v : "";
+  return typeof v === "string" ? fill(v, totalCabins) : "";
 }
 
 /** `[{ title, desc }]` lists stored in the page copy. */
-function items(page: PublicPage | null, key: string): Item[] {
+function items(page: PublicPage | null, key: string, totalCabins: number | null): Item[] {
   const raw = page?.text[key];
   if (!Array.isArray(raw)) return [];
   const out: Item[] = [];
@@ -32,7 +38,10 @@ function items(page: PublicPage | null, key: string): Item[] {
     const row = entry as Record<string, unknown>;
     const title = typeof row["title"] === "string" ? row["title"] : "";
     if (!title) continue;
-    out.push({ title, desc: typeof row["desc"] === "string" ? row["desc"] : "" });
+    out.push({
+      title: fill(title, totalCabins),
+      desc: typeof row["desc"] === "string" ? fill(row["desc"], totalCabins) : "",
+    });
   }
   return out;
 }
@@ -49,8 +58,9 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
   const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
   const hero = page?.media.cover ?? null;
   const supporting = page?.media.gallery ?? [];
-  const features = items(page, "features");
-  const values = items(page, "values");
+  const totalCabins = b.ship.ship.totalCabins;
+  const features = items(page, "features", totalCabins);
+  const values = items(page, "values", totalCabins);
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
@@ -72,7 +82,7 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
             <div className="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-8">
               <p className="eyebrow mb-5 text-chronos-gold">{str(page, "eyebrow")}</p>
               <h1 className="max-w-3xl text-4xl tracking-[0.02em] text-chronos-ivory sm:text-5xl lg:text-6xl">
-                {page?.title ?? ""}
+                {pageText(page, "__title__", totalCabins) || fill(page?.title ?? "", totalCabins)}
               </h1>
             </div>
           </div>
@@ -82,7 +92,7 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
               <Reveal>
-                <p className="mb-6 text-lg leading-relaxed text-chronos-stone/90">{page?.intro ?? ""}</p>
+                <p className="mb-6 text-lg leading-relaxed text-chronos-stone/90">{fill(page?.intro ?? "", totalCabins)}</p>
               </Reveal>
 
               <div className="grid gap-5 sm:grid-cols-2">
@@ -157,7 +167,7 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
                   <h2 className="mb-6 text-4xl tracking-[0.02em] text-chronos-ink sm:text-5xl">
                     {str(page, "vision_title")}
                   </h2>
-                  <p className="whitespace-pre-line text-lg leading-relaxed text-chronos-stone/90">{page.content}</p>
+                  <p className="whitespace-pre-line text-lg leading-relaxed text-chronos-stone/90">{fill(page.content, totalCabins)}</p>
                 </Reveal>
               </div>
             </div>
