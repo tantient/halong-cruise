@@ -12,7 +12,7 @@
 1. **Đưa bộ logo nền trong suốt vào thư viện media của tàu** (không copy file vào code): upload các PNG vàng/trắng/đen ở cả 3 dạng (đầy đủ, biểu tượng, chữ) vào kho lưu trữ của tàu, tạo bản ghi media trong database — sau này đổi logo từ CMS không cần sửa code.
 2. **Gán logo chính thức cho tàu Chronos**: logo sáng = bản trắng, logo tối = bản đen (hoặc vàng), dấu biểu tượng = bản vàng. Các trường này đã tự chảy vào dữ liệu SEO (Organization logo).
 3. **Favicon + biểu tượng cảm ứng**: tạo lại `favicon` và `apple-touch-icon` từ biểu tượng chính thức (bản vàng trên nền tối hoặc nền trong suốt, chọn bản đẹp nhất khi xem thực tế).
-4. **Header/Footer**: giữ nguyên logo SVG hiện tại nếu kiểm tra thấy khớp với artwork chính thức (SVG nét hơn PNG ở mọi kích thước và đổi màu theo nền được). Nếu SVG lệch artwork, vẽ lại SVG theo file chính thức. Không đổi layout header/footer.
+4. **Header/Footer**: giữ nguyên logo SVG đang hiển thị trên trang — đã chuẩn theo artwork chính thức, nét ở mọi kích thước và tự đổi màu theo nền. Không thay, không đổi layout header/footer. Bộ PNG chính thức phục vụ CMS/SEO/favicon và nhu cầu khác sau này.
 5. File `.ai` và nhóm nền trắng/đen: chỉ lưu bản PNG nền đặc vào thư viện media nếu bạn muốn; mặc định bỏ qua vì web không dùng.
 
 ## Kiểm tra sau khi làm
