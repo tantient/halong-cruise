@@ -70,7 +70,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           : "bg-gradient-to-b from-chronos-ink/45 via-chronos-ink/16 to-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between px-6 lg:px-8">
         <LocalLink path="/" className="flex items-center">
           <ChronosLogo
             showTagline={false}
@@ -80,7 +80,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           />
         </LocalLink>
 
-        <nav className="hidden items-center gap-3 xl:gap-4 xl:flex">
+        <nav className="hidden items-center gap-5 2xl:flex">
           <LocalLink
             path="/itineraries"
             className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
@@ -185,7 +185,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
         </div>
 
         <button
-          className="xl:hidden"
+          className="2xl:hidden"
           onClick={() => setMobileOpen((s) => !s)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
@@ -198,7 +198,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-chronos-ink/10 bg-chronos-ivory/98 px-6 pb-6 xl:hidden">
+        <div className="border-t border-chronos-ink/10 bg-chronos-ivory/98 px-6 pb-6 2xl:hidden">
           <nav className="flex flex-col gap-4 pt-4">
             {navLinks.slice(0, 2).map((link) => (
               <LocalLink
