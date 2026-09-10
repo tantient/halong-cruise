@@ -15,7 +15,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 /** Inline script: applies the stored theme before paint to avoid a flash. */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}var e=document.documentElement;e.classList.toggle("dark",t==="dark");e.style.colorScheme=t;}catch(_){}})();`;
+export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||"light";var e=document.documentElement;e.classList.toggle("dark",t==="dark");e.style.colorScheme=t;}catch(_){}})();`;
 
 function applyTheme(theme: Theme) {
   const el = document.documentElement;
@@ -33,8 +33,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } catch {
       stored = null;
     }
-    const initial: Theme =
-      stored ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    // Chronos is intentionally light by default. Dark mode remains an explicit
+    // visitor choice rather than inheriting an OS setting that can dim the site
+    // during daytime browsing.
+    const initial: Theme = stored === "dark" ? "dark" : "light";
     setThemeState(initial);
     applyTheme(initial);
   }, []);
