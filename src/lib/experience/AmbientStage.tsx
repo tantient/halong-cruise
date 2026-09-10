@@ -26,6 +26,7 @@ export function AmbientStage({
   className = "",
   scrim = true,
   zoom = false,
+  raw = false,
 }: {
   media: EntityMedia | undefined;
   alt: string;
@@ -33,6 +34,8 @@ export function AmbientStage({
   className?: string;
   scrim?: boolean;
   zoom?: boolean;
+  /** Render source media without time-of-day colour grading. */
+  raw?: boolean;
 }) {
   const state = useTimeState();
   const visited = useVisitedStates(state);
@@ -64,7 +67,7 @@ export function AmbientStage({
                 fetchPriority={priority && active ? "high" : "auto"}
                 decoding="async"
                 className={`absolute inset-0 h-full w-full object-cover ${zoom && !useVideo ? "ambient-zoom" : ""}`}
-                style={{ filter: "var(--amb-img)" }}
+                style={{ opacity: 1, filter: raw ? "none" : "var(--amb-img)" }}
               />
             ) : null}
             {useVideo && slot.video ? (
@@ -78,13 +81,13 @@ export function AmbientStage({
                 preload={active && priority ? "auto" : "metadata"}
                 aria-label={active ? (slot.video.alt ?? alt) : undefined}
                 className="absolute inset-0 h-full w-full object-cover"
-                style={{ filter: "var(--amb-img)" }}
+                style={{ opacity: 1, filter: raw ? "none" : "var(--amb-img)" }}
               />
             ) : null}
           </div>
         );
       })}
-      {scrim ? (
+      {scrim && !raw ? (
         <div
           aria-hidden
           className="absolute inset-0 transition-opacity duration-[1600ms]"

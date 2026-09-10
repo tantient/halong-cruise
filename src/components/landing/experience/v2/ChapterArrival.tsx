@@ -34,7 +34,7 @@ export function ChapterArrival({
 
   return (
     <section className="relative flex h-[100svh] min-h-[560px] w-full items-end overflow-hidden">
-      <AmbientStage media={section?.media} alt={shipName} priority zoom />
+      <AmbientStage media={section?.media} alt={shipName} priority zoom raw scrim={false} />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 sm:pb-24 lg:px-8 lg:pb-28">
         <SceneReveal variant="fade" delay={150} duration={1400}>
