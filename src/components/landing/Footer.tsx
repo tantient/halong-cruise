@@ -70,7 +70,7 @@ export function Footer({ t }: FooterProps) {
             variant="stacked"
             showTagline={false}
             size="md"
-            tone="auto"
+            tone="onLight"
             aria-label={site?.ship.displayName ?? undefined}
           />
 
