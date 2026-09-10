@@ -178,8 +178,8 @@ export function VenuesAdminPage() {
         <VenueForm
           key={editing?.id ?? "new"}
           shipId={shipId}
-          enabledLanguages={scope.ship?.enabled_languages ?? ["en"]}
-          defaultLanguage={scope.ship?.default_language ?? "en"}
+          enabledLanguages={scope.ship?.enabledLanguages ?? ["en"]}
+          defaultLanguage={scope.ship?.defaultLanguage ?? "en"}
           venue={editing}
           onDone={() => {
             setSelected(null);
