@@ -1,27 +1,34 @@
-# Kế hoạch: Đưa bộ logo chính thức của tàu Chronos vào website
+# Kế hoạch: Chuẩn hóa bộ logo chính thức của tàu Chronos
 
 ## Bộ logo trong file CHRONOS.zip
 
-- 3 dạng khóa logo (mỗi dạng 4 biến thể màu): **đầy đủ** (biểu tượng + CHRONOS CRUISE + dòng Ha Long Bay · Lan Ha Bay), **chỉ biểu tượng** (file `.1`), **chỉ chữ** (file `.2`).
-- 4 biến thể màu: **1 = vàng**, **2 = trắng**, **3 = đen**, **4 = vàng** (gần giống bản 1, chênh màu không đáng kể).
-- 2 nhóm file: `TÁCH NỀN` (nền trong suốt — dùng cho web) và `NỀN TRẮNG_ĐEN` (nền đặc — dùng cho in/trình bày), kèm 1 file gốc `.ai` cho in ấn.
-- Website hiện đang dùng logo SVG vẽ lại (`src/assets/logo/`) cho header/footer; database đã có sẵn chỗ lưu logo theo tàu (logo sáng / logo tối / dạng dấu) nhưng chưa có ảnh thật.
+- 3 dạng khóa logo, mỗi dạng 4 biến thể màu: **full logo** (biểu tượng + CHRONOS CRUISE + dòng Ha Long Bay · Lan Ha Bay), **symbol/mark** (file `.1`), **wordmark** (file `.2`).
+- 4 biến thể màu: bản 1 và bản 4 đều là **vàng** (chênh màu không đáng kể — chọn 1 bản làm chuẩn), bản 2 **trắng**, bản 3 **đen**.
+- 2 nhóm file: `TÁCH NỀN` (nền trong suốt — dùng cho web) và `NỀN TRẮNG_ĐEN` (nền đặc — dùng cho in/trình bày), kèm file gốc `.ai` cho in ấn.
+- Website hiện dùng logo SVG vector trong code cho header/footer; database đã có sẵn 3 chỗ lưu logo theo tàu (sáng / tối / dạng dấu) nhưng chưa có ảnh thật.
 
 ## Việc sẽ làm
 
-1. **Đưa bộ logo nền trong suốt vào thư viện media của tàu** (không copy file vào code): upload các PNG vàng/trắng/đen ở cả 3 dạng (đầy đủ, biểu tượng, chữ) vào kho lưu trữ của tàu, tạo bản ghi media trong database — sau này đổi logo từ CMS không cần sửa code.
-2. **Gán logo chính thức cho tàu Chronos**: logo sáng = bản trắng, logo tối = bản đen (hoặc vàng), dấu biểu tượng = bản vàng. Các trường này đã tự chảy vào dữ liệu SEO (Organization logo).
-3. **Favicon + biểu tượng cảm ứng**: tạo lại `favicon` và `apple-touch-icon` từ biểu tượng chính thức (bản vàng trên nền tối hoặc nền trong suốt, chọn bản đẹp nhất khi xem thực tế).
-4. **Header/Footer**: giữ nguyên logo SVG đang hiển thị trên trang — đã chuẩn theo artwork chính thức, nét ở mọi kích thước và tự đổi màu theo nền. Không thay, không đổi layout header/footer. Bộ PNG chính thức phục vụ CMS/SEO/favicon và nhu cầu khác sau này.
-5. File `.ai` và nhóm nền trắng/đen: chỉ lưu bản PNG nền đặc vào thư viện media nếu bạn muốn; mặc định bỏ qua vì web không dùng.
+1. **Chuẩn hóa 9 asset PNG nền trong suốt** vào thư viện media của tàu: full logo / symbol / wordmark × vàng / trắng / đen. Đặt tên theo dạng + màu, gắn nhóm `brand` để lọc trong CMS. Không copy file vào code.
+2. **Gán logo theo ngữ cảnh nền, không theo tên màu**:
+   - logo dùng trên nền sáng → bản đen (hoặc vàng nếu cần nhấn thương hiệu),
+   - logo dùng trên nền tối/ảnh → bản trắng,
+   - dấu biểu tượng → bản vàng.
+   Ghi rõ ngữ cảnh này vào ghi chú của từng asset để người quản trị chọn đúng, không đoán theo màu.
+3. **SEO**: logo chính thức tự chảy vào dữ liệu Organization qua trường branding — không sửa thêm code SEO.
+4. **Favicon + biểu tượng cảm ứng**: tạo lại từ symbol/mark chính thức, xem thực tế ở cỡ nhỏ rồi chọn bản vàng hoặc trắng cho dễ đọc nhất.
+5. **Header/Footer**: so sánh SVG hiện tại với artwork chính thức trước. Nếu khớp thì giữ nguyên (vector nét hơn PNG, tự đổi màu theo nền). Nếu lệch, báo lại điểm lệch trước khi sửa — không tự thay.
+6. **Không upload file `.ai`** và không upload nhóm nền trắng/đen (chỉ dùng cho in ấn).
 
 ## Kiểm tra sau khi làm
 
-- Header (nền ảnh + nền sáng), footer, trang đăng nhập admin hiển thị logo đúng, nét.
-- Tab trình duyệt hiện favicon mới; view-source có logo trong dữ liệu SEO.
+- 9 asset xuất hiện đúng trong thư viện media của tàu, tải được ảnh, không lỗi quyền.
+- Header (nền ảnh + nền sáng), footer, trang đăng nhập quản trị hiển thị logo đúng và nét.
+- Favicon mới hiện trên tab trình duyệt; dữ liệu SEO chứa logo chính thức.
 - Test desktop + mobile, EN + VI; không ảnh vỡ, không lỗi console.
 
 ## Ngoài phạm vi
 
-- Không redesign header/footer, không đổi màu sắc/token website, không đụng các trang nội dung.
-- Không upload file `.ai` vào hệ thống (file in ấn, web không dùng).
+- Không redesign layout header/footer hay bất kỳ trang nào.
+- Không đổi bộ màu / token màu của website.
+- Không chỉnh sửa nội dung trang.
