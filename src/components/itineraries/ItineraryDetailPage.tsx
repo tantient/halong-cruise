@@ -77,7 +77,7 @@ export function ItineraryDetailPage({ bundle, slug }: { bundle: PublicItinerarie
 
         {/* C — Visual day-by-day journey */}
         {it.dayPlan.some((d) => d.entries.length > 0) ? (
-          <section className="border-t border-chronos-ink/10 bg-white">
+          <section className="border-t border-chronos-ink/10 bg-chronos-sand-50">
             <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-28">
               <Reveal>
                 <p className="eyebrow mb-5 text-chronos-gold">{ui.dayByDay}</p>

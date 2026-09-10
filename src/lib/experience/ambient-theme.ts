@@ -28,55 +28,55 @@ export interface AmbientTheme {
 
 export const AMBIENT: Record<TimeState, AmbientTheme> = {
   morning: {
-    bg: "oklch(0.975 0.006 220)",
+    bg: "oklch(0.985 0.006 210)",
     wash:
-      "radial-gradient(120% 80% at 50% 0%, oklch(0.99 0.012 210 / 0.95) 0%, oklch(0.965 0.008 215 / 0.6) 45%, transparent 100%)",
-    fg: "oklch(0.30 0.02 240)",
-    muted: "oklch(0.43 0.02 235)",
+      "radial-gradient(120% 75% at 50% 0%, oklch(1 0.006 205 / 0.38) 0%, transparent 66%)",
+    fg: "oklch(0.22 0.025 240)",
+    muted: "oklch(0.38 0.022 235)",
     line: "oklch(0.30 0.02 240 / 0.16)",
     accent: "oklch(0.62 0.05 225)",
     scrim:
-      "linear-gradient(to top, oklch(0.20 0.02 240 / 0.72) 0%, oklch(0.22 0.02 240 / 0.22) 38%, transparent 68%), linear-gradient(to right, oklch(0.20 0.02 240 / 0.30) 0%, transparent 64%)",
-    imageFilter: "saturate(1.02) brightness(1.08) contrast(1.02)",
+      "linear-gradient(to top, oklch(0.16 0.02 240 / 0.52) 0%, oklch(0.18 0.02 240 / 0.14) 28%, transparent 58%), linear-gradient(to right, oklch(0.16 0.02 240 / 0.16) 0%, transparent 52%)",
+    imageFilter: "saturate(1.03) brightness(1.03) contrast(1.01)",
     onImage: "light",
   },
   day: {
-    bg: "oklch(0.985 0.003 200)",
+    bg: "oklch(0.99 0.003 200)",
     wash:
-      "radial-gradient(120% 90% at 70% 0%, oklch(1 0 0 / 0.9) 0%, oklch(0.96 0.012 205 / 0.55) 50%, transparent 100%)",
-    fg: "oklch(0.24 0.02 250)",
-    muted: "oklch(0.40 0.02 245)",
+      "radial-gradient(120% 80% at 70% 0%, oklch(0.97 0.018 205 / 0.35) 0%, transparent 68%)",
+    fg: "oklch(0.20 0.025 250)",
+    muted: "oklch(0.36 0.022 245)",
     line: "oklch(0.24 0.02 250 / 0.16)",
     accent: "oklch(0.55 0.08 235)",
     scrim:
-      "linear-gradient(to top, oklch(0.16 0.02 250 / 0.70) 0%, oklch(0.18 0.02 250 / 0.20) 38%, transparent 68%), linear-gradient(to right, oklch(0.16 0.02 250 / 0.28) 0%, transparent 64%)",
-    imageFilter: "saturate(1.06) brightness(1.06) contrast(1.04)",
+      "linear-gradient(to top, oklch(0.14 0.02 250 / 0.50) 0%, oklch(0.16 0.02 250 / 0.12) 28%, transparent 58%), linear-gradient(to right, oklch(0.14 0.02 250 / 0.14) 0%, transparent 52%)",
+    imageFilter: "saturate(1.04) brightness(1.04) contrast(1.02)",
     onImage: "light",
   },
   golden: {
-    bg: "oklch(0.955 0.022 78)",
+    bg: "oklch(0.975 0.012 82)",
     wash:
-      "radial-gradient(130% 95% at 50% 100%, oklch(0.90 0.075 68 / 0.75) 0%, oklch(0.95 0.03 80 / 0.5) 45%, transparent 100%)",
-    fg: "oklch(0.28 0.03 55)",
-    muted: "oklch(0.42 0.03 60)",
+      "radial-gradient(130% 90% at 50% 100%, oklch(0.90 0.06 70 / 0.22) 0%, transparent 62%)",
+    fg: "oklch(0.22 0.028 58)",
+    muted: "oklch(0.38 0.026 62)",
     line: "oklch(0.28 0.03 55 / 0.18)",
     accent: "oklch(0.66 0.10 62)",
     scrim:
-      "linear-gradient(to top, oklch(0.20 0.03 50 / 0.72) 0%, oklch(0.26 0.04 55 / 0.20) 38%, transparent 68%), linear-gradient(to right, oklch(0.20 0.03 50 / 0.28) 0%, transparent 64%)",
-    imageFilter: "saturate(1.10) brightness(1.04) contrast(1.03)",
+      "linear-gradient(to top, oklch(0.18 0.03 50 / 0.52) 0%, oklch(0.22 0.03 55 / 0.14) 28%, transparent 58%), linear-gradient(to right, oklch(0.18 0.03 50 / 0.14) 0%, transparent 52%)",
+    imageFilter: "saturate(1.05) brightness(1.02) contrast(1.01)",
     onImage: "light",
   },
   night: {
-    bg: "oklch(0.16 0.018 260)",
+    bg: "oklch(0.955 0.010 250)",
     wash:
-      "radial-gradient(130% 95% at 50% 12%, oklch(0.30 0.03 60 / 0.5) 0%, oklch(0.18 0.02 260 / 0.75) 45%, oklch(0.13 0.015 265 / 0.95) 100%)",
-    fg: "oklch(0.94 0.012 90)",
-    muted: "oklch(0.74 0.015 90)",
-    line: "oklch(0.94 0.012 90 / 0.18)",
-    accent: "oklch(0.82 0.075 88)",
+      "radial-gradient(120% 85% at 75% 0%, oklch(0.78 0.045 75 / 0.16) 0%, transparent 58%), linear-gradient(to bottom, oklch(0.90 0.025 250 / 0.16), transparent 65%)",
+    fg: "oklch(0.20 0.028 250)",
+    muted: "oklch(0.38 0.025 245)",
+    line: "oklch(0.22 0.025 250 / 0.18)",
+    accent: "oklch(0.62 0.075 82)",
     scrim:
-      "linear-gradient(to top, oklch(0.10 0.015 265 / 0.80) 0%, oklch(0.12 0.015 265 / 0.30) 40%, transparent 70%), linear-gradient(to right, oklch(0.10 0.015 265 / 0.34) 0%, transparent 64%)",
-    imageFilter: "saturate(1.02) brightness(0.94) contrast(1.05)",
+      "linear-gradient(to top, oklch(0.10 0.018 260 / 0.58) 0%, oklch(0.12 0.018 260 / 0.18) 30%, transparent 60%), linear-gradient(to right, oklch(0.10 0.018 260 / 0.18) 0%, transparent 52%)",
+    imageFilter: "saturate(1.04) brightness(1.01) contrast(1.02)",
     onImage: "light",
   },
 };

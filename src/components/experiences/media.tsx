@@ -201,7 +201,7 @@ export function FeatureList({
           </p>
           <p className="text-base tracking-wide text-chronos-ink">{item.title}</p>
           {item.description ? (
-            <p className="mt-2 text-sm leading-relaxed text-chronos-stone/85">{item.description}</p>
+            <p className="mt-2 text-sm leading-relaxed text-chronos-stone">{item.description}</p>
           ) : null}
         </div>
       ))}
@@ -224,7 +224,7 @@ export function SectionHeading({
   tone?: "light" | "dark";
 }) {
   const heading = tone === "dark" ? "text-chronos-ivory" : "text-chronos-ink";
-  const body = tone === "dark" ? "text-chronos-ivory/80" : "text-chronos-stone/90";
+  const body = tone === "dark" ? "text-chronos-ivory/90" : "text-chronos-stone";
   return (
     <Reveal className={align === "center" ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
       {eyebrow ? <p className="eyebrow mb-4 text-chronos-gold">{eyebrow}</p> : null}

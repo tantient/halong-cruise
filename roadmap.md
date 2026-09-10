@@ -9,6 +9,6 @@
 - [x] Keep time-of-day ambience scoped to the homepage and preserve clear photography in all four states.
 - [x] Verify Homepage, Experiences, The Ship, Cabins, Voyages, Gallery, Careers, and Contact on EN/VI desktop/mobile.
 - [x] Render the opening Homepage Hero from raw media with no colour grading or full-frame overlay.
-- [ ] Audit and correct the global bright-luxury visual baseline without redesigning public pages.
-- [ ] Recalibrate Homepage Morning/Day/Golden/Night ambience while preserving the time engine and five chapters.
-- [ ] Verify the requested EN/VI public-page matrix across desktop, laptop, and mobile.
+- [x] Audit and correct the global bright-luxury visual baseline without redesigning public pages.
+- [x] Recalibrate Homepage Morning/Day/Golden/Night ambience while preserving the time engine and five chapters.
+- [x] Verify the requested EN/VI public-page matrix across desktop, laptop, and mobile.

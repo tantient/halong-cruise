@@ -82,54 +82,54 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.975 0.004 95);
-  --foreground: oklch(0.20 0.03 90);
-  --card: oklch(0.98 0.004 95);
-  --card-foreground: oklch(0.20 0.03 90);
-  --popover: oklch(0.98 0.004 95);
-  --popover-foreground: oklch(0.20 0.03 90);
+  --background: oklch(0.99 0.002 100);
+  --foreground: oklch(0.18 0.018 85);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.018 85);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.018 85);
   --primary: oklch(0.52 0.055 95);
   --primary-foreground: oklch(0.975 0.004 95);
-  --secondary: oklch(0.935 0.009 95);
-  --secondary-foreground: oklch(0.20 0.03 90);
-  --muted: oklch(0.935 0.009 95);
-  --muted-foreground: oklch(0.40 0.018 90);
-  --accent: oklch(0.935 0.009 95);
-  --accent-foreground: oklch(0.20 0.03 90);
+  --secondary: oklch(0.965 0.006 95);
+  --secondary-foreground: oklch(0.18 0.018 85);
+  --muted: oklch(0.96 0.006 95);
+  --muted-foreground: oklch(0.34 0.016 85);
+  --accent: oklch(0.955 0.008 92);
+  --accent-foreground: oklch(0.18 0.018 85);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.88 0.02 95);
-  --input: oklch(0.88 0.02 95);
+  --border: oklch(0.87 0.012 92);
+  --input: oklch(0.87 0.012 92);
   --ring: oklch(0.78 0.042 95);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.975 0.004 95);
-  --sidebar-foreground: oklch(0.20 0.03 90);
+  --sidebar: oklch(0.99 0.002 100);
+  --sidebar-foreground: oklch(0.18 0.018 85);
   --sidebar-primary: oklch(0.52 0.055 95);
   --sidebar-primary-foreground: oklch(0.975 0.004 95);
   --sidebar-accent: oklch(0.935 0.009 95);
   --sidebar-accent-foreground: oklch(0.20 0.03 90);
   --sidebar-border: oklch(0.88 0.02 95);
   --sidebar-ring: oklch(0.78 0.042 95);
-  --chronos-ink: oklch(0.20 0.03 90);
-  --chronos-ivory: oklch(0.975 0.004 95);
-  --chronos-gold: oklch(0.62 0.065 82);
-  --chronos-gold-ink: oklch(0.54 0.06 82);
+  --chronos-ink: oklch(0.18 0.018 85);
+  --chronos-ivory: oklch(0.99 0.002 100);
+  --chronos-gold: oklch(0.61 0.075 82);
+  --chronos-gold-ink: oklch(0.50 0.07 82);
   --chronos-gold-light: oklch(0.85 0.04 95);
-  --chronos-navy: oklch(0.52 0.055 95);
-  --chronos-stone: oklch(0.39 0.018 82);
-  --chronos-warm: oklch(0.925 0.012 88);
-  --chronos-deep: oklch(0.52 0.055 95);
-  --chronos-cream: oklch(0.935 0.009 95);
-  --chronos-sand-50: oklch(0.975 0.004 95);
-  --chronos-sand-100: oklch(0.935 0.009 95);
+  --chronos-navy: oklch(0.28 0.035 238);
+  --chronos-stone: oklch(0.34 0.016 85);
+  --chronos-warm: oklch(0.955 0.010 88);
+  --chronos-deep: oklch(0.15 0.025 245);
+  --chronos-cream: oklch(0.97 0.008 92);
+  --chronos-sand-50: oklch(0.99 0.002 100);
+  --chronos-sand-100: oklch(0.96 0.008 92);
   --chronos-sand-300: oklch(0.85 0.04 95);
   --chronos-sand-500: oklch(0.64 0.06 82);
-  --chronos-sand-700: oklch(0.42 0.025 82);
-  --chronos-sand-900: oklch(0.20 0.03 90);
+  --chronos-sand-700: oklch(0.38 0.03 82);
+  --chronos-sand-900: oklch(0.18 0.018 85);
   --font-display: "Libre Baskerville", "Cormorant Garamond", "Times New Roman", serif;
   --font-body: "IBM Plex Sans", "Jura", ui-sans-serif, system-ui, sans-serif;
 }
@@ -359,19 +359,19 @@
   background:
     linear-gradient(
       to top,
-      color-mix(in oklab, var(--chronos-ink) 76%, transparent) 0%,
-      color-mix(in oklab, var(--chronos-ink) 34%, transparent) 34%,
-      transparent 68%
+      color-mix(in oklab, var(--chronos-deep) 42%, transparent) 0%,
+      color-mix(in oklab, var(--chronos-deep) 12%, transparent) 24%,
+      transparent 48%
     ),
     linear-gradient(
       to right,
-      color-mix(in oklab, var(--chronos-ink) 28%, transparent) 0%,
-      transparent 64%
+      color-mix(in oklab, var(--chronos-deep) 12%, transparent) 0%,
+      transparent 42%
     );
 }
 
 @utility image-copy-shadow {
-  text-shadow: 0 2px 18px color-mix(in oklab, var(--chronos-ink) 52%, transparent);
+  text-shadow: 0 2px 14px color-mix(in oklab, var(--chronos-deep) 58%, transparent);
 }
 
 /* Nền section sáng (cream) */
@@ -384,9 +384,9 @@
 @utility hero-overlay-deep {
   background: linear-gradient(
     to bottom,
-    color-mix(in oklab, var(--chronos-ink) 42%, transparent) 0%,
-    color-mix(in oklab, var(--chronos-ink) 12%, transparent) 45%,
-    color-mix(in oklab, var(--chronos-ink) 45%, transparent) 100%
+    color-mix(in oklab, var(--chronos-deep) 16%, transparent) 0%,
+    transparent 48%,
+    color-mix(in oklab, var(--chronos-deep) 30%, transparent) 100%
   );
 }
 
