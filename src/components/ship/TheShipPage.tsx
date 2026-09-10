@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { pageText } from "@/components/cabins/cabin-view";
 import { toServiceView } from "@/components/services/service-view";
 import { groupServices } from "@/components/experiences/grouping";
+import { venueListItems, venuesInCategory } from "@/components/experiences/venue-view";
 import {
   CuratedGallery,
   EditorialPair,
@@ -48,6 +49,7 @@ export function TheShipPage({
   const b = data ?? bundle;
   const perLang = b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0]!;
   const views = useMemo(() => perLang.services.map(toServiceView), [perLang]);
+  const venues = perLang.venues ?? [];
   const { experiences, shipSpaces } = groupServices(views);
 
   const page =
@@ -106,28 +108,40 @@ export function TheShipPage({
           </section>
         ) : null}
 
-        {interiors.map((space) => (
-          <section key={space.slug} className="pb-16 lg:pb-24">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-              <SectionHeading
-                eyebrow={space.eyebrow ?? ui.publicSpaces}
-                title={space.name}
-                lead={space.intro}
-              />
-            </div>
-            <div className="mx-auto mt-10 max-w-7xl px-6 lg:px-8">
-              <CuratedGallery
-                images={[...(space.cover ? [space.cover] : []), ...space.gallery.filter((g) => g.id !== space.cover?.id)]}
-                alt={space.name}
-              />
-              {space.highlights.length > 0 ? (
-                <div className="mt-12">
-                  <FeatureList items={space.highlights} columns={2} />
-                </div>
-              ) : null}
-            </div>
-          </section>
-        ))}
+        {interiors.map((space) => {
+          const spaceVenues = venuesInCategory(venues, space.category);
+          const items = spaceVenues.length > 0 ? venueListItems(spaceVenues, ui) : space.highlights;
+          const venueImages = spaceVenues
+            .map((v) => v.cover)
+            .filter((m): m is NonNullable<typeof m> => m !== null);
+          return (
+            <section key={space.slug} className="pb-16 lg:pb-24">
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <SectionHeading
+                  eyebrow={space.eyebrow ?? ui.publicSpaces}
+                  title={space.name}
+                  lead={space.intro}
+                />
+              </div>
+              <div className="mx-auto mt-10 max-w-7xl px-6 lg:px-8">
+                <CuratedGallery
+                  images={
+                    venueImages.length > 1
+                      ? venueImages
+                      : [...(space.cover ? [space.cover] : []), ...space.gallery.filter((g) => g.id !== space.cover?.id)]
+                  }
+                  alt={space.name}
+                />
+                {items.length > 0 ? (
+                  <div className="mt-12">
+                    <p className="eyebrow mb-6 text-chronos-gold">{ui.onboardFacilities}</p>
+                    <FeatureList items={items} columns={2} />
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          );
+        })}
 
         {deck ? (
           <section className="pb-16 lg:pb-24">
@@ -139,7 +153,7 @@ export function TheShipPage({
                   <p className="mt-3 text-sm text-chronos-ivory/85 sm:text-base">{deck.tagline}</p>
                 ) : null}
                 <LocalLink
-                  path={`/services/${deck.slug}`}
+                  path={`/experiences/${deck.slug}`}
                   className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-chronos-gold"
                 >
                   {ui.discover}

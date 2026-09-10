@@ -24,6 +24,7 @@ import type {
   PublicOffer,
   PublicService,
   PublicPage,
+  PublicVenue,
   ShipContext,
 } from "./types";
 
@@ -283,6 +284,8 @@ export const getPublicService = createServerFn({ method: "GET" })
 
 export interface PublicServicesLanguageData {
   services: PublicService[];
+  /** Real named places aboard, grouped by the category they belong to. */
+  venues: PublicVenue[];
 }
 
 export interface PublicServicesBundle {
@@ -297,11 +300,12 @@ export const getPublicServicesBundle = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PublicServicesBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
-    const { listServices } = await import("./content.server");
+    const { listServices, listVenues } = await import("./content.server");
     const entries = await Promise.all(
       s.context.enabledLanguages.map(async (language) => {
-        const services = await listServices({ ...s.scope, language });
-        return [language, { services }] as const;
+        const scope = { ...s.scope, language };
+        const [services, venues] = await Promise.all([listServices(scope), listVenues(scope)]);
+        return [language, { services, venues }] as const;
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };

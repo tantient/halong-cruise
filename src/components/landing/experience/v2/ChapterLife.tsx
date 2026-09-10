@@ -97,7 +97,7 @@ export function ChapterLife({
       title: s.name,
       meta: [s.category, s.openingHours].filter(Boolean).join(" · "),
       body: s.summary ?? s.description ?? "",
-      href: `/services/${s.slug}`,
+      href: `/experiences/${s.slug}`,
       media: s.media,
     });
 

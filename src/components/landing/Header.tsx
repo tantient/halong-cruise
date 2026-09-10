@@ -51,7 +51,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
   const serviceItems = useServiceNav(lang);
   const experienceLinks = serviceItems
     .filter((s) => publicGroup({ group: s.group }) === EXPERIENCE_GROUP)
-    .map((s) => ({ href: `/services/${s.slug}`, label: s.label }));
+    .map((s) => ({ href: `/experiences/${s.slug}`, label: s.label }));
 
   const linkClasses = scrolled
     ? "text-chronos-sand-900/75 hover:text-chronos-sand-900"

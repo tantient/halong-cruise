@@ -17,6 +17,8 @@ export interface ServiceHighlight {
 
 export interface ServiceView {
   slug: string;
+  /** Category key used to match the ship's venues to this record. */
+  category: string;
   name: string;
   eyebrow: string | null;
   tagline: string | null;
@@ -65,6 +67,7 @@ export function toServiceView(service: PublicService): ServiceView {
   const cover = service.media.cover ?? gallery[0] ?? null;
   return {
     slug: service.slug,
+    category: service.category ?? service.slug,
     name: service.name,
     eyebrow: str(meta["eyebrow"]),
     tagline: str(meta["tagline"]),

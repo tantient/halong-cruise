@@ -27,6 +27,7 @@ import type {
   PublicOffer,
   PublicPage,
   PublicService,
+  PublicVenue,
 } from "./types";
 
 export interface ReadScope {
@@ -309,6 +310,45 @@ export async function getService(scope: ReadScope, slug: string): Promise<Public
   return toService(row, await getEntityMedia(scope, "service", row.id));
 }
 
+/* ----------------------------------------------------------------- venues */
+
+const VENUE_COLUMNS =
+  "id,stable_key,category,parent_key,functional_name,commercial_name,location,area_sqm,capacity,capacity_unit,spec_note,function_text,access_type,summary,description,show_public,show_area,show_capacity,sort_order,translations";
+
+type VenueRow = {
+  id: string; stable_key: string; category: string; parent_key: string | null; functional_name: string;
+  commercial_name: string | null; location: string | null; area_sqm: number | null; capacity: number | null;
+  capacity_unit: string; spec_note: string | null; function_text: string | null; access_type: string | null;
+  summary: string | null; description: string | null; show_public: boolean; show_area: boolean;
+  show_capacity: boolean; sort_order: number; translations: unknown;
+};
+
+function toVenue(r: VenueRow, media: EntityMedia): PublicVenue {
+  return {
+    id: r.id, key: r.stable_key, category: r.category, parentKey: r.parent_key,
+    functionalName: r.functional_name, commercialName: r.commercial_name, location: r.location,
+    areaSqm: r.area_sqm, capacity: r.capacity, capacityUnit: r.capacity_unit, specNote: r.spec_note,
+    functionText: r.function_text, accessType: r.access_type, summary: r.summary, description: r.description,
+    showPublic: r.show_public, showArea: r.show_area, showCapacity: r.show_capacity,
+    sortOrder: r.sort_order, media,
+  };
+}
+
+/** Every published venue of the ship, ordered by category then sort order. */
+export async function listVenues(scope: ReadScope): Promise<PublicVenue[]> {
+  const db = getPublicDb();
+  const { data, error } = await db
+    .from("venues")
+    .select(VENUE_COLUMNS)
+    .eq("ship_id", scope.shipId)
+    .order("category")
+    .order("sort_order");
+  if (error) throw error;
+  const rows = localizeRows((data ?? []) as VenueRow[], scope.language, scope.defaultLanguage);
+  const media = await loadEntityMedia(scope, "venue", rows.map((r) => r.id));
+  return rows.map((r) => toVenue(r, mediaFor(media, r.id)));
+}
+
 /* ----------------------------------------------------------------- offers */
 
 const OFFER_COLUMNS =
@@ -429,15 +469,30 @@ export async function getHomepage(scope: ReadScope): Promise<PublicHomepage> {
 /** Slugs needed to enumerate every public URL of a ship (sitemap). */
 export async function listPublicSlugs(scope: ReadScope) {
   const db = getPublicDb();
-  const pick = (table: "cabins" | "itineraries" | "services" | "offers") =>
+  const pick = (table: "cabins" | "itineraries" | "offers") =>
     db.from(table).select("slug").eq("ship_id", scope.shipId).order("sort_order");
-  const [c, i, s, o, pages] = await Promise.all([pick("cabins"), pick("itineraries"), pick("services"), pick("offers"), listPageSlugs(scope)]);
-  for (const r of [c, i, s, o]) if (r.error) throw r.error;
+  const [c, i, o, svc, pages] = await Promise.all([
+    pick("cabins"),
+    pick("itineraries"),
+    pick("offers"),
+    db.from("services").select("slug,highlights").eq("ship_id", scope.shipId).order("sort_order"),
+    listPageSlugs(scope),
+  ]);
+  for (const r of [c, i, o, svc]) if (r.error) throw r.error;
+  const services = (svc.data ?? []) as Array<{ slug: string; highlights: unknown }>;
+  // Only experience categories have their own URL; ship-group records are part
+  // of the single The Ship page.
+  const isShipGroup = (h: unknown) => {
+    const bag = h && typeof h === "object" && !Array.isArray(h) ? (h as Record<string, unknown>) : {};
+    const g = typeof bag["group"] === "string" ? bag["group"].toLowerCase() : "";
+    return g === "ship" || g === "space" || g === "spaces";
+  };
   return {
     cabins: (c.data ?? []).map((r) => r.slug),
     itineraries: (i.data ?? []).map((r) => r.slug),
-    services: (s.data ?? []).map((r) => r.slug),
     offers: (o.data ?? []).map((r) => r.slug),
+    services: services.map((r) => r.slug),
+    experienceCategories: services.filter((r) => !isShipGroup(r.highlights)).map((r) => r.slug),
     pages,
   };
 }

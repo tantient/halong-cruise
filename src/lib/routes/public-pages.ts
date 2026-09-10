@@ -180,7 +180,7 @@ export function serviceHead(bundle: PublicServicesBundle, slug: string) {
   const service = data?.services.find((s) => s.slug === slug) ?? null;
   const cover = service?.media.cover?.url ?? service?.media.all[0]?.url ?? null;
   const seo = buildSeo(ship, language.language, {
-    path: `/services/${slug}`,
+    path: `/experiences/${slug}`,
     title: service?.name ?? null,
     description: service?.summary ?? service?.description ?? null,
     image: cover,
@@ -244,10 +244,23 @@ export function shipHead(data: { bundle: PublicServicesBundle; pageBundle: Publi
   return serviceAreaHead(data, "/the-ship");
 }
 
-/** `/experiences/<slug>` is an alias of the technical detail URL. */
-export function redirectExperienceSlug(pathname: string, slug: string) {
+/**
+ * Retired `/services/<slug>` URLs. Experience categories live under
+ * `/experiences/<category>`; records that describe the vessel itself belong to
+ * the single The Ship page. Only the path segment is swapped, so the redirect
+ * works under any language prefix.
+ */
+const legacyServiceSlugs: Record<string, string> = {
+  sundeck: "/experiences/pool",
+  spa: "/experiences/spa-wellness",
+  "public-spaces": "/the-ship",
+  exterior: "/the-ship",
+};
+
+export function redirectServiceSlug(pathname: string, slug: string) {
+  const target = legacyServiceSlugs[slug] ?? `/experiences/${slug}`;
   throw redirect({
-    href: pathname.replace(`/experiences/${slug}`, `/services/${slug}`),
+    href: pathname.replace(`/services/${slug}`, target),
     statusCode: 301,
     throw: true,
   });
