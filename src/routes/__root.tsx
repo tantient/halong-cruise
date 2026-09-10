@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { gitSyncInfo } from "../lib/git-sync-info";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider, themeInitScript } from "@/components/theme-provider";
 import { LanguageProvider } from "@/lib/i18n/language-context";
@@ -77,6 +78,53 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const APP_VERSION = gitSyncInfo.buildTime || gitSyncInfo.sha;
+
+function AutoRefreshOnNewDeployment() {
+  useEffect(() => {
+    let checking = false;
+
+    const checkVersion = async () => {
+      if (checking || !APP_VERSION || APP_VERSION === "unknown") return;
+      checking = true;
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("__version_check", Date.now().toString());
+        const response = await fetch(url, {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: { "x-app-version-check": "1" },
+        });
+        if (!response.ok) return;
+        const html = await response.text();
+        const match = html.match(/<meta name="app-version" content="([^"]+)"/i);
+        const deployedVersion = match?.[1];
+        if (deployedVersion && deployedVersion !== APP_VERSION) window.location.reload();
+      } catch {
+        // A version check must never interrupt normal browsing.
+      } finally {
+        checking = false;
+      }
+    };
+
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) void checkVersion();
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") void checkVersion();
+    };
+
+    window.addEventListener("pageshow", onPageShow);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () => {
+      window.removeEventListener("pageshow", onPageShow);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+  }, []);
+
+  return null;
+}
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Tenant language config (default + enabled languages) for the language
   // switcher and link building. Resolved from the request host on the server.
@@ -119,6 +167,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             ]
           : []),
         { name: "theme-color", content: themeColor },
+        { name: "app-version", content: APP_VERSION },
         ...(locale ? [{ property: "og:locale", content: locale }] : []),
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -183,6 +232,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <AutoRefreshOnNewDeployment />
       <ThemeProvider>
         <LanguageProvider config={languageConfig}>
           <ServiceNavProvider nav={serviceNav}>
