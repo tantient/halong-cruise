@@ -8,3 +8,4 @@
 - [x] Calibrate global light-page contrast and image overlays without changing layouts or content.
 - [x] Keep time-of-day ambience scoped to the homepage and preserve clear photography in all four states.
 - [x] Verify Homepage, Experiences, The Ship, Cabins, Voyages, Gallery, Careers, and Contact on EN/VI desktop/mobile.
+- [x] Render the opening Homepage Hero from raw media with no colour grading or full-frame overlay.
