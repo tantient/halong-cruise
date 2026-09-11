@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Shared image renderer for database media.
@@ -29,6 +29,20 @@ export function MediaImage({
   style?: React.CSSProperties;
 }) {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  // Images streamed during SSR can finish loading before hydration attaches the
+  // handlers, so `load` never fires. Reconcile the real element state on mount
+  // (and whenever `src` changes) to avoid images staying invisible.
+  useEffect(() => {
+    const el = imgRef.current;
+    if (!el) return;
+    if (el.complete) {
+      setStatus(el.naturalWidth > 0 ? "loaded" : "error");
+    } else {
+      setStatus("loading");
+    }
+  }, [src]);
 
   return (
     <>
@@ -41,6 +55,7 @@ export function MediaImage({
         }}
       />
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
         width={width ?? undefined}
