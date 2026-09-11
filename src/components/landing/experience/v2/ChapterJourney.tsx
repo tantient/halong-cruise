@@ -49,7 +49,7 @@ export function ChapterJourney({
   };
 
   return (
-    <section id={id} className="relative scroll-mt-24 pb-7 sm:pb-8 lg:pb-10 pt-12 sm:pt-14 lg:pt-16">
+    <section id={id} className="relative scroll-mt-24 pb-7 sm:pb-8 lg:pb-10 pt-9 sm:pt-12 lg:pt-12">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 sm:gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <SceneReveal variant="up">
