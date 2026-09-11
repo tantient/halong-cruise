@@ -42,12 +42,12 @@ export function ChapterOffers({
   const stage = list[index]?.media.all.length ? list[index]!.media : media;
 
   return (
-    <section className="relative pt-20 pb-24 sm:pt-24 sm:pb-28 lg:pt-28 lg:pb-32">
+    <section className="relative py-12 sm:py-14 lg:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SceneReveal variant="up">
           <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
         </SceneReveal>
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-16">
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
           <SceneReveal variant="up" delay={120}>
             <h2 className="font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
@@ -59,7 +59,7 @@ export function ChapterOffers({
           </SceneReveal>
         </div>
 
-        <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-16">
+        <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-12">
           {stage ? (
             <SceneReveal variant="mask">
               <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[3/4]">
@@ -77,7 +77,7 @@ export function ChapterOffers({
                     onMouseEnter={() => setFocus(i)}
                     onFocus={() => setFocus(i)}
                     aria-current={i === index}
-                    className="group block border-b py-7 transition-opacity duration-500 sm:py-8"
+                    className="group block border-b py-6 transition-opacity duration-500 sm:py-7"
                     style={{ borderColor: "var(--amb-line)", opacity: i === index ? 1 : 0.62 }}
                   >
                     <span className="flex items-baseline gap-5">
@@ -103,7 +103,7 @@ export function ChapterOffers({
               ))}
             </ol>
 
-            <SceneReveal variant="fade" delay={200} className="mt-10">
+            <SceneReveal variant="fade" delay={200} className="mt-8">
               <AmbientLink path="/offers">{textOf(section, "cta") || ui.viewAll}</AmbientLink>
             </SceneReveal>
           </div>

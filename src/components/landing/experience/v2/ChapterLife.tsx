@@ -140,12 +140,12 @@ export function ChapterLife({
   const current = slots[index]!;
 
   return (
-    <section className="relative pt-16 pb-16 sm:pt-20 sm:pb-20 lg:pt-24 lg:pb-24">
+    <section className="relative py-12 sm:py-14 lg:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SceneReveal variant="up">
           <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
         </SceneReveal>
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-16">
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
           <SceneReveal variant="up" delay={120}>
             <h2 className="font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
@@ -155,7 +155,7 @@ export function ChapterLife({
           <SceneReveal variant="up" delay={220}>
             <Body>{stateText(section, state, "body")}</Body>
             {textOf(section, "cta_all") ? (
-              <div className="mt-7">
+              <div className="mt-5">
                 <AmbientLink path="/experiences" variant="text">
                   {textOf(section, "cta_all")}
                 </AmbientLink>
@@ -167,7 +167,7 @@ export function ChapterLife({
       </div>
 
       {/* One stage; the slot changes inside it, never leaving the viewport. */}
-      <SceneReveal variant="mask" delay={200} className="mt-12 sm:mt-16">
+      <SceneReveal variant="mask" delay={200} className="mt-8 sm:mt-10">
         <div className="relative h-[78svh] min-h-[460px] w-full overflow-hidden">
           {slots.map((slot, i) => (
             <div

@@ -39,13 +39,13 @@ export function ChapterFinal({
         </SceneReveal>
         {textOf(section, "body") ? (
           <SceneReveal variant="fade" delay={300}>
-            <p className="mx-auto mt-7 max-w-md text-[0.68rem] uppercase tracking-[0.4em] text-white/70">
+            <p className="mx-auto mt-5 max-w-md text-[0.68rem] uppercase tracking-[0.4em] text-white/70">
               {textOf(section, "body")}
             </p>
           </SceneReveal>
         ) : null}
         <SceneReveal variant="up" delay={460}>
-          <div className="mt-11 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
             {cta ? (
               <AmbientLink path={primaryPath} tone="onImage" variant="solid">
                 {cta}
