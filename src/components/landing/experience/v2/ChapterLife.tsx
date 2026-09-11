@@ -140,7 +140,7 @@ export function ChapterLife({
   const current = slots[index]!;
 
   return (
-    <section className="relative py-12 sm:py-14 lg:py-16">
+    <section className="relative py-7 sm:py-8 lg:py-10">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SceneReveal variant="up">
           <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
