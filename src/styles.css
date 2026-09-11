@@ -166,8 +166,8 @@
   --chronos-sand-500: oklch(0.64 0.06 82);
   --chronos-sand-700: oklch(0.38 0.03 82);
   --chronos-sand-900: oklch(0.18 0.018 85);
-  --font-display: "Libre Baskerville", "Cormorant Garamond", "Times New Roman", serif;
-  --font-body: "IBM Plex Sans", "Jura", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Libre Baskerville", "Baskerville Fallback", "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Plex Fallback", ui-sans-serif, system-ui, sans-serif;
 }
 
 
