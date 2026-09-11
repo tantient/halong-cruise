@@ -55,6 +55,7 @@ export function MediaImage({
         }}
       />
       <img
+        ref={imgRef}
         src={src}
         alt={alt}
         width={width ?? undefined}
