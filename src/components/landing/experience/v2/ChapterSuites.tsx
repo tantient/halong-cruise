@@ -39,7 +39,7 @@ export function ChapterSuites({
       .join(" · ");
 
   return (
-    <section className="relative py-16 sm:py-20 lg:py-24">
+    <section className="relative pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SceneReveal variant="up">
           <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
@@ -58,7 +58,7 @@ export function ChapterSuites({
 
         <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-16">
           <SceneReveal variant="mask">
-            <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[1/1]">
+            <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[4/3]">
               {list.map((c, i) => (
                 <div
                   key={c.id}
