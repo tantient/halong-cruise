@@ -142,19 +142,13 @@
 @font-face {
   font-family: "Chronos Display Fallback";
   src: local("Times New Roman"), local("Georgia"), local("Serif");
-  size-adjust: 111%;
-  ascent-override: 92%;
-  descent-override: 24%;
-  line-gap-override: 0%;
+  size-adjust: 127%;
 }
 
 @font-face {
   font-family: "Chronos Body Fallback";
   src: local("Arial"), local("Helvetica"), local("Liberation Sans");
-  size-adjust: 104%;
-  ascent-override: 95%;
-  descent-override: 25%;
-  line-gap-override: 0%;
+  size-adjust: 98%;
 }
 
 
