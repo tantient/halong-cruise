@@ -85,6 +85,8 @@ export interface PublicHomepageLanguageData {
   itineraries: PublicItinerary[];
   /** Published services of the ship, for homepage experience scenes. */
   services: PublicService[];
+  /** Currently active published offers, for the homepage offers preview. */
+  offers: PublicOffer[];
 }
 
 export interface PublicHomepageBundle {
@@ -104,16 +106,17 @@ export const getPublicHomepageBundle = createServerFn({ method: "GET" })
   .handler(async ({ data }): Promise<PublicHomepageBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
-    const { getHomepage, listJobPositions, listCabins, listItineraries, listServices } = await import("./content.server");
+    const { getHomepage, listJobPositions, listCabins, listItineraries, listServices, listOffers } = await import("./content.server");
     const entries = await Promise.all(
       s.context.enabledLanguages.map(async (language) => {
         const scope = { ...s.scope, language };
-        const [homepage, jobs, cabins, itineraries, services] = await Promise.all([
+        const [homepage, jobs, cabins, itineraries, services, offers] = await Promise.all([
           getHomepage(scope),
           listJobPositions(scope),
           listCabins(scope),
           listItineraries(scope),
           listServices(scope),
+          listOffers(scope, { activeOnly: true }),
         ]);
         return [
           language,
@@ -123,12 +126,14 @@ export const getPublicHomepageBundle = createServerFn({ method: "GET" })
             cabins,
             itineraries,
             services,
+            offers,
           },
         ] as const;
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
   });
+
 
 
 export const getPublicCabins = createServerFn({ method: "GET" })
