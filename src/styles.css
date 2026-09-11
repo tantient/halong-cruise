@@ -130,26 +130,10 @@
   --chronos-sand-500: oklch(0.64 0.06 82);
   --chronos-sand-700: oklch(0.38 0.03 82);
   --chronos-sand-900: oklch(0.18 0.018 85);
-  --font-display: "Libre Baskerville", "Chronos Display Fallback", "Times New Roman", serif;
-  --font-body: "IBM Plex Sans", "Chronos Body Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Libre Baskerville", "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Jura", ui-sans-serif, system-ui, sans-serif;
 }
 
-/*
- * Metric-matched fallbacks: while the web fonts stream in, text is laid out at
- * nearly the same size, so headlines and paragraphs do not reflow on swap
- * (removes layout shift without touching the typography itself).
- */
-@font-face {
-  font-family: "Chronos Display Fallback";
-  src: local("Times New Roman"), local("Georgia"), local("Serif");
-  size-adjust: 127%;
-}
-
-@font-face {
-  font-family: "Chronos Body Fallback";
-  src: local("Arial"), local("Helvetica"), local("Liberation Sans");
-  size-adjust: 98%;
-}
 
 
 .dark {
