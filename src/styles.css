@@ -5,6 +5,42 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
+ * Metric-matched fallback faces.
+ *
+ * These do not change any visible typography: they only make the local system
+ * font used before the webfont arrives occupy the same space, so text does not
+ * reflow when IBM Plex Sans / Libre Baskerville finish loading (CLS on mobile).
+ * Ratios were measured in-browser against Arial / Times New Roman.
+ */
+@font-face {
+  font-family: "Plex Fallback";
+  src: local("Arial"), local("Helvetica"), local("Liberation Sans");
+  size-adjust: 100.6%;
+  ascent-override: 101.9%;
+  descent-override: 27.3%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Baskerville Fallback";
+  src: local("Times New Roman"), local("Liberation Serif"), local("Times");
+  size-adjust: 123.7%;
+  ascent-override: 80.8%;
+  descent-override: 22.6%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Baskerville Fallback";
+  font-style: italic;
+  src: local("Times New Roman"), local("Liberation Serif"), local("Times");
+  size-adjust: 118.7%;
+  ascent-override: 84.2%;
+  descent-override: 23.6%;
+  line-gap-override: 0%;
+}
+
+/*
  * Design system definition.
  *
  * The @theme inline block maps CSS custom properties to Tailwind utility
