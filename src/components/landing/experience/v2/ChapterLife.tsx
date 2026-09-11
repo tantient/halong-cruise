@@ -15,7 +15,7 @@ import {
 } from "@/lib/platform";
 
 import { SceneReveal } from "../motion";
-import { Body, Eyebrow, stateText } from "./parts";
+import { AmbientLink, Body, Eyebrow, stateText } from "./parts";
 
 /** One slot of the explorer: a single visual stage plus its editorial copy. */
 interface ExplorerSlot {
@@ -154,8 +154,16 @@ export function ChapterLife({
           </SceneReveal>
           <SceneReveal variant="up" delay={220}>
             <Body>{stateText(section, state, "body")}</Body>
+            {textOf(section, "cta_all") ? (
+              <div className="mt-7">
+                <AmbientLink path="/experiences" variant="text">
+                  {textOf(section, "cta_all")}
+                </AmbientLink>
+              </div>
+            ) : null}
           </SceneReveal>
         </div>
+
       </div>
 
       {/* One stage; the slot changes inside it, never leaving the viewport. */}

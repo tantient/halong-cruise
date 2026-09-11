@@ -11,7 +11,9 @@ import { Footer } from "../../Footer";
 
 import { ChapterArrival } from "./ChapterArrival";
 import { ChapterJourney } from "./ChapterJourney";
+import { ChapterSuites } from "./ChapterSuites";
 import { ChapterLife } from "./ChapterLife";
+import { ChapterOffers } from "./ChapterOffers";
 import { ChapterSignature } from "./ChapterSignature";
 import { ChapterFinal } from "./ChapterFinal";
 
@@ -40,14 +42,17 @@ export function ExperienceHomeV2({
   t: Translations;
 }) {
   const shipName = bundle.ship.ship.displayName;
-  const { homepage, cabins, itineraries, services } = data;
+  const { homepage, cabins, itineraries, services, offers } = data;
   const s = homepage.sections;
 
   const arrival = sectionOfType(s, "v2_arrival") ?? sectionOfType(s, "exp_opening") ?? sectionOfType(s, "hero");
   const journey = sectionOfType(s, "v2_journey");
+  const suites = sectionOfType(s, "v2_suites");
   const life = sectionOfType(s, "v2_life");
+  const offersSection = sectionOfType(s, "v2_offers");
   const signature = sectionOfType(s, "v2_signature");
   const final = sectionOfType(s, "v2_final") ?? sectionOfType(s, "exp_final");
+
 
   const arrivalSection =
     arrival && arrival.media.all.length > 0
@@ -69,8 +74,11 @@ export function ExperienceHomeV2({
             shipName={shipName}
             lang={lang}
           />
+          <ChapterSuites section={suites} cabins={cabins} lang={lang} />
           <ChapterLife section={life} cabins={cabins} services={services} lang={lang} />
+          <ChapterOffers section={offersSection} offers={offers} lang={lang} />
           <ChapterSignature section={signature} shipName={shipName} />
+
           <ChapterFinal
             section={final}
             shipName={shipName}
