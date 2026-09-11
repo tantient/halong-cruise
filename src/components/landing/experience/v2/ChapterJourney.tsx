@@ -49,30 +49,30 @@ export function ChapterJourney({
   };
 
   return (
-    <section id={id} className="relative scroll-mt-24 pt-24 pb-20 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28">
-      <div className="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-24 lg:px-8">
+    <section id={id} className="relative scroll-mt-24 py-12 sm:py-14 lg:py-16">
+      <div className="mx-auto grid max-w-7xl gap-10 px-6 sm:gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <SceneReveal variant="up">
             <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
           </SceneReveal>
           <SceneReveal variant="up" delay={120}>
-            <h2 className="mt-8 font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
+            <h2 className="mt-6 font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
               <span className="italic opacity-70">{textOf(section, "title_accent")}</span>
             </h2>
           </SceneReveal>
-          <SceneReveal variant="up" delay={240} className="mt-7">
+          <SceneReveal variant="up" delay={240} className="mt-5">
             <Body>{stateText(section, state, "body")}</Body>
           </SceneReveal>
 
-          <SceneReveal variant="mask" delay={320} className="mt-10 hidden lg:block">
+          <SceneReveal variant="mask" delay={320} className="mt-8 hidden lg:block">
             <div className="relative aspect-[4/3] w-full overflow-hidden">
               <AmbientStage media={stageMedia} alt={shipName} scrim={false} />
             </div>
           </SceneReveal>
 
           {textOf(section, "note") ? (
-            <SceneReveal variant="fade" delay={420} className="mt-8">
+            <SceneReveal variant="fade" delay={420} className="mt-6">
               <p className="text-[0.66rem] uppercase tracking-[0.4em] text-[color:var(--amb-muted)]">
                 {textOf(section, "note")}
               </p>
@@ -80,7 +80,7 @@ export function ChapterJourney({
           ) : null}
         </div>
 
-        <ol className="relative space-y-14 sm:space-y-16">
+        <ol className="relative space-y-10 sm:space-y-12">
           <span
             aria-hidden
             className="absolute top-2 bottom-2 left-[7px] w-px"

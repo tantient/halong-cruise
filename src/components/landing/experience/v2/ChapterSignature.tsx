@@ -36,7 +36,7 @@ export function ChapterSignature({
             <Eyebrow index={textOf(section, "chapter")} label={label} tone="onImage" />
           </SceneReveal>
           <SceneReveal variant="up" delay={180} duration={1400}>
-            <h2 className="mt-7 font-display text-[2.9rem] leading-[0.98] font-normal text-white sm:text-6xl lg:text-[6.4rem]">
+            <h2 className="mt-5 font-display text-[2.9rem] leading-[0.98] font-normal text-white sm:text-6xl lg:text-[6.4rem]">
               {title}
               {accent ? (
                 <>
@@ -48,7 +48,7 @@ export function ChapterSignature({
           </SceneReveal>
           {body ? (
             <SceneReveal variant="up" delay={420} duration={1300}>
-              <p className="mt-7 max-w-lg text-sm leading-[1.9] font-light text-white/85 sm:text-base">{body}</p>
+              <p className="mt-5 max-w-lg text-sm leading-[1.9] font-light text-white/85 sm:text-base">{body}</p>
             </SceneReveal>
           ) : null}
         </div>

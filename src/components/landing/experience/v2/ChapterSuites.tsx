@@ -39,12 +39,12 @@ export function ChapterSuites({
       .join(" · ");
 
   return (
-    <section className="relative pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28">
+    <section className="relative py-12 sm:py-14 lg:py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <SceneReveal variant="up">
           <Eyebrow index={textOf(section, "chapter")} label={stateText(section, state, "time_label")} />
         </SceneReveal>
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-16">
+        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-12">
           <SceneReveal variant="up" delay={120}>
             <h2 className="font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
@@ -56,7 +56,7 @@ export function ChapterSuites({
           </SceneReveal>
         </div>
 
-        <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-16">
+        <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-12">
           <SceneReveal variant="mask">
             <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[4/3]">
               {list.map((c, i) => (
@@ -85,7 +85,7 @@ export function ChapterSuites({
                     onFocus={() => setFocus(i)}
                     onClick={() => setFocus(i)}
                     aria-current={i === index}
-                    className="block w-full border-b py-6 text-left transition-opacity duration-500 sm:py-7"
+                    className="block w-full border-b py-5 text-left transition-opacity duration-500 sm:py-6"
                     style={{ borderColor: "var(--amb-line)", opacity: i === index ? 1 : 0.6 }}
                   >
                     <span className="flex items-baseline gap-5">
@@ -108,7 +108,7 @@ export function ChapterSuites({
               ))}
             </ol>
 
-            <SceneReveal variant="fade" delay={200} className="mt-10">
+            <SceneReveal variant="fade" delay={200} className="mt-8">
               <AmbientLink path="/cabins">{textOf(section, "cta") || ui.viewAll}</AmbientLink>
             </SceneReveal>
           </div>
