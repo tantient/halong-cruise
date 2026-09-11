@@ -66,7 +66,7 @@ export function AmbientStage({
                 loading={priority && active ? "eager" : "lazy"}
                 fetchPriority={priority && active ? "high" : "auto"}
                 decoding="async"
-                className={`absolute inset-0 h-full w-full object-cover ${zoom && !useVideo ? "ambient-zoom" : ""}`}
+                className={`absolute inset-0 h-full w-full object-cover text-transparent select-none ${zoom && !useVideo ? "ambient-zoom" : ""}`}
                 style={{ opacity: 1, filter: raw ? "none" : "var(--amb-img)" }}
               />
             ) : null}
