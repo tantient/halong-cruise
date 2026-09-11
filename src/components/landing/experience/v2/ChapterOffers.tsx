@@ -1,17 +1,26 @@
 "use client";
 
+import { useState } from "react";
+
+import { AmbientStage } from "@/lib/experience/AmbientStage";
 import { useTimeState } from "@/lib/experience/time-context";
 import { experienceUi } from "@/lib/i18n/ui-experience";
 import { LocalLink } from "@/lib/i18n/language-context";
-import { textOf, type PublicHomepageSection, type PublicOffer } from "@/lib/platform";
+import { textOf, type EntityMedia, type PublicHomepageSection, type PublicOffer } from "@/lib/platform";
 
 import { SceneReveal } from "../motion";
 import { AmbientLink, Body, Eyebrow, stateText } from "./parts";
 
+/** First media group that actually carries an image: section first, then offers. */
+function anchorMedia(section: PublicHomepageSection, offers: PublicOffer[]): EntityMedia | undefined {
+  if (section.media.all.length > 0) return section.media;
+  return offers.find((o) => o.media.all.length > 0)?.media;
+}
+
 /**
- * Chapter — Offers. A restrained editorial preview of the ship's active offers.
- * Copy, badge and value text come from the `offers` rows; terms stay on the
- * offers page, so nothing commercial is restated or invented here.
+ * Chapter — Offers. One editorial image anchors the chapter and the ship's
+ * active offers read as a quiet index beside it. Names and descriptions come
+ * from the `offers` rows; terms stay on the offers page.
  */
 export function ChapterOffers({
   section,
@@ -24,8 +33,13 @@ export function ChapterOffers({
 }) {
   const ui = experienceUi(lang);
   const state = useTimeState();
+  const [focus, setFocus] = useState(0);
   if (!section || offers.length === 0) return null;
+
   const list = offers.slice(0, 3);
+  const index = Math.min(focus, list.length - 1);
+  const media = anchorMedia(section, list);
+  const stage = list[index]?.media.all.length ? list[index]!.media : media;
 
   return (
     <section className="relative py-20 sm:py-28 lg:py-32">
@@ -45,38 +59,55 @@ export function ChapterOffers({
           </SceneReveal>
         </div>
 
-        <ul className="mt-12 border-t sm:mt-16" style={{ borderColor: "var(--amb-line)" }}>
-          {list.map((o, i) => (
-            <SceneReveal as="li" key={o.id} variant="up" delay={i * 100}>
-              <LocalLink
-                path="/offers"
-                className="group grid gap-3 border-b py-7 transition-opacity duration-500 hover:opacity-70 sm:grid-cols-[minmax(0,0.32fr)_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:py-8"
-                style={{ borderColor: "var(--amb-line)" }}
-              >
-                <span className="text-[0.64rem] uppercase tracking-[0.34em] text-[color:var(--amb-muted)]">
-                  {o.badge || o.valueText || o.offerType}
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-display text-2xl leading-snug font-normal text-[color:var(--amb-fg)] sm:text-3xl">
-                    {o.name}
-                  </span>
-                  {o.description ? (
-                    <span className="mt-3 block max-w-xl text-sm leading-[1.85] font-light text-[color:var(--amb-muted)]">
-                      {o.description}
-                    </span>
-                  ) : null}
-                </span>
-                <span aria-hidden className="text-[color:var(--amb-muted)] sm:pl-6">
-                  &rarr;
-                </span>
-              </LocalLink>
+        <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-16">
+          {stage ? (
+            <SceneReveal variant="mask">
+              <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[3/4]">
+                <AmbientStage media={stage} alt={list[index]?.name ?? textOf(section, "title")} scrim={false} />
+              </div>
             </SceneReveal>
-          ))}
-        </ul>
+          ) : null}
 
-        <SceneReveal variant="fade" delay={200} className="mt-10">
-          <AmbientLink path="/offers">{textOf(section, "cta") || ui.viewAll}</AmbientLink>
-        </SceneReveal>
+          <div className="lg:pt-2">
+            <ol className="border-t" style={{ borderColor: "var(--amb-line)" }}>
+              {list.map((o, i) => (
+                <SceneReveal as="li" key={o.id} variant="up" delay={i * 100}>
+                  <LocalLink
+                    path="/offers"
+                    onMouseEnter={() => setFocus(i)}
+                    onFocus={() => setFocus(i)}
+                    aria-current={i === index}
+                    className="group block border-b py-7 transition-opacity duration-500 sm:py-8"
+                    style={{ borderColor: "var(--amb-line)", opacity: i === index ? 1 : 0.62 }}
+                  >
+                    <span className="flex items-baseline gap-5">
+                      <span className="font-display text-sm italic text-[color:var(--amb-muted)]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-display text-2xl leading-snug font-normal text-[color:var(--amb-fg)] sm:text-3xl">
+                          {o.name}
+                        </span>
+                        {o.description ? (
+                          <span className="mt-3 block max-w-md text-sm leading-[1.85] font-light text-[color:var(--amb-muted)]">
+                            {o.description}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span aria-hidden className="text-[color:var(--amb-muted)]">
+                        &rarr;
+                      </span>
+                    </span>
+                  </LocalLink>
+                </SceneReveal>
+              ))}
+            </ol>
+
+            <SceneReveal variant="fade" delay={200} className="mt-10">
+              <AmbientLink path="/offers">{textOf(section, "cta") || ui.viewAll}</AmbientLink>
+            </SceneReveal>
+          </div>
+        </div>
       </div>
     </section>
   );
