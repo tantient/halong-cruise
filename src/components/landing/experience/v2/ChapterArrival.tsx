@@ -2,6 +2,7 @@
 
 import { AmbientStage } from "@/lib/experience/AmbientStage";
 import { useTimeState } from "@/lib/experience/time-context";
+import { LocalLink } from "@/lib/i18n/language-context";
 import { textOf, type PublicHomepageSection } from "@/lib/platform";
 import { experienceUi } from "@/lib/i18n/ui-experience";
 
@@ -31,6 +32,7 @@ export function ChapterArrival({
   const tagline = textOf(section, "tagline");
   const subtitle = stateText(section, state, "subtitle");
   const cta = textOf(section, "cta");
+  const ctaSecondary = textOf(section, "cta_secondary");
 
   return (
     <section className="relative flex h-[100svh] min-h-[560px] w-full items-end overflow-hidden">
@@ -60,17 +62,31 @@ export function ChapterArrival({
           ) : (
             <span />
           )}
-          {cta ? (
+          {cta || ctaSecondary ? (
             <SceneReveal variant="fade" delay={820} duration={1200}>
-              <a
-                href={`#${nextId}`}
-                className="inline-flex items-center gap-3 border border-white/45 px-7 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
-              >
-                {cta}
-                <span aria-hidden>&darr;</span>
-              </a>
+              <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-5">
+                {cta ? (
+                  <a
+                    href={`#${nextId}`}
+                    className="inline-flex items-center gap-3 border border-white/45 px-7 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
+                  >
+                    {cta}
+                    <span aria-hidden>&darr;</span>
+                  </a>
+                ) : null}
+                {ctaSecondary ? (
+                  <LocalLink
+                    path="/itineraries"
+                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/80 underline decoration-white/30 underline-offset-8 transition-colors duration-500 hover:text-white hover:decoration-white/70"
+                  >
+                    {ctaSecondary}
+                    <span aria-hidden>&rarr;</span>
+                  </LocalLink>
+                ) : null}
+              </div>
             </SceneReveal>
           ) : null}
+
         </div>
       </div>
 
