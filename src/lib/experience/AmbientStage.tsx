@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { EntityMedia } from "@/lib/platform";
 
+import { MediaImage } from "./MediaImage";
 import { resolveMediaSlot, type Viewport } from "./media-slot";
 import { useTimeState } from "./time-context";
 import { TIME_STATES, type TimeState } from "./time-of-day";
@@ -59,15 +60,14 @@ export function AmbientStage({
             style={{ opacity: active ? 1 : 0 }}
           >
             {still ? (
-              <img
+              <MediaImage
                 src={still.url}
                 alt={active && !useVideo ? (still.alt ?? alt) : ""}
-                aria-hidden={active && !useVideo ? undefined : true}
-                loading={priority && active ? "eager" : "lazy"}
-                fetchPriority={priority && active ? "high" : "auto"}
-                decoding="async"
-                className={`absolute inset-0 h-full w-full object-cover text-transparent select-none ${zoom && !useVideo ? "ambient-zoom" : ""}`}
-                style={{ opacity: 1, filter: raw ? "none" : "var(--amb-img)" }}
+                width={still.width}
+                height={still.height}
+                priority={priority && active}
+                className={zoom && !useVideo ? "ambient-zoom" : ""}
+                style={{ filter: raw ? "none" : "var(--amb-img)" }}
               />
             ) : null}
             {useVideo && slot.video ? (
