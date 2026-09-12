@@ -146,6 +146,7 @@ export interface Translations {
     chatWhatsApp: string;
     call: string;
     mapTitle: string;
+    openMap: string;
     formTitle: string;
     formSubtitle: string;
     name: string;
@@ -321,6 +322,7 @@ const translations: Record<Lang, Translations> = {
       chatWhatsApp: "Nhắn tin WhatsApp",
       call: "Gọi ngay",
       mapTitle: "Vị trí bến tàu",
+      openMap: "Xem chỉ đường",
       formTitle: "Gửi tin nhắn cho chúng tôi",
       formSubtitle: "Điền thông tin bên dưới, chúng tôi sẽ phản hồi trong vòng 24 giờ.",
       name: "Họ tên",
@@ -494,6 +496,7 @@ const translations: Record<Lang, Translations> = {
       chatWhatsApp: "Chat on WhatsApp",
       call: "Call now",
       mapTitle: "Port location",
+      openMap: "Get directions",
       formTitle: "Send us a message",
       formSubtitle: "Fill in the form below and we will reply within 24 hours.",
       name: "Full name",
