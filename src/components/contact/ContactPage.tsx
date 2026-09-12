@@ -120,7 +120,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
           </div>
         </section>
 
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-20 lg:grid-cols-2 lg:px-8 lg:py-28">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <Reveal className="space-y-8">
             <div className="space-y-6">
               {details.map(({ icon: Icon, label, value, href: link }) => (
