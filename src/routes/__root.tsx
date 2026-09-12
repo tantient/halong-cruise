@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { gitSyncInfo } from "../lib/git-sync-info";
 import { Toaster } from "@/components/ui/sonner";
+import { FloatingWhatsApp } from "@/components/layout/FloatingWhatsApp";
 import { ThemeProvider, themeInitScript } from "@/components/theme-provider";
 import { LanguageProvider } from "@/lib/i18n/language-context";
 import { ServiceNavProvider } from "@/lib/i18n/service-nav-context";
@@ -248,6 +249,7 @@ function RootComponent() {
             <SiteProvider site={site}>
             {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
             <Outlet />
+            <FloatingWhatsApp />
             <Toaster position="top-center" richColors />
             </SiteProvider>
           </ServiceNavProvider>
