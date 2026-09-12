@@ -137,12 +137,12 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                         href={link}
                         target={link.startsWith("http") ? "_blank" : undefined}
                         rel="noopener noreferrer"
-                        className="text-chronos-ink transition-colors hover:text-chronos-gold"
+                        className="whitespace-pre-line text-chronos-ink transition-colors hover:text-chronos-gold"
                       >
                         {value}
                       </a>
                     ) : (
-                      <p className="text-chronos-ink">{value}</p>
+                      <p className="whitespace-pre-line text-chronos-ink">{value}</p>
                     )}
                   </div>
                 </div>
