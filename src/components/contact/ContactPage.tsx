@@ -182,7 +182,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
             </div>
 
             {mapEmbed ? (
-              <div>
+              <div className="max-w-2xl">
                 <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{t.contact.mapTitle}</h2>
                 <div className="aspect-[4/3] w-full overflow-hidden border border-chronos-ink/10">
                   <iframe
@@ -195,61 +195,6 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                 </div>
               </div>
             ) : null}
-          </Reveal>
-
-          <Reveal
-            as="form"
-            onSubmit={handleSubmit}
-            className="h-fit border border-chronos-ink/10 bg-chronos-ink/[0.02] p-7 sm:p-10"
-          >
-            <h2 className="mb-2 text-3xl tracking-[0.02em] text-chronos-ink">
-              {str(page, "form_title") || t.contact.formTitle}
-            </h2>
-            <p className="mb-8 text-sm text-chronos-stone/85">
-              {str(page, "form_subtitle") || t.contact.formSubtitle}
-            </p>
-
-            <div className="grid gap-7 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="c-name" className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                  {t.contact.name}
-                </Label>
-                <Input id="c-name" value={values.name} onChange={set("name")} required className="field-underline border-chronos-ink/20 focus:border-chronos-gold" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="c-phone" className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                  {t.contact.phoneField}
-                </Label>
-                <Input id="c-phone" type="tel" value={values.phone} onChange={set("phone")} required className="field-underline border-chronos-ink/20 focus:border-chronos-gold" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="c-email" className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                  {t.contact.email}
-                </Label>
-                <Input id="c-email" type="email" value={values.email} onChange={set("email")} className="field-underline border-chronos-ink/20 focus:border-chronos-gold" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="c-subject" className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                  {t.contact.subject}
-                </Label>
-                <Input id="c-subject" value={values.subject} onChange={set("subject")} className="field-underline border-chronos-ink/20 focus:border-chronos-gold" />
-              </div>
-              <div className="space-y-2 sm:col-span-2">
-                <Label htmlFor="c-message" className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">
-                  {t.contact.message}
-                </Label>
-                <Textarea id="c-message" rows={5} value={values.message} onChange={set("message")} required className="field-underline border-chronos-ink/20 focus:border-chronos-gold" />
-              </div>
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
-              disabled={sending}
-              className="btn-sheen mt-10 w-full rounded-none bg-chronos-gold text-xs font-semibold uppercase tracking-[0.2em] text-chronos-ink hover:bg-chronos-gold/90"
-            >
-              {t.contact.submit}
-            </Button>
           </Reveal>
         </div>
       </main>
