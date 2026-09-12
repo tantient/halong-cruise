@@ -165,7 +165,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                 <Button
                   asChild
                   variant="outline"
-                  className="rounded-none border-chronos-ink/20 bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
+                  className="rounded-none border-chronos-ink/20 bg-transparent bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
                 >
                   <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
                     {t.contact.chatZalo}
@@ -176,7 +176,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                 <Button
                   asChild
                   variant="outline"
-                  className="rounded-none border-chronos-ink/20 bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
+                  className="rounded-none border-chronos-ink/20 bg-transparent bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
                 >
                   <a href={`tel:${phoneTel}`}>{t.contact.call}</a>
                 </Button>

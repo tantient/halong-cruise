@@ -104,7 +104,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
                   </div>
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Button asChild className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ink hover:bg-chronos-gold/90"><LocalLink path={`/cabins/${active.slug}`}>{ui.exploreSuite}<ArrowRight className="ml-2 h-4 w-4" /></LocalLink></Button>
-                    <Button type="button" variant="outline" onClick={() => setCompareCabin(active)} className="rounded-none border-chronos-ink/20 px-6 text-xs font-semibold uppercase tracking-[0.16em]">{ui.compareSuites}</Button>
+                    <Button type="button" variant="outline" onClick={() => setCompareCabin(active)} className="rounded-none border-chronos-ink/20 bg-transparent px-6 text-xs font-semibold uppercase tracking-[0.16em]">{ui.compareSuites}</Button>
                   </div>
                 </div>
               </article>
@@ -116,7 +116,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
           <Reveal className="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8 lg:py-20">
             <div><p className="eyebrow mb-3 text-chronos-gold">{ui.findSuite}</p><h2 className="text-3xl tracking-[0.02em] text-card-foreground">{copy("cta_title") || ui.findSuite}</h2><p className="mt-3 max-w-xl text-chronos-stone/85">{copy("cta_subtitle") || ui.findSuiteCopy}</p></div>
             <div className="flex flex-wrap gap-3">
-              <Button type="button" variant="outline" disabled={!active} onClick={() => active && setCompareCabin(active)} className="rounded-none border-chronos-ink/20 px-6 text-xs font-semibold uppercase tracking-[0.16em]">{ui.compareSuites}</Button>
+              <Button type="button" variant="outline" disabled={!active} onClick={() => active && setCompareCabin(active)} className="rounded-none border-chronos-ink/20 bg-transparent px-6 text-xs font-semibold uppercase tracking-[0.16em]">{ui.compareSuites}</Button>
               <Button asChild className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ink hover:bg-chronos-gold/90"><a href={quoteLink} target="_blank" rel="noopener noreferrer">{ui.requestRecommendation}</a></Button>
             </div>
           </Reveal>
