@@ -90,9 +90,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
     settings.address
       ? { icon: MapPin, label: t.contact.address, value: settings.address, href: settings.googleMaps ?? null }
       : null,
-    str(page, "hours_value")
-      ? { icon: Clock, label: t.contact.hours, value: str(page, "hours_value"), href: null }
-      : null,
+    null,
   ].filter((d): d is { icon: typeof Phone; label: string; value: string; href: string | null } => d !== null);
 
   return (
