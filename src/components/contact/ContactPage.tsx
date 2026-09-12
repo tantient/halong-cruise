@@ -45,7 +45,8 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
   const phoneDisplay = settings.hotlineDisplay ?? settings.hotline;
   const phoneTel = dial(settings.hotline ?? settings.hotlineDisplay);
   const hero = page?.media.cover ?? null;
-  const mapEmbed = str(page, "map_embed");
+  const defaultPage = b.languages[b.ship.defaultLanguage]?.page ?? null;
+  const mapEmbed = str(page, "map_embed") || str(defaultPage, "map_embed");
 
   const details = [
     phoneDisplay
