@@ -168,7 +168,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                     rel="noopener noreferrer"
                     className="mt-3 inline-block text-xs uppercase tracking-[0.18em] text-chronos-stone/70 transition-colors hover:text-chronos-gold"
                   >
-                    {t.contact.address}
+                    {t.contact.openMap}
                   </a>
                 ) : null}
               </div>
