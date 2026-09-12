@@ -134,6 +134,9 @@ export interface Translations {
     label: string;
     title: string;
     subtitle: string;
+    privateConcierge: string;
+    conciergeTitle: string;
+    conciergeIntro: string;
     phone: string;
     zalo: string;
     whatsapp: string;
@@ -310,6 +313,9 @@ const translations: Record<Lang, Translations> = {
       label: "LIÊN HỆ",
       title: "Kết nối cùng chúng tôi",
       subtitle: "Đội ngũ tư vấn sẵn sàng hỗ trợ bạn 24/7 qua điện thoại, Zalo, WhatsApp hoặc email.",
+      privateConcierge: "DỊCH VỤ HỖ TRỢ RIÊNG",
+      conciergeTitle: "Bắt đầu hành trình cùng chúng tôi.",
+      conciergeIntro: "Dù bạn có câu hỏi, cần tư vấn về hải trình hay mong muốn hỗ trợ riêng, đội ngũ của chúng tôi luôn sẵn sàng đồng hành.",
       phone: "Hotline / Zalo / WhatsApp",
       zalo: "Zalo",
       whatsapp: "WhatsApp",
@@ -484,6 +490,9 @@ const translations: Record<Lang, Translations> = {
       label: "CONTACT",
       title: "Get in touch",
       subtitle: "Our concierge team is available 24/7 by phone, Zalo, WhatsApp or email.",
+      privateConcierge: "PRIVATE CONCIERGE",
+      conciergeTitle: "Begin your journey with us.",
+      conciergeIntro: "Whether you have a question, need advice on an itinerary, or would like personalized assistance, our team is here to help.",
       phone: "Hotline / Zalo / WhatsApp",
       zalo: "Zalo",
       whatsapp: "WhatsApp",
