@@ -188,7 +188,7 @@ export function AboutPage({ bundle }: { bundle: PublicPageBundle }) {
             <Button
               asChild
               variant="outline"
-              className="w-full rounded-none border-chronos-ink/20 px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 sm:w-auto"
+              className="w-full rounded-none border-chronos-ink/20 bg-transparent px-8 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 sm:w-auto"
             >
               <LocalLink path="/cabins">{cta.exploreSuites}</LocalLink>
             </Button>
