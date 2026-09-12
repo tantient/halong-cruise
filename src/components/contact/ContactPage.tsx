@@ -48,32 +48,6 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
   const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
 
   const settings = b.ship.settings;
-  const fu = formUi(lang);
-  const sendLead = useServerFn(submitPublicLead);
-  const [values, setValues] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
-  const [sending, setSending] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    try {
-      // The server resolves the ship from the hostname; no tenant id is sent.
-      const res = await sendLead({ data: { type: "contact", pathname: href("/contact"), ...values } });
-      if (res.ok) {
-        toast.success(t.contact.success);
-        setValues({ name: "", phone: "", email: "", subject: "", message: "" });
-      } else {
-        toast.error(fu.error);
-      }
-    } catch {
-      toast.error(fu.error);
-    } finally {
-      setSending(false);
-    }
-  };
-
-  const set = (key: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setValues((v) => ({ ...v, [key]: e.target.value }));
 
   const phoneDisplay = settings.hotlineDisplay ?? settings.hotline;
   const phoneTel = dial(settings.hotline ?? settings.hotlineDisplay);
