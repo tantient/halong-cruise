@@ -1,21 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 
 import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { formUi } from "@/lib/i18n/ui-forms";
-import { publicQueries, submitPublicLead, type PublicPage, type PublicPageBundle } from "@/lib/platform";
+import { publicQueries, type PublicPage, type PublicPageBundle } from "@/lib/platform";
 
 function WhatsAppIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
