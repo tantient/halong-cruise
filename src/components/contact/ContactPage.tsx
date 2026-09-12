@@ -45,7 +45,8 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
   const phoneDisplay = settings.hotlineDisplay ?? settings.hotline;
   const phoneTel = dial(settings.hotline ?? settings.hotlineDisplay);
   const hero = page?.media.cover ?? null;
-  const mapEmbed = str(page, "map_embed");
+  const defaultPage = b.languages[b.ship.defaultLanguage]?.page ?? null;
+  const mapEmbed = str(page, "map_embed") || str(defaultPage, "map_embed");
 
   const details = [
     phoneDisplay
@@ -149,9 +150,9 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
             </div>
 
             {mapEmbed ? (
-              <div className="max-w-2xl">
+              <div className="max-w-3xl">
                 <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{t.contact.mapTitle}</h2>
-                <div className="aspect-[4/3] w-full overflow-hidden border border-chronos-ink/10">
+                <div className="h-[300px] w-full overflow-hidden border border-chronos-ink/10 sm:h-[340px]">
                   <iframe
                     title={t.contact.mapTitle}
                     src={mapEmbed}
@@ -160,6 +161,16 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                     style={{ border: 0 }}
                   />
                 </div>
+                {settings.googleMaps ? (
+                  <a
+                    href={settings.googleMaps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-xs uppercase tracking-[0.18em] text-chronos-stone/70 transition-colors hover:text-chronos-gold"
+                  >
+                    {t.contact.openMap}
+                  </a>
+                ) : null}
               </div>
             ) : null}
           </Reveal>
