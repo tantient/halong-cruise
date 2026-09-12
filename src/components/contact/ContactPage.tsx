@@ -88,71 +88,73 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
           </div>
         </section>
 
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-          <Reveal className="space-y-8">
-            <div className="space-y-6">
-              {details.map(({ icon: Icon, label, value, href: link }) => (
-                <div key={label} className="flex gap-4">
-                  <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center border border-chronos-gold/40 text-chronos-gold">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{label}</p>
-                    {link ? (
-                      <a
-                        href={link}
-                        target={link.startsWith("http") ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        className="whitespace-pre-line text-chronos-ink transition-colors hover:text-chronos-gold"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      <p className="whitespace-pre-line text-chronos-ink">{value}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+          <Reveal className="grid items-start gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
+            <div>
+              <p className="eyebrow mb-4 text-chronos-gold">{t.contact.privateConcierge}</p>
+              <h2 className="max-w-xl text-3xl text-chronos-ink sm:text-4xl">{t.contact.conciergeTitle}</h2>
+              <p className="mt-4 max-w-xl text-chronos-stone">{t.contact.conciergeIntro}</p>
 
-            <div className="flex flex-wrap gap-3">
-              {settings.whatsapp ? (
-                <Button
-                  asChild
-                  className="btn-sheen rounded-none bg-chronos-gold px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
-                >
-                  <a href={settings.whatsapp} target="_blank" rel="noopener noreferrer">
-                    <WhatsAppIcon className="mr-2 h-4 w-4" />
-                    {t.contact.chatWhatsApp}
-                  </a>
-                </Button>
-              ) : null}
-              {settings.zalo ? (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="rounded-none border-chronos-ink/20 bg-transparent bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
-                >
-                  <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
-                    {t.contact.chatZalo}
-                  </a>
-                </Button>
-              ) : null}
-              {phoneTel ? (
-                <Button
-                  asChild
-                  variant="outline"
-                  className="rounded-none border-chronos-ink/20 bg-transparent bg-transparent px-7 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
-                >
-                  <a href={`tel:${phoneTel}`}>{t.contact.call}</a>
-                </Button>
-              ) : null}
+              <div className="mt-7 space-y-5">
+                {details.map(({ icon: Icon, label, value, href: link }) => (
+                  <div key={label} className="flex gap-4">
+                    <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-chronos-gold/40 text-chronos-gold">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{label}</p>
+                      {link ? (
+                        <a
+                          href={link}
+                          target={link.startsWith("http") ? "_blank" : undefined}
+                          rel="noopener noreferrer"
+                          className="whitespace-pre-line text-chronos-ink transition-colors hover:text-chronos-gold"
+                        >
+                          {value}
+                        </a>
+                      ) : (
+                        <p className="whitespace-pre-line text-chronos-ink">{value}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {settings.whatsapp ? (
+                  <Button
+                    asChild
+                    className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-gold/90"
+                  >
+                    <a href={settings.whatsapp} target="_blank" rel="noopener noreferrer">
+                      <WhatsAppIcon className="mr-2 h-4 w-4" />
+                      {t.contact.chatWhatsApp}
+                    </a>
+                  </Button>
+                ) : null}
+                {settings.zalo ? (
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="rounded-none border-chronos-gold/60 bg-transparent px-6 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ink hover:bg-chronos-ink/5 hover:text-chronos-ink"
+                  >
+                    <a href={settings.zalo} target="_blank" rel="noopener noreferrer">
+                      {t.contact.chatZalo}
+                    </a>
+                  </Button>
+                ) : null}
+                {phoneTel ? (
+                  <Button asChild variant="link" className="px-3 text-xs uppercase tracking-[0.18em] text-chronos-gold">
+                    <a href={`tel:${phoneTel}`}>{t.contact.call} →</a>
+                  </Button>
+                ) : null}
+              </div>
             </div>
 
             {mapEmbed ? (
-              <div className="max-w-3xl">
-                <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{t.contact.mapTitle}</h2>
-                <div className="h-[300px] w-full overflow-hidden border border-chronos-ink/10 sm:h-[340px]">
+              <div>
+                <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-gold">{t.contact.mapTitle}</h2>
+                <div className="h-[300px] w-full overflow-hidden border border-chronos-ink/10 sm:h-[380px] lg:h-[390px]">
                   <iframe
                     title={t.contact.mapTitle}
                     src={mapEmbed}
@@ -166,9 +168,9 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                     href={settings.googleMaps}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-block text-xs uppercase tracking-[0.18em] text-chronos-stone/70 transition-colors hover:text-chronos-gold"
+                    className="mt-4 inline-block text-xs uppercase tracking-[0.18em] text-chronos-gold transition-colors hover:text-chronos-ink"
                   >
-                    {t.contact.openMap}
+                    {t.contact.openMap} →
                   </a>
                 ) : null}
               </div>
