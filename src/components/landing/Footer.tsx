@@ -63,7 +63,7 @@ export function Footer({ t }: FooterProps) {
   const email = site?.settings.email ?? null;
 
   const address = site?.settings.address ?? null;
-  const links = [...quickLinks.slice(0, 7), { label: t.nav.careers, to: "/careers" }, quickLinks[7]];
+  const links = [...quickLinks.slice(0, 7), { label: t.nav.careers, to: "/careers" }, ...quickLinks.slice(7)];
   const heading = "mb-5 text-[11px] uppercase tracking-[0.28em] text-chronos-sand-500";
 
   return (
