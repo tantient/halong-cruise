@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Card, Field, SelectField, TextField } from "@/components/admin/admin-ui";
+import { Card, Field, SelectField, TextAreaField, TextField } from "@/components/admin/admin-ui";
 import { ShipGeneralForm, type ShipGeneralValues } from "@/components/admin/ShipGeneralForm";
 import {
   deleteShipDomain,
@@ -71,7 +71,7 @@ export function ShipEditor({ shipId }: { shipId: string }) {
         <BrandingTab shipId={shipId} branding={payload.branding} onSaved={invalidate} />
       ) : null}
       {tab === "settings" ? (
-        <SettingsTab shipId={shipId} settings={payload.settings} onSaved={invalidate} />
+        <SettingsTab shipId={shipId} ship={payload.ship} settings={payload.settings} onSaved={invalidate} />
       ) : null}
       {tab === "domains" ? (
         <DomainsTab shipId={shipId} domains={payload.domains} onSaved={invalidate} />
