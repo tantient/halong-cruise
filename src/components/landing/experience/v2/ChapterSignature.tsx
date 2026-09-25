@@ -41,14 +41,14 @@ export function ChapterSignature({
               {accent ? (
                 <>
                   <br />
-                  <span className="italic text-white/80">{accent}</span>
+                  <span className="italic text-white/90">{accent}</span>
                 </>
               ) : null}
             </h2>
           </SceneReveal>
           {body ? (
             <SceneReveal variant="up" delay={420} duration={1300}>
-              <p className="mt-5 max-w-lg text-sm leading-[1.9] font-light text-white/85 sm:text-base">{body}</p>
+              <p className="mt-5 max-w-lg text-sm leading-[1.9] font-normal text-white/85 sm:text-base">{body}</p>
             </SceneReveal>
           ) : null}
         </div>

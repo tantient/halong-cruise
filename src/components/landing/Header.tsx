@@ -163,7 +163,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                       : "bg-chronos-ivory text-chronos-sand-900"
                     : scrolled
                       ? "text-chronos-sand-900/70 hover:text-chronos-sand-900"
-                      : "text-chronos-ivory/80 hover:text-chronos-ivory"
+                      : "text-chronos-ivory/90 hover:text-chronos-ivory"
                 }`}
                 aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
               >

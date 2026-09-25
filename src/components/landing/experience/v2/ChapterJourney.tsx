@@ -116,7 +116,7 @@ export function ChapterJourney({
                   {it.name}
                 </h3>
                 {it.summary ? (
-                  <p className="mt-3 max-w-lg text-sm leading-[1.85] font-light text-[color:var(--amb-muted)] sm:text-base">
+                  <p className="mt-3 max-w-lg text-sm leading-[1.85] font-normal text-[color:var(--amb-muted)] sm:text-base">
                     {it.summary}
                   </p>
                 ) : null}

@@ -79,7 +79,7 @@ export function QuoteForm({ content, t }: QuoteFormProps) {
             <p className="leading-relaxed text-chronos-sand-700">{tr.subtitle}</p>
             <div className="space-y-4 pt-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-chronos-sand-500">{t.contact.phone}</p>
-              <p className="text-xl font-light text-chronos-sand-900">{site?.settings.hotlineDisplay ?? site?.settings.hotline ?? ""}</p>
+              <p className="text-xl font-normal text-chronos-sand-900">{site?.settings.hotlineDisplay ?? site?.settings.hotline ?? ""}</p>
             </div>
           </Reveal>
 

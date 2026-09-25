@@ -183,15 +183,15 @@ export function ChapterLife({
 
           <div className="relative z-10 flex h-full flex-col justify-end p-6 sm:p-10 lg:p-14">
             <div className="max-w-2xl">
-              <span className="text-[0.62rem] uppercase tracking-[0.42em] text-white/70">{current.kind}</span>
+              <span className="text-[0.62rem] uppercase tracking-[0.42em] text-white/85">{current.kind}</span>
               <h3 className="mt-4 font-display text-3xl leading-[1.05] font-normal text-white sm:text-5xl lg:text-6xl">
                 {current.title}
               </h3>
               {current.meta ? (
-                <p className="mt-3 text-[0.68rem] uppercase tracking-[0.3em] text-white/70">{current.meta}</p>
+                <p className="mt-3 text-[0.68rem] uppercase tracking-[0.3em] text-white/85">{current.meta}</p>
               ) : null}
               {current.body ? (
-                <p className="mt-5 max-w-xl text-sm leading-[1.85] font-light text-white/85 sm:text-base">
+                <p className="mt-5 max-w-xl text-sm leading-[1.85] font-normal text-white/85 sm:text-base">
                   {current.body}
                 </p>
               ) : null}
@@ -216,7 +216,7 @@ export function ChapterLife({
                   onClick={() => setActive(i)}
                   aria-current={i === index}
                   className={`text-[0.66rem] uppercase tracking-[0.3em] transition-colors duration-300 ${
-                    i === index ? "text-white" : "text-white/50 hover:text-white/80"
+                    i === index ? "text-white" : "text-white/85 hover:text-white/90"
                   }`}
                 >
                   {slot.label}

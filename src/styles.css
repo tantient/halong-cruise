@@ -129,7 +129,7 @@
   --secondary: oklch(0.965 0.006 95);
   --secondary-foreground: oklch(0.18 0.018 85);
   --muted: oklch(0.96 0.006 95);
-  --muted-foreground: oklch(0.34 0.016 85);
+  --muted-foreground: oklch(0.30 0.016 85);
   --accent: oklch(0.955 0.008 92);
   --accent-foreground: oklch(0.18 0.018 85);
   --destructive: oklch(0.577 0.245 27.325);
@@ -156,7 +156,7 @@
   --chronos-gold-ink: oklch(0.50 0.07 82);
   --chronos-gold-light: oklch(0.85 0.04 95);
   --chronos-navy: oklch(0.28 0.035 238);
-  --chronos-stone: oklch(0.34 0.016 85);
+  --chronos-stone: oklch(0.30 0.016 85);
   --chronos-warm: oklch(0.955 0.010 88);
   --chronos-deep: oklch(0.15 0.025 245);
   --chronos-cream: oklch(0.97 0.008 92);

@@ -32,7 +32,7 @@ export function Eyebrow({
   className?: string;
 }) {
   if (!index && !label) return null;
-  const color = tone === "onImage" ? "text-white/75" : "text-[color:var(--amb-muted)]";
+  const color = tone === "onImage" ? "text-white/85" : "text-[color:var(--amb-muted)]";
   const line = tone === "onImage" ? "bg-white/40" : "bg-[color:var(--amb-line)]";
   return (
     <div className={`flex items-center gap-4 ${color} ${className}`}>
@@ -57,7 +57,7 @@ export function Body({
 }) {
   return (
     <p
-      className={`max-w-xl text-base leading-[1.85] font-light sm:text-lg ${
+      className={`max-w-xl text-base leading-[1.85] font-normal sm:text-lg ${
         tone === "onImage" ? "text-white/85" : "text-[color:var(--amb-muted)]"
       } ${className}`}
     >

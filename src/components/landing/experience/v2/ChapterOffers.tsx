@@ -89,7 +89,7 @@ export function ChapterOffers({
                           {o.name}
                         </span>
                         {o.description ? (
-                          <span className="mt-3 block max-w-md text-sm leading-[1.85] font-light text-[color:var(--amb-muted)]">
+                          <span className="mt-3 block max-w-md text-sm leading-[1.85] font-normal text-[color:var(--amb-muted)]">
                             {o.description}
                           </span>
                         ) : null}
