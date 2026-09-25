@@ -32,6 +32,10 @@ const pathInput = z.object({ pathname: z.string().default("/") });
 const slugInput = pathInput.extend({ slug: z.string().min(1).max(200) });
 const categoryInput = pathInput.extend({ category: z.string().min(1).max(60) });
 
+function withCache<T>(name: string, data: unknown, fn: () => Promise<T>): Promise<T> {
+  return import("./cache.server").then(({ cached }) => cached(`${name}|${requestHost()}|${JSON.stringify(data)}`, fn));
+}
+
 function requestHost(): string {
   return getRequestHeader("x-forwarded-host") ?? getRequestHeader("host") ?? "";
 }
@@ -60,20 +64,20 @@ export interface PublicSiteContext {
 
 export const getPublicSiteContext = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicSiteContext | null> => {
+  .handler(({ data }) => withCache("getPublicSiteContext", data, async (): Promise<PublicSiteContext | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     return { ship: s.context, language: s.lang, redirectToHost: s.redirectToHost };
-  });
+  }));
 
 export const getPublicHomepage = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicHomepage", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getHomepage } = await import("./content.server");
     return getHomepage(s.scope);
-  });
+  }));
 
 export interface PublicHomepageLanguageData {
   homepage: PublicHomepage;
@@ -103,7 +107,7 @@ export interface PublicHomepageBundle {
  */
 export const getPublicHomepageBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicHomepageBundle | null> => {
+  .handler(({ data }) => withCache("getPublicHomepageBundle", data, async (): Promise<PublicHomepageBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getHomepage, listJobPositions, listCabins, listItineraries, listServices, listOffers } = await import("./content.server");
@@ -132,27 +136,27 @@ export const getPublicHomepageBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 
 
 export const getPublicCabins = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicCabins", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listCabins } = await import("./content.server");
     return listCabins(s.scope);
-  });
+  }));
 
 export const getPublicCabin = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicCabin", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getCabin } = await import("./content.server");
     return getCabin(s.scope, data.slug);
-  });
+  }));
 
 export interface PublicCabinsLanguageData {
   cabins: PublicCabinFull[];
@@ -169,7 +173,7 @@ export interface PublicCabinsBundle {
 /** Cabins list + page copy for every enabled language (client-side language switch). */
 export const getPublicCabinsBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicCabinsBundle | null> => {
+  .handler(({ data }) => withCache("getPublicCabinsBundle", data, async (): Promise<PublicCabinsBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listCabinsFull, getPage } = await import("./content.server");
@@ -181,7 +185,7 @@ export const getPublicCabinsBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 export interface PublicCabinLanguageData {
   cabin: PublicCabinFull;
@@ -199,7 +203,7 @@ export interface PublicCabinBundle {
 /** One cabin (+ siblings and page copy) for every enabled language. */
 export const getPublicCabinBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }): Promise<PublicCabinBundle | null> => {
+  .handler(({ data }) => withCache("getPublicCabinBundle", data, async (): Promise<PublicCabinBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getCabin, listCabinsFull, getPage } = await import("./content.server");
@@ -220,16 +224,16 @@ export const getPublicCabinBundle = createServerFn({ method: "GET" })
       language: s.lang,
       languages: Object.fromEntries(entries.filter((e): e is NonNullable<typeof e> => e !== null)),
     };
-  });
+  }));
 
 export const getPublicItineraries = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicItineraries", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listItineraries } = await import("./content.server");
     return listItineraries(s.scope);
-  });
+  }));
 
 export interface PublicItinerariesLanguageData {
   itineraries: PublicItineraryFull[];
@@ -246,7 +250,7 @@ export interface PublicItinerariesBundle {
 /** Itineraries (with day plan) + page copy for every enabled language. */
 export const getPublicItinerariesBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicItinerariesBundle | null> => {
+  .handler(({ data }) => withCache("getPublicItinerariesBundle", data, async (): Promise<PublicItinerariesBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listItinerariesFull, getPage } = await import("./content.server");
@@ -258,34 +262,34 @@ export const getPublicItinerariesBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 export const getPublicItinerary = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicItinerary", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getItinerary } = await import("./content.server");
     return getItinerary(s.scope, data.slug);
-  });
+  }));
 
 export const getPublicServices = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicServices", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listServices } = await import("./content.server");
     return listServices(s.scope);
-  });
+  }));
 
 export const getPublicService = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicService", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getService } = await import("./content.server");
     return getService(s.scope, data.slug);
-  });
+  }));
 
 export interface PublicServicesLanguageData {
   services: PublicService[];
@@ -302,7 +306,7 @@ export interface PublicServicesBundle {
 /** All published services of the ship, for every enabled language. */
 export const getPublicServicesBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicServicesBundle | null> => {
+  .handler(({ data }) => withCache("getPublicServicesBundle", data, async (): Promise<PublicServicesBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listServices, listVenues } = await import("./content.server");
@@ -314,7 +318,7 @@ export const getPublicServicesBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 /** Navigation entry for one service (used by the shared header menu). */
 export interface ServiceNavItem {
@@ -332,7 +336,7 @@ export interface ServiceNav {
 /** Lightweight service menu for every enabled language (loaded once per request). */
 export const getPublicServiceNav = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<ServiceNav | null> => {
+  .handler(({ data }) => withCache("getPublicServiceNav", data, async (): Promise<ServiceNav | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listServices } = await import("./content.server");
@@ -356,43 +360,43 @@ export const getPublicServiceNav = createServerFn({ method: "GET" })
       }),
     );
     return { languages: Object.fromEntries(entries) };
-  });
+  }));
 
 export const getPublicOffers = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.extend({ activeOnly: z.boolean().optional() }).parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicOffers", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listOffers } = await import("./content.server");
     return listOffers(s.scope, { activeOnly: data.activeOnly ?? false });
-  });
+  }));
 
 export const getPublicPage = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicPage", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getPage } = await import("./content.server");
     return getPage(s.scope, data.slug);
-  });
+  }));
 
 export const getPublicJobPositions = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicJobPositions", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listJobPositions } = await import("./content.server");
     return listJobPositions(s.scope);
-  });
+  }));
 
 export const getPublicMediaByCategory = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => categoryInput.parse(d))
-  .handler(async ({ data }) => {
+  .handler(({ data }) => withCache("getPublicMediaByCategory", data, async () => {
     const s = await publicScope(data.pathname);
     if (!s) return [];
     const { listMediaByCategory } = await import("./content.server");
     return listMediaByCategory(s.scope, data.category);
-  });
+  }));
 
 /* ----------------------------------------------------------------- offers */
 
@@ -411,7 +415,7 @@ export interface PublicOffersBundle {
 /** Offers + page copy for every enabled language. */
 export const getPublicOffersBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.extend({ activeOnly: z.boolean().optional() }).parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicOffersBundle | null> => {
+  .handler(({ data }) => withCache("getPublicOffersBundle", data, async (): Promise<PublicOffersBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listOffers, getPage } = await import("./content.server");
@@ -426,7 +430,7 @@ export const getPublicOffersBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 /* ------------------------------------------------------------ static pages */
 
@@ -443,7 +447,7 @@ export interface PublicPageBundle {
 /** One editorial page (about, contact, …) for every enabled language. */
 export const getPublicPageBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => slugInput.parse(d))
-  .handler(async ({ data }): Promise<PublicPageBundle | null> => {
+  .handler(({ data }) => withCache("getPublicPageBundle", data, async (): Promise<PublicPageBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getPage } = await import("./content.server");
@@ -454,7 +458,7 @@ export const getPublicPageBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 /* ---------------------------------------------------------------- careers */
 
@@ -472,7 +476,7 @@ export interface PublicCareersBundle {
 /** Published job positions + careers page copy for every enabled language. */
 export const getPublicCareersBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicCareersBundle | null> => {
+  .handler(({ data }) => withCache("getPublicCareersBundle", data, async (): Promise<PublicCareersBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { listJobPositions, getPage } = await import("./content.server");
@@ -484,7 +488,7 @@ export const getPublicCareersBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
 
 /* ---------------------------------------------------------------- gallery */
 
@@ -523,7 +527,7 @@ function galleryCategories(page: PublicPage | null): GalleryCategoryView[] {
 /** Gallery page copy + its images (grouped by the page's own categories). */
 export const getPublicGalleryBundle = createServerFn({ method: "GET" })
   .inputValidator((d: unknown) => pathInput.parse(d ?? {}))
-  .handler(async ({ data }): Promise<PublicGalleryBundle | null> => {
+  .handler(({ data }) => withCache("getPublicGalleryBundle", data, async (): Promise<PublicGalleryBundle | null> => {
     const s = await publicScope(data.pathname);
     if (!s) return null;
     const { getPage, listGalleryMedia } = await import("./content.server");
@@ -540,4 +544,4 @@ export const getPublicGalleryBundle = createServerFn({ method: "GET" })
       }),
     );
     return { ship: s.context, language: s.lang, languages: Object.fromEntries(entries) };
-  });
+  }));
