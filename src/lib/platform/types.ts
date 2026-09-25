@@ -49,6 +49,8 @@ export interface ShipSettings {
   bookingUrl: string | null;
   checkinPoint: string | null;
   address: string | null;
+  /** Embeddable map URL for the guest reception address. */
+  mapEmbed: string | null;
 }
 
 export interface ShipSeoDefaults {

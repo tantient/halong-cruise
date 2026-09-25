@@ -312,6 +312,7 @@ const settingsSchema = z.object({
   bookingUrl: nullableText,
   checkinPoint: nullableText,
   address: nullableText,
+  mapEmbed: nullableText,
   translations: translationMap,
 });
 
@@ -338,6 +339,7 @@ export const saveShipSettings = createServerFn({ method: "POST" })
         booking_url: data.bookingUrl,
         checkin_point: data.checkinPoint,
         address: data.address,
+        map_embed: data.mapEmbed,
         translations: cleanTranslations(data.translations),
       },
       { onConflict: "ship_id" },
