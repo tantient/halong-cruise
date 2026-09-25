@@ -51,6 +51,8 @@ export function ShipEditor({ shipId }: { shipId: string }) {
 
   return (
     <div className="space-y-6">
+      <HomepageReferenceWarning shipId={shipId} />
+
       <div className="flex flex-wrap gap-2 border-b border-border pb-2">
         {TABS.map((t) => (
           <button
