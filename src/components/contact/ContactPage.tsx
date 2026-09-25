@@ -46,7 +46,10 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
   const phoneTel = dial(settings.hotline ?? settings.hotlineDisplay);
   const hero = page?.media.cover ?? null;
   const defaultPage = b.languages[b.ship.defaultLanguage]?.page ?? null;
-  const mapEmbed = str(page, "map_embed") || str(defaultPage, "map_embed");
+  // Guest reception address, map and directions link all come from ship settings,
+  // so editing the address in the admin updates every surface at once. The page
+  // translation stays as a fallback for ships that have not moved over yet.
+  const mapEmbed = settings.mapEmbed || str(page, "map_embed") || str(defaultPage, "map_embed");
 
   const details = [
     phoneDisplay

@@ -51,6 +51,34 @@ export function TextField({
   );
 }
 
+export function TextAreaField({
+  label,
+  value,
+  onChange,
+  hint,
+  rows = 3,
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  hint?: string | undefined;
+  rows?: number | undefined;
+  placeholder?: string | undefined;
+}) {
+  return (
+    <Field label={label} hint={hint}>
+      <textarea
+        value={value}
+        rows={rows}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+      />
+    </Field>
+  );
+}
+
 export function SelectField({
   label,
   value,
