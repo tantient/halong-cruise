@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, Field, SelectField, TextAreaField, TextField } from "@/components/admin/admin-ui";
 import { ShipGeneralForm, type ShipGeneralValues } from "@/components/admin/ShipGeneralForm";
+import { checkHomepageReferences } from "@/lib/cms/homepage-checks.functions";
 import {
   deleteShipDomain,
   getShipAdmin,
@@ -79,6 +80,40 @@ export function ShipEditor({ shipId }: { shipId: string }) {
         <DomainsTab shipId={shipId} domains={payload.domains} onSaved={invalidate} />
       ) : null}
       {tab === "seo" ? <SeoTab shipId={shipId} seo={payload.seo} onSaved={invalidate} /> : null}
+    </div>
+  );
+}
+
+/**
+ * Warns the admin when a homepage chapter points at a cabin/experience that does
+ * not exist or is still a draft — those slots would render empty once published.
+ */
+function HomepageReferenceWarning({ shipId }: { shipId: string }) {
+  const check = useServerFn(checkHomepageReferences);
+  const query = useQuery({
+    queryKey: ["cms", "homepage-refs", shipId],
+    queryFn: () => check({ data: { shipId } }),
+  });
+
+  const issues = query.data?.issues ?? [];
+  if (issues.length === 0) return null;
+
+  return (
+    <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+      <p className="font-medium text-amber-700">
+        Trang chủ đang trỏ tới nội dung không hợp lệ ({issues.length})
+      </p>
+      <ul className="mt-2 space-y-1 text-xs text-amber-800">
+        {issues.map((i, index) => (
+          <li key={`${i.sectionType}-${i.slug}-${index}`}>
+            Mục “{i.sectionType}” ({i.where}) trỏ tới {i.kind === "cabin" ? "hạng phòng" : "trải nghiệm"} “{i.slug}”{" "}
+            {i.reason === "missing" ? "không tồn tại" : "chưa được xuất bản"}.
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 text-xs text-amber-800">
+        Hãy sửa trước khi xuất bản — không thể chuyển tàu sang live khi còn cảnh báo này.
+      </p>
     </div>
   );
 }
