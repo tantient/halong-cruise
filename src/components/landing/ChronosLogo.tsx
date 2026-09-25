@@ -2,7 +2,7 @@ import stackedSrc from "@/assets/logo/chronos-stacked.svg?raw";
 import markSrc from "@/assets/logo/chronos-mark.svg?raw";
 import wordmarkSrc from "@/assets/logo/chronos-wordmark.svg?raw";
 
-type LogoVariant = "inline" | "stacked";
+type LogoVariant = "inline" | "stacked" | "wordmark";
 type LogoSize = "sm" | "md" | "lg";
 /**
  * auto    = theo chế độ sáng/tối (mực trên nền sáng, ngà trên nền tối)
@@ -43,6 +43,11 @@ const SIZE_CLASSES: Record<LogoVariant, Record<LogoSize, string>> = {
     sm: "h-14 sm:h-16",
     md: "h-16 sm:h-20 lg:h-24",
     lg: "h-20 sm:h-24 lg:h-28",
+  },
+  wordmark: {
+    sm: "h-7 sm:h-8",
+    md: "h-8 sm:h-10 lg:h-11",
+    lg: "h-10 sm:h-12 lg:h-14",
   },
 };
 
@@ -109,6 +114,19 @@ export function ChronosLogo({
       </span>
     );
   }
+
+  if (variant === "wordmark") {
+    return (
+      <span className={`${base} ${className ?? ""}`} role="img" {...rest}>
+        <InlineSvg
+          markup={showTagline ? SVG.wordmark : SVG.wordmarkPlain}
+          className="h-full"
+        />
+      </span>
+    );
+  }
+
+
 
   return (
     <span

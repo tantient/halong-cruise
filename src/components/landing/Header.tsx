@@ -75,7 +75,8 @@ export function Header({ lang, setLang, t }: HeaderProps) {
       <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between px-6 lg:px-8">
         <LocalLink path="/" className="flex items-center">
           <ChronosLogo
-            showTagline={false}
+            variant="wordmark"
+            showTagline
             size="md"
             tone={scrolled ? "onLight" : "onDark"}
             aria-label="Chronos Cruise"
