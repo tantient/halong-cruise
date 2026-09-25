@@ -70,15 +70,15 @@ export function Footer({ t }: FooterProps) {
     <footer className="border-t border-chronos-sand-300/20 bg-chronos-ivory">
       <div className="mx-auto max-w-7xl px-5 pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-16 md:px-6 lg:px-8">
         <div className="grid gap-12 text-center md:grid-cols-12 md:gap-10 md:text-left">
-          <div className="flex flex-col items-center gap-6 md:col-span-4 md:items-start">
+          <div className="flex flex-col items-center gap-5 md:col-span-4 md:items-start">
             <ChronosLogo
               variant="stacked"
               showTagline
               tone="onLight"
-              className="h-28 sm:h-32 lg:h-36"
+              className="h-24 sm:h-28 lg:h-32"
               aria-label={site?.ship.displayName ?? undefined}
             />
-            <div className="flex gap-4">
+            <div className="flex items-center gap-3 md:self-center">
               {socials.map(({ label, href, Icon }) => (
                 <a
                   key={label}
@@ -86,9 +86,9 @@ export function Footer({ t }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-chronos-sand-300/30 text-chronos-sand-700 transition-colors hover:border-chronos-sand-500 hover:text-chronos-sand-500"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-chronos-sand-300/30 text-chronos-sand-700 transition-colors hover:border-chronos-sand-500 hover:text-chronos-sand-500"
                 >
-                  <Icon className="h-4 w-4" strokeWidth={1.5} />
+                  <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </a>
               ))}
             </div>
