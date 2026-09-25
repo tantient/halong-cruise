@@ -62,70 +62,75 @@ export function Footer({ t }: FooterProps) {
   const phoneTel = (site?.settings.hotline ?? site?.settings.hotlineDisplay ?? "").replace(/[^\d+]/g, "");
   const email = site?.settings.email ?? null;
 
+  const address = site?.settings.address ?? null;
+  const links = [...quickLinks.slice(0, 7), { label: t.nav.careers, to: "/careers" }, quickLinks[7]];
+  const heading = "mb-5 text-[11px] uppercase tracking-[0.28em] text-chronos-sand-500";
+
   return (
     <footer className="border-t border-chronos-sand-300/20 bg-chronos-ivory">
-      <div className="mx-auto max-w-7xl px-5 py-16 md:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-12 text-center">
-          <ChronosLogo
-            variant="stacked"
-            showTagline={false}
-            size="md"
-            tone="onLight"
-            aria-label={site?.ship.displayName ?? undefined}
-          />
+      <div className="mx-auto max-w-7xl px-5 pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-16 md:px-6 lg:px-8">
+        <div className="grid gap-12 text-center md:grid-cols-12 md:gap-10 md:text-left">
+          <div className="flex flex-col items-center gap-6 md:col-span-4 md:items-start">
+            <ChronosLogo
+              variant="stacked"
+              showTagline={false}
+              size="md"
+              tone="onLight"
+              aria-label={site?.ship.displayName ?? undefined}
+            />
+            <p className="text-xs uppercase tracking-[0.28em] text-chronos-sand-700">
+              {site?.ship.tagline ?? t.footer.tagline}
+            </p>
+            <div className="flex gap-4">
+              {socials.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-chronos-sand-300/30 text-chronos-sand-700 transition-colors hover:border-chronos-sand-500 hover:text-chronos-sand-500"
+                >
+                  <Icon className="h-4 w-4" strokeWidth={1.5} />
+                </a>
+              ))}
+            </div>
+          </div>
 
-
-          <p className="text-xs uppercase tracking-[0.32em] text-chronos-sand-700">
-            {site?.ship.tagline ?? t.footer.tagline}
-          </p>
-
-
-          <nav className="flex flex-wrap justify-center gap-x-12 gap-y-4 text-xs uppercase tracking-[0.2em] text-chronos-sand-700">
-            {quickLinks.map((link) => (
-              <LocalLink
-                key={link.label}
-                path={link.to}
-                className="transition-colors hover:text-chronos-sand-500"
-              >
-                {link.label}
-              </LocalLink>
-            ))}
+          <nav className="md:col-span-4">
+            <p className={heading}>{t.footer.quickLinks}</p>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs uppercase tracking-[0.18em] text-chronos-sand-700">
+              {links.map((link) => (
+                <li key={link.to}>
+                  <LocalLink path={link.to} className="transition-colors hover:text-chronos-sand-500">
+                    {link.label}
+                  </LocalLink>
+                </li>
+              ))}
+            </ul>
           </nav>
 
-          {phoneDisplay || email ? (
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs tracking-[0.12em] text-chronos-sand-700">
+          <div className="md:col-span-4">
+            <p className={heading}>{t.nav.contact}</p>
+            <div className="flex flex-col gap-3 text-sm leading-relaxed text-chronos-sand-700">
+              {address ? <p className="whitespace-pre-line">{address}</p> : null}
               {phoneDisplay ? (
                 <a href={`tel:${phoneTel}`} className="transition-colors hover:text-chronos-sand-500">
                   {phoneDisplay}
                 </a>
               ) : null}
               {email ? (
-                <a href={`mailto:${email}`} className="transition-colors hover:text-chronos-sand-500">
+                <a href={`mailto:${email}`} className="break-all transition-colors hover:text-chronos-sand-500">
                   {email}
                 </a>
               ) : null}
             </div>
-          ) : null}
-
-          <div className="flex gap-6">
-            {socials.map(({ label, href, Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-chronos-sand-300/30 text-chronos-sand-700 transition-colors hover:border-chronos-sand-500 hover:text-chronos-sand-500"
-              >
-                <Icon className="h-4 w-4" strokeWidth={1.5} />
-              </a>
-            ))}
           </div>
+        </div>
 
-          <div className="text-xs tracking-wide text-chronos-sand-700/60">
-            © {new Date().getFullYear()}
-            {site?.ship.displayName ? ` ${site.ship.displayName}.` : ""} {t.footer.rights}
-          </div>
+        <div className="mt-14 border-t border-chronos-sand-300/20 pt-6 text-center text-xs tracking-wide text-chronos-sand-700/60 md:text-left">
+          © {new Date().getFullYear()}
+          {site?.ship.displayName ? ` ${site.ship.displayName}.` : ""} {t.footer.rights}
         </div>
       </div>
     </footer>
