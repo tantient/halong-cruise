@@ -72,12 +72,12 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           : "bg-gradient-to-b from-chronos-deep/24 via-chronos-deep/5 to-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-[1600px] items-center justify-between px-6 lg:px-8">
+      <div className="mx-auto flex h-20 lg:h-24 max-w-[1600px] items-center justify-between px-6 lg:px-8">
         <LocalLink path="/" className="flex items-center">
           <ChronosLogo
-            variant="wordmark"
+            variant="stacked"
             showTagline
-            size="md"
+            className="h-16 lg:h-20"
             tone={scrolled ? "onLight" : "onDark"}
             aria-label="Chronos Cruise"
           />
