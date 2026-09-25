@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Card, Field, SelectField, TextField } from "@/components/admin/admin-ui";
+import { Card, Field, SelectField, TextAreaField, TextField } from "@/components/admin/admin-ui";
 import { ShipGeneralForm, type ShipGeneralValues } from "@/components/admin/ShipGeneralForm";
+import { checkHomepageReferences } from "@/lib/cms/homepage-checks.functions";
 import {
   deleteShipDomain,
   getShipAdmin,
@@ -51,6 +52,8 @@ export function ShipEditor({ shipId }: { shipId: string }) {
 
   return (
     <div className="space-y-6">
+      <HomepageReferenceWarning shipId={shipId} />
+
       <div className="flex flex-wrap gap-2 border-b border-border pb-2">
         {TABS.map((t) => (
           <button
@@ -71,12 +74,46 @@ export function ShipEditor({ shipId }: { shipId: string }) {
         <BrandingTab shipId={shipId} branding={payload.branding} onSaved={invalidate} />
       ) : null}
       {tab === "settings" ? (
-        <SettingsTab shipId={shipId} settings={payload.settings} onSaved={invalidate} />
+        <SettingsTab shipId={shipId} ship={payload.ship} settings={payload.settings} onSaved={invalidate} />
       ) : null}
       {tab === "domains" ? (
         <DomainsTab shipId={shipId} domains={payload.domains} onSaved={invalidate} />
       ) : null}
       {tab === "seo" ? <SeoTab shipId={shipId} seo={payload.seo} onSaved={invalidate} /> : null}
+    </div>
+  );
+}
+
+/**
+ * Warns the admin when a homepage chapter points at a cabin/experience that does
+ * not exist or is still a draft — those slots would render empty once published.
+ */
+function HomepageReferenceWarning({ shipId }: { shipId: string }) {
+  const check = useServerFn(checkHomepageReferences);
+  const query = useQuery({
+    queryKey: ["cms", "homepage-refs", shipId],
+    queryFn: () => check({ data: { shipId } }),
+  });
+
+  const issues = query.data?.issues ?? [];
+  if (issues.length === 0) return null;
+
+  return (
+    <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm">
+      <p className="font-medium text-amber-700">
+        Trang chủ đang trỏ tới nội dung không hợp lệ ({issues.length})
+      </p>
+      <ul className="mt-2 space-y-1 text-xs text-amber-800">
+        {issues.map((i, index) => (
+          <li key={`${i.sectionType}-${i.slug}-${index}`}>
+            Mục “{i.sectionType}” ({i.where}) trỏ tới {i.kind === "cabin" ? "hạng phòng" : "trải nghiệm"} “{i.slug}”{" "}
+            {i.reason === "missing" ? "không tồn tại" : "chưa được xuất bản"}.
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 text-xs text-amber-800">
+        Hãy sửa trước khi xuất bản — không thể chuyển tàu sang live khi còn cảnh báo này.
+      </p>
     </div>
   );
 }
@@ -213,12 +250,28 @@ function BrandingTab({
   );
 }
 
+/** One-line address used to build map links. */
+const flatAddress = (address: string) =>
+  address
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join(", ");
+
+const directionsUrl = (address: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(flatAddress(address))}`;
+
+const embedUrl = (address: string) =>
+  `https://www.google.com/maps?q=${encodeURIComponent(flatAddress(address))}&output=embed`;
+
 function SettingsTab({
   shipId,
+  ship,
   settings,
   onSaved,
 }: {
   shipId: string;
+  ship: Record<string, unknown>;
   settings: Record<string, unknown> | null;
   onSaved: () => void;
 }) {
@@ -240,9 +293,26 @@ function SettingsTab({
     bookingUrl: str(settings?.["booking_url"]),
     checkinPoint: str(settings?.["checkin_point"]),
     address: str(settings?.["address"]),
+    mapEmbed: str(settings?.["map_embed"]),
   }));
-  const translations = record(settings?.["translations"]);
+  const [translations, setTranslations] = useState(() => record(settings?.["translations"]));
   const set = (k: keyof typeof v) => (value: string) => setV({ ...v, [k]: value });
+
+  const defaultLanguage = str(ship["default_language"]) || "en";
+  const otherLanguages = (
+    Array.isArray(ship["enabled_languages"]) ? (ship["enabled_languages"] as string[]) : []
+  ).filter((code) => code !== defaultLanguage);
+
+  const setAddressTranslation = (lang: string, value: string) =>
+    setTranslations({
+      ...translations,
+      [lang]: { ...(translations[lang] ?? {}), address: value },
+    });
+
+  const syncMapLinks = () => {
+    if (!v.address.trim()) return;
+    setV({ ...v, googleMaps: directionsUrl(v.address), mapEmbed: embedUrl(v.address) });
+  };
 
   return (
     <form
@@ -263,6 +333,54 @@ function SettingsTab({
           <TextField label="Zalo tuyển dụng" value={v.recruitZalo} onChange={set("recruitZalo")} />
         </div>
       </Card>
+
+      <Card
+        title="Địa chỉ bến cảng & bản đồ"
+        description="Địa chỉ này dùng chung cho phần thông tin liên hệ, bản đồ và liên kết chỉ đường trên trang Liên hệ."
+      >
+        <TextAreaField
+          label={`Địa chỉ đón tiếp khách (${defaultLanguage.toUpperCase()})`}
+          value={v.address}
+          onChange={set("address")}
+          rows={3}
+          hint="Mỗi dòng là một phần của địa chỉ."
+        />
+        {otherLanguages.map((lang) => (
+          <TextAreaField
+            key={lang}
+            label={`Địa chỉ đón tiếp khách (${lang.toUpperCase()})`}
+            value={str(translations[lang]?.["address"])}
+            onChange={(value) => setAddressTranslation(lang, value)}
+            rows={3}
+          />
+        ))}
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <TextField
+            label="Liên kết chỉ đường (Google Maps)"
+            value={v.googleMaps}
+            onChange={set("googleMaps")}
+            hint="Mở khi khách bấm vào địa chỉ."
+          />
+          <TextField
+            label="Đường dẫn bản đồ nhúng"
+            value={v.mapEmbed}
+            onChange={set("mapEmbed")}
+            hint="Bản đồ hiển thị trong trang Liên hệ."
+          />
+        </div>
+
+        <Button type="button" variant="outline" size="sm" onClick={syncMapLinks} disabled={!v.address.trim()}>
+          Tạo lại bản đồ và chỉ đường từ địa chỉ
+        </Button>
+
+        {v.mapEmbed ? (
+          <div className="h-56 w-full overflow-hidden rounded-md border border-border">
+            <iframe title="Xem trước bản đồ" src={v.mapEmbed} loading="lazy" className="h-full w-full" style={{ border: 0 }} />
+          </div>
+        ) : null}
+      </Card>
+
       <Card title="Mạng xã hội">
         <div className="grid gap-4 md:grid-cols-2">
           <TextField label="Facebook" value={v.facebook} onChange={set("facebook")} />
@@ -270,14 +388,12 @@ function SettingsTab({
           <TextField label="TikTok" value={v.tiktok} onChange={set("tiktok")} />
           <TextField label="TripAdvisor" value={v.tripadvisor} onChange={set("tripadvisor")} />
           <TextField label="YouTube" value={v.youtube} onChange={set("youtube")} />
-          <TextField label="Google Maps" value={v.googleMaps} onChange={set("googleMaps")} />
         </div>
       </Card>
       <Card title="Khác">
         <div className="grid gap-4 md:grid-cols-2">
           <TextField label="Đường dẫn đặt phòng" value={v.bookingUrl} onChange={set("bookingUrl")} />
           <TextField label="Điểm check-in" value={v.checkinPoint} onChange={set("checkinPoint")} />
-          <TextField label="Địa chỉ" value={v.address} onChange={set("address")} />
         </div>
       </Card>
       <Button type="submit" disabled={save.isPending}>

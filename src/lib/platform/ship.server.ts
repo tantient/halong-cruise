@@ -194,6 +194,7 @@ export async function getShipContext(
       bookingUrl: st?.booking_url ?? null,
       checkinPoint: st?.checkin_point ?? null,
       address: st?.address ?? null,
+      mapEmbed: st?.map_embed ?? null,
     },
     seo: {
       siteName: se?.site_name ?? null,

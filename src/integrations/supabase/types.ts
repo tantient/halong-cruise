@@ -1037,6 +1037,7 @@ export type Database = {
           hotline_display: string | null
           id: string
           instagram: string | null
+          map_embed: string | null
           recruit_email: string | null
           recruit_zalo: string | null
           ship_id: string
@@ -1060,6 +1061,7 @@ export type Database = {
           hotline_display?: string | null
           id?: string
           instagram?: string | null
+          map_embed?: string | null
           recruit_email?: string | null
           recruit_zalo?: string | null
           ship_id: string
@@ -1083,6 +1085,7 @@ export type Database = {
           hotline_display?: string | null
           id?: string
           instagram?: string | null
+          map_embed?: string | null
           recruit_email?: string | null
           recruit_zalo?: string | null
           ship_id?: string
