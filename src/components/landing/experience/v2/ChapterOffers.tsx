@@ -51,7 +51,7 @@ export function ChapterOffers({
           <SceneReveal variant="up" delay={120}>
             <h2 className="font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
-              <span className="italic opacity-70">{textOf(section, "title_accent")}</span>
+              <span className="italic opacity-85">{textOf(section, "title_accent")}</span>
             </h2>
           </SceneReveal>
           <SceneReveal variant="up" delay={220}>
