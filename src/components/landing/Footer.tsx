@@ -70,7 +70,8 @@ export function Footer({ t }: FooterProps) {
     <footer className="border-t border-chronos-sand-300/20 bg-chronos-ivory">
       <div className="mx-auto max-w-7xl px-5 pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-16 md:px-6 lg:px-8">
         <div className="grid gap-12 text-center md:grid-cols-12 md:gap-10 md:text-left">
-          <div className="flex flex-col items-center gap-5 md:col-span-4 md:items-start">
+          <div className="flex justify-center md:col-span-4 md:justify-start">
+          <div className="flex w-fit flex-col items-center gap-5">
             <ChronosLogo
               variant="stacked"
               showTagline
@@ -78,7 +79,7 @@ export function Footer({ t }: FooterProps) {
               className="h-24 sm:h-28 lg:h-32"
               aria-label={site?.ship.displayName ?? undefined}
             />
-            <div className="flex items-center gap-3 md:self-center">
+            <div className="flex items-center justify-center gap-3">
               {socials.map(({ label, href, Icon }) => (
                 <a
                   key={label}
@@ -92,6 +93,7 @@ export function Footer({ t }: FooterProps) {
                 </a>
               ))}
             </div>
+          </div>
           </div>
 
           <nav className="md:col-span-4">
