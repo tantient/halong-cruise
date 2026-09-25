@@ -250,6 +250,13 @@
     letter-spacing: 0.01em;
   }
 
+  .chronos-logo-svg {
+    display: block;
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+  }
+
 }
 
 /* Brand typography */

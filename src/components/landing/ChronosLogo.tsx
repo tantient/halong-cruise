@@ -16,7 +16,7 @@ type LogoTone = "auto" | "onLight" | "onDark" | "gold" | "inherit";
 const TONE_CLASSES: Record<LogoTone, string> = {
   auto: "text-chronos-sand-900 dark:text-chronos-ivory",
   onLight: "text-chronos-sand-900",
-  onDark: "text-chronos-ivory drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]",
+  onDark: "text-chronos-ivory",
   gold: "text-chronos-gold-ink dark:text-chronos-gold",
   inherit: "",
 };
@@ -61,7 +61,7 @@ function prepare(raw: string, viewBox?: string): string {
     .replace(/<\?xml[^>]*\?>/i, "")
     .replace(
       /<svg\b/i,
-      '<svg preserveAspectRatio="xMidYMid meet" height="100%" focusable="false" aria-hidden="true"',
+      '<svg class="chronos-logo-svg" preserveAspectRatio="xMidYMid meet" height="100%" focusable="false" aria-hidden="true"',
     )
     .trim();
   if (viewBox) out = out.replace(/viewBox="[^"]*"/i, `viewBox="${viewBox}"`);
@@ -80,7 +80,7 @@ const SVG = {
 function InlineSvg({ markup, className }: { markup: string; className?: string }) {
   return (
     <span
-      className={`block shrink-0 [&>svg]:block [&>svg]:h-full [&>svg]:w-auto ${className ?? ""}`}
+      className={`block shrink-0 transform-gpu [&>svg]:block [&>svg]:h-full [&>svg]:w-auto ${className ?? ""}`}
       dangerouslySetInnerHTML={{ __html: markup }}
     />
   );
