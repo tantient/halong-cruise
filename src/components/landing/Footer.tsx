@@ -73,14 +73,11 @@ export function Footer({ t }: FooterProps) {
           <div className="flex flex-col items-center gap-6 md:col-span-4 md:items-start">
             <ChronosLogo
               variant="stacked"
-              showTagline={false}
-              size="md"
+              showTagline
               tone="onLight"
+              className="h-28 sm:h-32 lg:h-36"
               aria-label={site?.ship.displayName ?? undefined}
             />
-            <p className="text-xs uppercase tracking-[0.28em] text-chronos-sand-700">
-              {site?.ship.tagline ?? t.footer.tagline}
-            </p>
             <div className="flex gap-4">
               {socials.map(({ label, href, Icon }) => (
                 <a
