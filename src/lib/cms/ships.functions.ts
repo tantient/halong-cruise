@@ -12,6 +12,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 import { requireAdmin } from "./admin-auth";
+import { describeHomepageIssues, findHomepageReferenceIssues } from "./homepage-checks.functions";
 import { SUPPORTED_LANGUAGES } from "@/lib/i18n/languages";
 
 const SHIP_STATUSES = ["draft", "staging", "live", "disabled"] as const;
@@ -227,6 +228,21 @@ export const updateShipAdmin = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     assertLanguageConsistency(data);
+
+    // Going live must not publish a homepage whose chapters point at content
+    // that does not exist (or is still a draft) — those slots render empty.
+    if (data.status === "live") {
+      const issues = await findHomepageReferenceIssues(
+        context.supabase as never,
+        data.shipId,
+      );
+      if (issues.length > 0) {
+        throw new Error(
+          `Không thể chuyển sang live vì trang chủ có nội dung không hợp lệ:\n${describeHomepageIssues(issues)}`,
+        );
+      }
+    }
+
     const { error } = await context.supabase
       .from("ships")
       .update({
