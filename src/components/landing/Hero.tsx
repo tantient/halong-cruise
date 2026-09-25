@@ -70,7 +70,7 @@ export function Hero({ content, slides, t }: HeroProps) {
           </h1>
         </Reveal>
         <Reveal immediate delay={420}>
-          <p className="mx-auto mb-12 max-w-2xl text-base font-light leading-relaxed text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
+          <p className="mx-auto mb-12 max-w-2xl text-base font-normal leading-relaxed text-white/90 drop-shadow-[0_1px_8px_rgba(0,0,0,0.75)]">
             {content.subtitle}
           </p>
         </Reveal>
@@ -87,7 +87,7 @@ export function Hero({ content, slides, t }: HeroProps) {
                 onChange={(e) => setContact(e.target.value)}
                 placeholder={t.earlyAccess.contactPlaceholder}
                 required
-                className="flex-1 rounded-full border-0 bg-transparent px-6 py-3 text-sm text-white placeholder:text-white/60 focus:bg-white/10 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="flex-1 rounded-full border-0 bg-transparent px-6 py-3 text-sm text-white placeholder:text-white/85 focus:bg-white/10 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               <button
                 type="submit"
@@ -109,7 +109,7 @@ export function Hero({ content, slides, t }: HeroProps) {
       </div>
 
       <div className="pointer-events-none absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-4">
-        <span className="text-xs uppercase tracking-[0.3em] text-white/80 drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+        <span className="text-xs uppercase tracking-[0.3em] text-white/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
           {t.hero.scroll}
         </span>
         <span className="h-16 w-px bg-gradient-to-b from-white/60 to-transparent" />

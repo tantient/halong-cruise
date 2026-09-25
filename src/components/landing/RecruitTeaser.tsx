@@ -105,11 +105,11 @@ export function RecruitTeaser({ lang, content, image, jobs, t }: RecruitTeaserPr
             <div className="space-y-8">
               <div className="space-y-4">
                 <h2 className="font-display text-4xl font-normal leading-tight text-chronos-sand-900 md:text-5xl lg:text-6xl">
-                  {content.title} <span className="font-display italic font-light text-chronos-sand-500">{content.titleAccent}</span>
+                  {content.title} <span className="font-display italic font-normal text-chronos-sand-500">{content.titleAccent}</span>
                 </h2>
                 <div className="h-px w-20 bg-chronos-sand-500" />
               </div>
-              <p className="text-lg font-light leading-relaxed text-chronos-sand-700">{content.subtitle}</p>
+              <p className="text-lg font-normal leading-relaxed text-chronos-sand-700">{content.subtitle}</p>
 
               <form onSubmit={handleSubmit} className="space-y-6 pt-4">
                 <div className="space-y-2">

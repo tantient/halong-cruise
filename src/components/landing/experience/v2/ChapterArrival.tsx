@@ -41,7 +41,7 @@ export function ChapterArrival({
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 sm:pb-24 lg:px-8 lg:pb-28">
         {tagline ? (
           <SceneReveal variant="fade" delay={150} duration={1400}>
-            <span className="block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-white/75">
+            <span className="block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-white/85">
               {tagline}
             </span>
           </SceneReveal>
@@ -55,7 +55,7 @@ export function ChapterArrival({
         <div className="mt-8 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           {subtitle ? (
             <SceneReveal variant="up" delay={620} duration={1400}>
-              <p className="max-w-md text-sm font-light leading-relaxed text-white/85 sm:text-base">
+              <p className="max-w-md text-sm font-normal leading-relaxed text-white/85 sm:text-base">
                 {subtitle}
               </p>
             </SceneReveal>
@@ -77,7 +77,7 @@ export function ChapterArrival({
                 {ctaSecondary ? (
                   <LocalLink
                     path="/itineraries"
-                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/80 underline decoration-white/30 underline-offset-8 transition-colors duration-500 hover:text-white hover:decoration-white/70"
+                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/90 underline decoration-white/30 underline-offset-8 transition-colors duration-500 hover:text-white hover:decoration-white/70"
                   >
                     {ctaSecondary}
                     <span aria-hidden>&rarr;</span>
@@ -91,7 +91,7 @@ export function ChapterArrival({
       </div>
 
       <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2">
-        <span className="text-[0.58rem] uppercase tracking-[0.4em] text-white/60">{ui.scroll}</span>
+        <span className="text-[0.58rem] uppercase tracking-[0.4em] text-white/85">{ui.scroll}</span>
         <span className="scroll-thread h-10 w-px" />
       </div>
     </section>

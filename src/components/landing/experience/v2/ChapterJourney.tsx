@@ -58,7 +58,7 @@ export function ChapterJourney({
           <SceneReveal variant="up" delay={120}>
             <h2 className="mt-6 font-display text-4xl leading-[1.04] font-normal text-[color:var(--amb-fg)] sm:text-5xl lg:text-[3.9rem]">
               {textOf(section, "title")}{" "}
-              <span className="italic opacity-70">{textOf(section, "title_accent")}</span>
+              <span className="italic opacity-85">{textOf(section, "title_accent")}</span>
             </h2>
           </SceneReveal>
           <SceneReveal variant="up" delay={240} className="mt-5">
@@ -116,7 +116,7 @@ export function ChapterJourney({
                   {it.name}
                 </h3>
                 {it.summary ? (
-                  <p className="mt-3 max-w-lg text-sm leading-[1.85] font-light text-[color:var(--amb-muted)] sm:text-base">
+                  <p className="mt-3 max-w-lg text-sm leading-[1.85] font-normal text-[color:var(--amb-muted)] sm:text-base">
                     {it.summary}
                   </p>
                 ) : null}
