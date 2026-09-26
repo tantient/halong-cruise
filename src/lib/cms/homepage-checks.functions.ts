@@ -53,18 +53,9 @@ function refsFromConfiguration(configuration: unknown): Ref[] {
     });
   }
 
-  // `emphasis` maps a time state ("morning", "night", …) to service slugs.
-  const emphasis = config["emphasis"];
-  if (emphasis && typeof emphasis === "object" && !Array.isArray(emphasis)) {
-    for (const [state, value] of Object.entries(emphasis as Record<string, unknown>)) {
-      if (!Array.isArray(value)) continue;
-      value.forEach((slug) => {
-        if (typeof slug === "string" && slug) {
-          refs.push({ kind: "service", slug, where: `emphasis.${state}` });
-        }
-      });
-    }
-  }
+  // `emphasis` (time-state ordering hints) is intentionally NOT checked:
+  // ChapterLife only uses it to sort slots and silently ignores unknown slugs,
+  // so a dangling emphasis slug has no rendering impact.
 
   return refs;
 }
