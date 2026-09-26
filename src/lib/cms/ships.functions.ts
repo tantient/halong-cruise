@@ -231,7 +231,17 @@ export const updateShipAdmin = createServerFn({ method: "POST" })
 
     // Going live must not publish a homepage whose chapters point at content
     // that does not exist (or is still a draft) — those slots render empty.
-    if (data.status === "live") {
+    // Only guard the transition INTO live: a ship that is already live must
+    // stay editable (name, languages, …) even if a homepage slot is dangling.
+    const { data: current, error: currentError } = await context.supabase
+      .from("ships")
+      .select("status")
+      .eq("id", data.shipId)
+      .maybeSingle();
+    if (currentError) throw new Error(currentError.message);
+    if (!current) throw new Error("Không tìm thấy tàu");
+
+    if (data.status === "live" && current.status !== "live") {
       const issues = await findHomepageReferenceIssues(
         context.supabase as never,
         data.shipId,
