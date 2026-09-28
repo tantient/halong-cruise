@@ -217,6 +217,13 @@ function CabinForm({
   onClose: () => void;
   onSaved: (cabinId: string) => void;
 }) {
+  const TRI = [
+    { value: "unknown", label: "Chưa xác nhận" },
+    { value: "yes", label: "Có" },
+    { value: "no", label: "Không" },
+  ];
+  const toTri = (v: unknown) => (v === true ? "yes" : v === false ? "no" : "unknown");
+  const fromTri = (v: string) => (v === "yes" ? true : v === "no" ? false : null);
   const save = useServerFn(saveCabinAdmin);
   const [form, setForm] = useState({
     slug: str(cabin?.['slug']),
@@ -233,6 +240,12 @@ function CabinForm({
     currency: str(cabin?.['currency']),
     status: str(cabin?.['status']) || "draft",
     sortOrder: str(cabin?.['sort_order']) || "0",
+    quantity: str(cabin?.['quantity']),
+    doubleQuantity: str(cabin?.['double_quantity']),
+    twinQuantity: str(cabin?.['twin_quantity']),
+    deckDistribution: JSON.stringify(cabin?.['deck_distribution'] ?? []),
+    extraBed: toTri(cabin?.['extra_bed_allowed']),
+    connecting: toTri(cabin?.['connecting_room_available']),
   });
   const [bag, setBagState] = useState<TranslationBag>(
     (cabin?.['translations'] as TranslationBag | undefined) ?? {},
@@ -260,6 +273,12 @@ function CabinForm({
           currency: form.currency,
           status: form.status as "draft" | "published",
           sortOrder: Number(form.sortOrder) || 0,
+          quantity: num(form.quantity),
+          doubleQuantity: num(form.doubleQuantity),
+          twinQuantity: num(form.twinQuantity),
+          deckDistribution: form.deckDistribution,
+          extraBedAllowed: fromTri(form.extraBed),
+          connectingRoomAvailable: fromTri(form.connecting),
           translations: bag,
         },
       }),
@@ -290,6 +309,17 @@ function CabinForm({
           options={CONTENT_STATUSES.map((s) => ({ value: s, label: s }))}
         />
         <TextField label="Thứ tự" value={form.sortOrder} onChange={set("sortOrder")} type="number" />
+        <TextField label="Số phòng hạng này" value={form.quantity} onChange={set("quantity")} type="number" />
+        <TextField label="Số phòng Double" value={form.doubleQuantity} onChange={set("doubleQuantity")} type="number" />
+        <TextField label="Số phòng Twin" value={form.twinQuantity} onChange={set("twinQuantity")} type="number" />
+        <TextField
+          label="Phân bổ theo boong"
+          value={form.deckDistribution}
+          onChange={set("deckDistribution")}
+          hint='JSON, ví dụ [{"deck":"2","double":1,"twin":9}]'
+        />
+        <SelectField label="Giường phụ" value={form.extraBed} onChange={set("extraBed")} options={TRI} />
+        <SelectField label="Phòng thông nhau" value={form.connecting} onChange={set("connecting")} options={TRI} />
       </div>
       <AreaField label="Mô tả ngắn" value={form.summary} onChange={set("summary")} />
       <AreaField label="Mô tả chi tiết" value={form.description} onChange={set("description")} rows={6} />
