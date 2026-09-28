@@ -32,6 +32,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
     ...(cabin.view ? [{ label: ui.view, value: cabin.view }] : []),
     ...(cabin.roomCount ? [{ label: ui.cabinsCount, value: ui.rooms(cabin.roomCount) }] : []),
   ];
+  const amenities = cabin.extraBed ? [ui.extraBed, ...cabin.amenities] : cabin.amenities;
   const heroImage = cabin.cover ?? cabin.gallery[0] ?? null;
   const gallery = cabin.gallery.filter((media, index, all) => media.id !== heroImage?.id && all.findIndex((item) => item.id === media.id) === index);
   const spaceImages = gallery.slice(0, 3);
@@ -61,7 +62,7 @@ export function CabinDetailPage({ bundle, slug }: { bundle: PublicCabinBundle; s
 
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"><div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr]">
         <Reveal><p className="eyebrow mb-5 text-chronos-gold">{ui.keyDetails}</p><dl className="divide-y divide-chronos-ink/10 border-y border-chronos-ink/10">{specs.map((spec) => <div key={spec.label} className="grid grid-cols-[minmax(0,1fr)_auto] gap-5 py-4"><dt className="min-w-0 text-xs uppercase tracking-[0.16em] text-chronos-stone/65">{spec.label}</dt><dd className="max-w-[14rem] text-right text-chronos-ink">{spec.value}</dd></div>)}</dl>{cabin.areaNote ? <p className="mt-4 text-xs leading-relaxed text-chronos-stone/65">{cabin.areaNote}</p> : null}</Reveal>
-        {cabin.amenities.length ? <Reveal><p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowAmenities}</p><ul className="grid gap-x-8 sm:grid-cols-2">{cabin.amenities.map((amenity) => <li key={amenity} className="flex items-start gap-3 border-b border-chronos-ink/10 py-4 text-sm text-chronos-stone/85"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />{amenity}</li>)}</ul></Reveal> : null}
+        {amenities.length ? <Reveal><p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowAmenities}</p><ul className="grid gap-x-8 sm:grid-cols-2">{amenities.map((amenity) => <li key={amenity} className="flex items-start gap-3 border-b border-chronos-ink/10 py-4 text-sm text-chronos-stone/85"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />{amenity}</li>)}</ul></Reveal> : null}
       </div></section>
 
       {cabin.plan.length ? <section className="mx-auto max-w-7xl px-6 pb-20 lg:px-8 lg:pb-28"><Reveal><p className="eyebrow mb-5 text-chronos-gold">{ui.eyebrowFloorPlan}</p><DeckPlanProvider><DeckPlan zones={cabin.plan} labels={{ area: ui.planArea, tapHint: ui.planTapHint }} hint={pageText(page, "plan_hint", b.ship.ship.totalCabins)} /></DeckPlanProvider></Reveal></section> : null}

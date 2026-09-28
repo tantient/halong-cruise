@@ -143,12 +143,13 @@ export async function listGalleryMedia(scope: ReadScope, categories?: string[]) 
 /* ----------------------------------------------------------------- cabins */
 
 const CABIN_COLUMNS =
-  "id,slug,name,category,size_sqm,max_guests,bed_config,view_type,deck,summary,description,price_from,currency,sort_order,translations";
+  "id,slug,name,category,size_sqm,max_guests,bed_config,view_type,deck,summary,description,price_from,currency,sort_order,translations,quantity,double_quantity,twin_quantity,extra_bed_allowed";
 
 type CabinRow = {
   id: string; slug: string; name: string; category: string | null; size_sqm: number | null; max_guests: number | null;
   bed_config: string | null; view_type: string | null; deck: string | null; summary: string | null; description: string | null;
   price_from: number | null; currency: string | null; sort_order: number; translations: unknown;
+  quantity: number | null; double_quantity: number | null; twin_quantity: number | null; extra_bed_allowed: boolean | null;
 };
 
 function toCabin(r: CabinRow, media: EntityMedia): PublicCabin {
@@ -156,6 +157,8 @@ function toCabin(r: CabinRow, media: EntityMedia): PublicCabin {
     id: r.id, slug: r.slug, name: r.name, category: r.category, sizeSqm: r.size_sqm, maxGuests: r.max_guests,
     bedConfig: r.bed_config, viewType: r.view_type, deck: r.deck, summary: r.summary, description: r.description,
     priceFrom: r.price_from, currency: r.currency, sortOrder: r.sort_order, media,
+    quantity: r.quantity, doubleQuantity: r.double_quantity, twinQuantity: r.twin_quantity,
+    extraBedAllowed: r.extra_bed_allowed,
   };
 }
 

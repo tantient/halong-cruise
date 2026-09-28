@@ -8,6 +8,13 @@
       "when": 1790327289391,
       "tag": "0000_add_ship_settings_map_embed",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790574268167,
+      "tag": "0001_cabin_master_structured_fields",
+      "breakpoints": true
     }
   ]
 }

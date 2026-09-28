@@ -56,6 +56,7 @@ export interface CabinUi {
   planTapHint: string;
   rooms: (n: number | string) => string;
   guests: (n: number | string) => string;
+  extraBed: string;
 }
 
 const UI: Record<Lang, CabinUi> = {
@@ -103,6 +104,7 @@ const UI: Record<Lang, CabinUi> = {
     exploreVoyages: "Explore voyages",
     finalJourney: "REQUEST YOUR JOURNEY",
     otherCabin: "Other cabin",
+    extraBed: "Extra bed available",
     planArea: "AREA",
     planTapHint: "Tap any area on the plan to see its name.",
     rooms: (n) => `${n} cabins`,
@@ -153,6 +155,7 @@ const UI: Record<Lang, CabinUi> = {
     finalJourney: "ĐỀ XUẤT HÀNH TRÌNH",
     otherCabin: "Hạng phòng khác",
     planArea: "KHU VỰC",
+    extraBed: "Có thể kê thêm giường phụ",
     planTapHint: "Chạm vào từng khu vực trên sơ đồ để xem tên khu vực.",
     rooms: (n) => `${n} phòng`,
     guests: (n) => `${n} khách`,

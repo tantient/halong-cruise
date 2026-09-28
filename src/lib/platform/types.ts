@@ -142,6 +142,11 @@ export interface PublicCabin {
   currency: string | null;
   sortOrder: number;
   media: EntityMedia;
+  quantity: number | null;
+  doubleQuantity: number | null;
+  twinQuantity: number | null;
+  /** true/false = confirmed; null = not confirmed (never shown). */
+  extraBedAllowed: boolean | null;
 }
 
 export interface PublicCabinFull extends PublicCabin {

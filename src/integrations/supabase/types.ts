@@ -75,16 +75,21 @@ export type Database = {
         Row: {
           bed_config: string | null
           category: string | null
+          connecting_room_available: boolean | null
           created_at: string
           created_by: string | null
           currency: string | null
           deck: string | null
+          deck_distribution: Json
           description: string | null
+          double_quantity: number | null
+          extra_bed_allowed: boolean | null
           id: string
           max_guests: number | null
           name: string
           price_from: number | null
           published_at: string | null
+          quantity: number | null
           ship_id: string
           size_sqm: number | null
           slug: string
@@ -92,6 +97,7 @@ export type Database = {
           status: string
           summary: string | null
           translations: Json
+          twin_quantity: number | null
           updated_at: string
           updated_by: string | null
           view_type: string | null
@@ -99,16 +105,21 @@ export type Database = {
         Insert: {
           bed_config?: string | null
           category?: string | null
+          connecting_room_available?: boolean | null
           created_at?: string
           created_by?: string | null
           currency?: string | null
           deck?: string | null
+          deck_distribution?: Json
           description?: string | null
+          double_quantity?: number | null
+          extra_bed_allowed?: boolean | null
           id?: string
           max_guests?: number | null
           name: string
           price_from?: number | null
           published_at?: string | null
+          quantity?: number | null
           ship_id: string
           size_sqm?: number | null
           slug: string
@@ -116,6 +127,7 @@ export type Database = {
           status?: string
           summary?: string | null
           translations?: Json
+          twin_quantity?: number | null
           updated_at?: string
           updated_by?: string | null
           view_type?: string | null
@@ -123,16 +135,21 @@ export type Database = {
         Update: {
           bed_config?: string | null
           category?: string | null
+          connecting_room_available?: boolean | null
           created_at?: string
           created_by?: string | null
           currency?: string | null
           deck?: string | null
+          deck_distribution?: Json
           description?: string | null
+          double_quantity?: number | null
+          extra_bed_allowed?: boolean | null
           id?: string
           max_guests?: number | null
           name?: string
           price_from?: number | null
           published_at?: string | null
+          quantity?: number | null
           ship_id?: string
           size_sqm?: number | null
           slug?: string
@@ -140,6 +157,7 @@ export type Database = {
           status?: string
           summary?: string | null
           translations?: Json
+          twin_quantity?: number | null
           updated_at?: string
           updated_by?: string | null
           view_type?: string | null

@@ -68,18 +68,24 @@ export function cabinsHead(bundle: PublicCabinsBundle) {
  * product data, so renames keep old URLs alive with a permanent redirect.
  * Works for any language prefix because only the slug segment is swapped.
  */
-const legacyCabinSlugs: Record<string, string> = {
+const legacyCabinSlugs: Record<string, string | null> = {
   "owners-suite": "chronos-signature-jacuzzi-suite",
-  "junior-suite-a": "premier-double-suite",
-  "junior-suite-b": "premier-twin-suite",
-  "grand-suite-corner": "grand-suite",
+  // Retired by the official cabin master V2 — no confirmed one-to-one mapping,
+  // so these land on the listing rather than on a possibly wrong cabin.
+  "junior-suite-a": null,
+  "junior-suite-b": null,
+  "grand-suite-corner": null,
+  "premier-double-suite": null,
+  "premier-twin-suite": null,
+  "premier-triple-suite": null,
+  "grand-suite": null,
 };
 
 export function redirectLegacyCabinSlug(pathname: string, slug: string) {
+  if (!(slug in legacyCabinSlugs)) return;
   const target = legacyCabinSlugs[slug];
-  if (!target) return;
   throw redirect({
-    href: pathname.replace(`/cabins/${slug}`, `/cabins/${target}`),
+    href: pathname.replace(`/cabins/${slug}`, target ? `/cabins/${target}` : "/cabins"),
     statusCode: 301,
     throw: true,
   });

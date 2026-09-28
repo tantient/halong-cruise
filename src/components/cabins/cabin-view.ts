@@ -33,6 +33,8 @@ export interface CabinView {
   bed: string | null;
   deck: string | null;
   maxGuests: number | null;
+  /** Only confirmed eligibility is shown; unknown/false are omitted. */
+  extraBed: boolean;
   cover: MediaItem | null;
   gallery: MediaItem[];
   highlights: string[];
@@ -84,6 +86,7 @@ export function toCabinView(cabin: PublicCabinFull): CabinView {
     bed: groupValue(cabin, "bed") ?? cabin.bedConfig,
     deck: groupValue(cabin, "deck") ?? cabin.deck,
     maxGuests: cabin.maxGuests,
+    extraBed: cabin.extraBedAllowed === true,
     cover: cabin.media.cover ?? cabin.media.all[0] ?? null,
     gallery: cabin.media.gallery.length ? cabin.media.gallery : cabin.media.all.slice(1),
     highlights: listOfType(cabin, "highlight"),
