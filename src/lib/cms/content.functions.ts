@@ -87,7 +87,7 @@ function friendly(error: { code?: string | undefined; message: string }): Error 
 /* --------------------------------------------------------------- cabins */
 
 const CABIN_COLUMNS =
-  "id,ship_id,slug,name,category,size_sqm,max_guests,bed_config,view_type,deck,summary,description,price_from,currency,status,published_at,sort_order,translations";
+  "id,ship_id,slug,name,category,size_sqm,max_guests,bed_config,view_type,deck,summary,description,price_from,currency,status,published_at,sort_order,translations,quantity,double_quantity,twin_quantity,deck_distribution,extra_bed_allowed,connecting_room_available";
 
 const CABIN_DETAIL_COLUMNS =
   "id,ship_id,cabin_id,group_name,label,value,content_type,sort_order,translations";
@@ -158,6 +158,26 @@ const cabinSchema = z.object({
   currency: nullableText,
   status: statusEnum,
   sortOrder: z.number().int().min(0).max(9999),
+  quantity: nullableInt,
+  doubleQuantity: nullableInt,
+  twinQuantity: nullableInt,
+  deckDistribution: z
+    .string()
+    .optional()
+    .transform((v, ctx) => {
+      if (!v || !v.trim()) return [];
+      try {
+        const parsed = z
+          .array(z.object({ deck: z.string(), double: z.number().int().min(0), twin: z.number().int().min(0) }))
+          .parse(JSON.parse(v));
+        return parsed;
+      } catch {
+        ctx.addIssue({ code: "custom", message: "Phân bổ boong không đúng định dạng JSON" });
+        return z.NEVER;
+      }
+    }),
+  extraBedAllowed: z.boolean().nullable().optional().transform((v) => v ?? null),
+  connectingRoomAvailable: z.boolean().nullable().optional().transform((v) => v ?? null),
   translations: translationMap,
 });
 
@@ -196,6 +216,12 @@ export const saveCabinAdmin = createServerFn({ method: "POST" })
       currency: data.currency,
       status: data.status,
       sort_order: data.sortOrder,
+      quantity: data.quantity,
+      double_quantity: data.doubleQuantity,
+      twin_quantity: data.twinQuantity,
+      deck_distribution: data.deckDistribution,
+      extra_bed_allowed: data.extraBedAllowed,
+      connecting_room_available: data.connectingRoomAvailable,
       translations: cleanTranslations(data.translations),
       updated_by: userId,
       ...publishFields(data.status, currentPublishedAt),
