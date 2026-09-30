@@ -13,3 +13,10 @@
 ## Open / blocked
 - [ ] Ảnh gym là ảnh AI tự tạo — chờ xác nhận có gỡ luôn không
 - [ ] Gym & gift shop thiếu ảnh thật (gift shop hiện không còn ảnh sau khi gỡ)
+
+## Ảnh mới từ user (đang nhận từng thư mục)
+- [x] 01–10: đã xử lý (toàn cảnh, đuôi tàu, hồ bơi, sảnh đón tàu, sảnh thang, nhà hàng chính, hành lang/gift shop, giải trí gia đình, kid club, business center)
+- [in_progress] 11_P_Fitness: 2 ảnh gym (1920px) — nạp thư viện / thay ảnh gym cũ nếu có
+- [todo] 12_P_Tiec_Panorama: 2 ảnh nhà hàng tiệc panorama — xử lý sau khi xong 11
+- [x] 11_P_Fitness: gym-1 (cover Fitness Centre) + gym-2 (gallery venue)
+- [x] 13_P_Poker: poker-1 (cover Poker Room, thay poker-01 cũ) + poker-2 (gallery venue)
