@@ -20,3 +20,5 @@
 - [todo] 12_P_Tiec_Panorama: 2 ảnh nhà hàng tiệc panorama — xử lý sau khi xong 11
 - [x] 11_P_Fitness: gym-1 (cover Fitness Centre) + gym-2 (gallery venue)
 - [x] 13_P_Poker: poker-1 (cover Poker Room, thay poker-01 cũ) + poker-2 (gallery venue)
+- [x] 14_P_Cigar_Whisky — cigar-1 (cover) + cigar-2 (gallery) thay ảnh Cigar & Whisky Lounge
+- [x] 15_P_Karaoke — karaoke-1 (cover) + karaoke-2 (gallery) thay ảnh Karaoke Room
