@@ -159,13 +159,21 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
               <div>
                 <h2 className="mb-4 text-xs uppercase tracking-[0.24em] text-chronos-gold">{t.contact.mapTitle}</h2>
                 <div className="h-[300px] w-full overflow-hidden border border-chronos-ink/10 sm:h-[380px] lg:h-[390px]">
-                  <iframe
-                    title={t.contact.mapTitle}
-                    src={mapEmbed}
-                    loading="lazy"
-                    className="h-full w-full"
-                    style={{ border: 0 }}
-                  />
+                  {parseEmbedCoords(mapEmbed) ? (
+                    <ChronosMap
+                      embed={mapEmbed}
+                      title={b.ship.ship.displayName}
+                      address={settings.address ?? ""}
+                    />
+                  ) : (
+                    <iframe
+                      title={t.contact.mapTitle}
+                      src={mapEmbed}
+                      loading="lazy"
+                      className="h-full w-full"
+                      style={{ border: 0 }}
+                    />
+                  )}
                 </div>
                 {settings.googleMaps ? (
                   <a
