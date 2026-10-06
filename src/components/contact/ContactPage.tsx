@@ -7,6 +7,7 @@ import { Header } from "@/components/landing/Header";
 import { Footer } from "@/components/landing/Footer";
 import { useLanguage } from "@/components/landing/use-language";
 import { Reveal } from "@/components/landing/Reveal";
+import { ChronosMap, parseEmbedCoords } from "@/components/contact/ChronosMap";
 import { Button } from "@/components/ui/button";
 import { publicQueries, type PublicPage, type PublicPageBundle } from "@/lib/platform";
 
