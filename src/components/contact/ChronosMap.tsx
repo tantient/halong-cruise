@@ -19,11 +19,11 @@ const IVORY = "#f7f2e7";
 
 export function parseEmbedCoords(embed: string): { lat: number; lng: number } | null {
   const at = embed.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
-  if (at) return { lat: parseFloat(at[1]), lng: parseFloat(at[2]) };
+  if (at?.[1] && at[2]) return { lat: parseFloat(at[1]), lng: parseFloat(at[2]) };
   const dims = embed.match(/!3d(-?\d+(?:\.\d+)?)!4d(-?\d+(?:\.\d+)?)/);
-  if (dims) return { lat: parseFloat(dims[1]), lng: parseFloat(dims[2]) };
+  if (dims?.[1] && dims[2]) return { lat: parseFloat(dims[1]), lng: parseFloat(dims[2]) };
   const q = embed.match(/[?&]q=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
-  if (q) return { lat: parseFloat(q[1]), lng: parseFloat(q[2]) };
+  if (q?.[1] && q[2]) return { lat: parseFloat(q[1]), lng: parseFloat(q[2]) };
   return null;
 }
 
