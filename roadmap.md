@@ -7,21 +7,17 @@
 - [x] Homepage vertical rhythm refinement — giảm whitespace toàn bộ Journey/Suites/Life/Offers và nhịp nội bộ, giữ nguyên visual direction
 - [x] Admin: gom địa chỉ bến cảng + bản đồ + liên kết chỉ đường về một nguồn duy nhất (ship_settings.address / google_maps / map_embed), có xem trước bản đồ
 - [x] Kiểm tra tự động cảnh báo mục trải nghiệm/hạng phòng trang chủ trỏ tới slug không tồn tại hoặc chưa xuất bản; chặn chuyển tàu sang live khi còn cảnh báo
+- [x] Thay toàn bộ ảnh website bằng bộ ảnh mới của user (01–22): toàn cảnh, đuôi tàu, hồ bơi, sảnh đón, sảnh thang, nhà hàng chính, gia đình, Kid Club, Fitness, Panorama, Poker, Cigar & Whisky, Karaoke, Spa, Terrace, Nhà hàng ngoài trời, Sky Bar
+- [x] Ảnh trạng thái golden trang chủ = ảnh lounge hoàng hôn mới
+- [x] Tăng tốc tải trang: dữ liệu trang lưu dùng chung giữa các máy chủ (không dùng bộ nhớ đệm trang đã render)
+- [x] Chuẩn hóa hệ thống kiểu chữ: nội dung ≥16px, nhãn/nút ≥13px, khoảng dòng cân đối; kiểm tra điện thoại/tablet/máy tính
+- [x] Gỡ 5 hạng phòng cũ khỏi hệ thống (Premier Double/Twin/Triple Suite, Grand Suite, Grand Suite Corner); ảnh cũ giữ nguyên trong thư viện; URL cũ vẫn tự chuyển về danh mục phòng
 
 ## In progress
 - [ ] Full public website audit (chronoscruise.com + preview), EN/VI, desktop/mobile — REPORT ONLY, không sửa code/DB, không publish
 
 ## Open / blocked
-- [ ] Ảnh gym là ảnh AI tự tạo — chờ xác nhận có gỡ luôn không
-- [ ] Gym & gift shop thiếu ảnh thật (gift shop hiện không còn ảnh sau khi gỡ)
-
-## Ảnh mới từ user (đang nhận từng thư mục)
-- [x] 01–10: đã xử lý (toàn cảnh, đuôi tàu, hồ bơi, sảnh đón tàu, sảnh thang, nhà hàng chính, hành lang/gift shop, giải trí gia đình, kid club, business center)
-- [in_progress] 11_P_Fitness: 2 ảnh gym (1920px) — nạp thư viện / thay ảnh gym cũ nếu có
-- [todo] 12_P_Tiec_Panorama: 2 ảnh nhà hàng tiệc panorama — xử lý sau khi xong 11
-- [x] 11_P_Fitness: gym-1 (cover Fitness Centre) + gym-2 (gallery venue)
-- [x] 13_P_Poker: poker-1 (cover Poker Room, thay poker-01 cũ) + poker-2 (gallery venue)
-- [x] 14_P_Cigar_Whisky — cigar-1 (cover) + cigar-2 (gallery) thay ảnh Cigar & Whisky Lounge
-- [x] 15_P_Karaoke — karaoke-1 (cover) + karaoke-2 (gallery) thay ảnh Karaoke Room
-
-- [x] Giữ trang chủ sáng; tăng độ rõ chữ mà không phủ tối ảnh.
+- [ ] Gift Shop: đang hiện trên trang Con Tàu nhưng chưa có ảnh nào (3 ảnh hành lang/lưu niệm trong thư viện chờ user quyết có dùng không)
+- [ ] Business Center: đã có 1 ảnh, chưa vào Gallery
+- [ ] Ảnh quầy lễ tân (chronos/public/reception-1.jpg) đang chờ user chọn vị trí hiển thị
+- [ ] Thư mục ảnh 16, 18, 19 (nếu có) chưa nhận
