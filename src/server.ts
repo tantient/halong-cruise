@@ -35,19 +35,38 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-function preventStaleDocumentCache(request: Request, response: Response): Response {
-  const contentType = response.headers.get("content-type") ?? "";
-  if (request.method !== "GET" || !contentType.includes("text/html")) return response;
+/**
+ * Edge HTML cache for public pages.
+ *
+ * Rendering a public page costs several seconds of database work on a cold
+ * worker instance, and the per-instance in-memory data cache rarely hits on
+ * serverless. Public content changes rarely, so a short-lived edge cache of
+ * the rendered HTML absorbs that cost: the first visitor after each TTL
+ * window pays it, everyone else gets a fast response. CMS edits still appear
+ * within a minute. Browser caches stay disabled (preventStaleDocumentCache
+ * below still strips them) — only the edge copy is cached.
+ */
+const EDGE_HTML_TTL_SECONDS = 60;
 
-  const headers = new Headers(response.headers);
-  headers.set("cache-control", "no-store, no-cache, must-revalidate, max-age=0");
-  headers.set("pragma", "no-cache");
-  headers.set("expires", "0");
-  return new Response(response.body, {
-    status: response.status,
-    statusText: response.statusText,
-    headers,
-  });
+const NON_CACHEABLE_PREFIXES = ["/admin", "/auth", "/api", "/dev"];
+
+function edgeCache(): Cache | undefined {
+  // Available on Cloudflare Workers; absent in the Node dev server.
+  return typeof caches !== "undefined" ? caches.default : undefined;
+}
+
+function isCacheableRequest(request: Request): boolean {
+  if (request.method !== "GET") return false;
+  const url = new URL(request.url);
+  // Any query string (version checks, trackers, preview params) bypasses.
+  if (url.searchParams.size > 0) return false;
+  if (NON_CACHEABLE_PREFIXES.some((p) => url.pathname === p || url.pathname.startsWith(`${p}/`))) return false;
+  return true;
+}
+
+function isCacheableResponse(response: Response): boolean {
+  const contentType = response.headers.get("content-type") ?? "";
+  return response.status === 200 && contentType.includes("text/html");
 }
 
 function isH3SwallowedErrorBody(body: string): boolean {
