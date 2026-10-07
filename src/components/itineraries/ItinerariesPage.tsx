@@ -133,7 +133,7 @@ function ItineraryCard({
                 <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
                   <Check className="h-3.5 w-3.5 text-chronos-gold" /> {ui.includes}
                 </p>
-                <ul className="space-y-1.5 text-sm text-chronos-stone/85">
+                <ul className="space-y-1.5 text-base text-chronos-stone/85">
                   {it.includes.map((i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />
@@ -146,7 +146,7 @@ function ItineraryCard({
                 <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-chronos-ink">
                   <X className="h-3.5 w-3.5 text-chronos-stone/50" /> {ui.excludes}
                 </p>
-                <ul className="space-y-1.5 text-sm text-chronos-stone/70">
+                <ul className="space-y-1.5 text-base text-chronos-stone/75">
                   {it.excludes.map((e) => (
                     <li key={e} className="flex items-start gap-2">
                       <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-stone/50" />
@@ -187,8 +187,8 @@ function ItineraryCard({
                 <div className="space-y-4">
                   {it.timeline.map((item) => (
                     <div key={item.key} className="flex gap-4">
-                      <span className="w-14 shrink-0 text-sm font-semibold text-chronos-gold">{item.time}</span>
-                      <span className="text-sm text-chronos-stone/85">{item.label}</span>
+                      <span className="w-14 shrink-0 text-base font-semibold text-chronos-gold">{item.time}</span>
+                      <span className="text-base text-chronos-stone/85">{item.label}</span>
                     </div>
                   ))}
                 </div>
@@ -199,7 +199,7 @@ function ItineraryCard({
                 </p>
                 <ul className="grid gap-2 sm:grid-cols-2">
                   {it.highlights.map((h) => (
-                    <li key={h} className="flex items-start gap-2 text-sm text-chronos-stone/85">
+                    <li key={h} className="flex items-start gap-2 text-base text-chronos-stone/85">
                       <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />
                       {h}
                     </li>

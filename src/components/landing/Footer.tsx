@@ -64,7 +64,7 @@ export function Footer({ t }: FooterProps) {
 
   const address = site?.settings.address ?? null;
   const links = [...quickLinks.slice(0, 7), { label: t.nav.careers, to: "/careers" }, ...quickLinks.slice(7)];
-  const heading = "mb-5 text-[11px] uppercase tracking-[0.28em] text-chronos-sand-500";
+  const heading = "mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-sand-500";
 
   return (
     <footer className="border-t border-chronos-sand-300/20 bg-chronos-ivory">
@@ -98,7 +98,7 @@ export function Footer({ t }: FooterProps) {
 
           <nav className="md:col-span-4">
             <p className={heading}>{t.footer.quickLinks}</p>
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs uppercase tracking-[0.18em] text-chronos-sand-700">
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-[13px] font-medium uppercase tracking-[0.12em] text-chronos-sand-700">
               {links.map((link) => (
                 <li key={link.to}>
                   <LocalLink path={link.to} className="transition-colors hover:text-chronos-sand-500">
@@ -111,7 +111,7 @@ export function Footer({ t }: FooterProps) {
 
           <div className="md:col-span-4">
             <p className={heading}>{t.nav.contact}</p>
-            <div className="flex flex-col gap-3 text-sm leading-relaxed text-chronos-sand-700">
+            <div className="flex flex-col gap-3 text-base leading-relaxed text-chronos-sand-700">
               {address ? <p className="whitespace-pre-line">{address}</p> : null}
               {phoneDisplay ? (
                 <a href={`tel:${phoneTel}`} className="transition-colors hover:text-chronos-sand-500">
@@ -127,7 +127,7 @@ export function Footer({ t }: FooterProps) {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-chronos-sand-300/20 pt-6 text-center text-xs tracking-wide text-chronos-sand-700/60 md:text-left">
+        <div className="mt-14 border-t border-chronos-sand-300/20 pt-6 text-center text-sm text-chronos-sand-700/70 md:text-left">
           © {new Date().getFullYear()}
           {site?.ship.displayName ? ` ${site.ship.displayName}.` : ""} {t.footer.rights}
         </div>

@@ -196,7 +196,7 @@ export function FeatureList({
     <Reveal className={`grid gap-x-12 gap-y-8 ${cols}`}>
       {items.map((item, i) => (
         <div key={item.title} className="border-t border-chronos-ink/12 pt-5">
-          <p className="mb-2 text-xs tracking-[0.28em] text-chronos-gold">
+            <p className="mb-2 text-xs font-medium tracking-[0.18em] text-chronos-gold">
             {String(i + 1).padStart(2, "0")}
           </p>
           <p className="text-base tracking-wide text-chronos-ink">{item.title}</p>
