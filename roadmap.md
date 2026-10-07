@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Done
+- [x] Sửa bản đồ Liên hệ: hiển thị Google Maps thật, đúng mã địa điểm, ghim và tên Chronos Cruise.
 - [x] Gỡ 3 ảnh AI tự tạo (suite, dining panorama, gift shop) khỏi DB + storage + source assets
 - [x] Gallery filter EN/VI + curation fields
 - [x] Homepage vertical rhythm refinement — giảm whitespace toàn bộ Journey/Suites/Life/Offers và nhịp nội bộ, giữ nguyên visual direction
