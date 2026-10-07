@@ -86,13 +86,13 @@ export function Header({ lang, setLang, t }: HeaderProps) {
         <nav className="hidden items-center gap-5 2xl:flex">
           <LocalLink
             path="/itineraries"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.itineraries}
           </LocalLink>
           <LocalLink
             path="/cabins"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.cabins}
           </LocalLink>
@@ -100,7 +100,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           <div className="group relative">
             <LocalLink
               path="/experiences"
-              className={`flex items-center gap-1 whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+              className={`flex items-center gap-1 whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
             >
               {t.nav.experiences}
               <ChevronDown className="h-3.5 w-3.5" />
@@ -109,7 +109,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
               <div className="rounded-sm border border-chronos-ink/10 bg-chronos-ivory/98 p-2 shadow-lg backdrop-blur-md">
                 {experienceLinks.map((link) => (
                   <LocalLink key={link.href} path={link.href} className={dropdownLinkClasses}>
-                    <span className="block text-[12px] font-medium tracking-wide text-chronos-ink">
+                    <span className="block text-[13px] font-medium tracking-wide text-chronos-ink">
                       {link.label}
                     </span>
                   </LocalLink>
@@ -120,7 +120,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
 
           <LocalLink
             path="/the-ship"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.ship}
           </LocalLink>
@@ -128,19 +128,19 @@ export function Header({ lang, setLang, t }: HeaderProps) {
 
           <LocalLink
             path="/gallery"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.gallery}
           </LocalLink>
           <LocalLink
             path="/careers"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.careers}
           </LocalLink>
           <LocalLink
             path="/contact"
-            className={`whitespace-nowrap text-xs font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
             {t.nav.contact}
           </LocalLink>
@@ -156,7 +156,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
               <button
                 key={code}
                 onClick={() => setLang(code as Lang)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
+                className={`rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
                   lang === code
                     ? scrolled
                       ? "bg-chronos-sand-900 text-chronos-ivory"
@@ -180,7 +180,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             }
           />
 
-          <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
+          <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
             <a href={bookingLink} target="_blank" rel="noopener noreferrer">
               {t.nav.book}
             </a>
@@ -256,7 +256,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                 <button
                   key={code}
                   onClick={() => setLang(code as Lang)}
-                  className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  className={`rounded-full px-3 py-1 text-[13px] font-semibold ${
                     lang === code ? "bg-chronos-sand-900 text-chronos-ivory" : "text-chronos-sand-900/70"
                   }`}
                   aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
@@ -266,7 +266,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
               ))}
               <ThemeToggle className="border-chronos-sand-900/15 text-chronos-sand-900 hover:bg-chronos-sand-900/5" />
             </div>
-            <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
+            <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
               <a href={bookingLink} target="_blank" rel="noopener noreferrer">
                 {t.nav.book}
               </a>
