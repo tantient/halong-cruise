@@ -69,6 +69,30 @@ function isCacheableResponse(response: Response): boolean {
   return response.status === 200 && contentType.includes("text/html");
 }
 
+/** Browser caches of HTML documents stay disabled (stale-tab protection). */
+function preventStaleDocumentCache(request: Request, response: Response): Response {
+  const contentType = response.headers.get("content-type") ?? "";
+  if (request.method !== "GET" || !contentType.includes("text/html")) return response;
+
+  const headers = new Headers(response.headers);
+  headers.set("cache-control", "no-store, no-cache, must-revalidate, max-age=0");
+  headers.set("pragma", "no-cache");
+  headers.set("expires", "0");
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+/** Cache-copy headers: public + short TTL so the edge re-renders within a minute. */
+function edgeCacheHeaders(response: Response): Headers {
+  const headers = new Headers(response.headers);
+  headers.set("cache-control", `public, max-age=${EDGE_HTML_TTL_SECONDS}`);
+  headers.delete("set-cookie");
+  return headers;
+}
+
 function isH3SwallowedErrorBody(body: string): boolean {
   try {
     const payload = JSON.parse(body) as { unhandled?: unknown; message?: unknown };
@@ -80,10 +104,24 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const cache = isCacheableRequest(request) ? edgeCache() : undefined;
     try {
+      if (cache) {
+        const hit = await cache.match(request);
+        if (hit) return preventStaleDocumentCache(request, hit);
+      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalizedResponse = await normalizeCatastrophicSsrResponse(response);
+      if (cache && isCacheableResponse(normalizedResponse)) {
+        // waitUntil keeps the put off the critical path; body cloned for the caller.
+        ctx?.waitUntil?.(
+          cache.put(request, new Response(normalizedResponse.clone().body, {
+            status: 200,
+            headers: edgeCacheHeaders(normalizedResponse),
+          })),
+        );
+      }
       return preventStaleDocumentCache(request, normalizedResponse);
     } catch (error) {
       console.error(error);
