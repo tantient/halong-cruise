@@ -172,6 +172,27 @@ export type Database = {
           },
         ]
       }
+      content_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          expires_at: string
+          value: Json
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          expires_at: string
+          value: Json
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          expires_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       entity_media: {
         Row: {
           created_at: string
