@@ -1,3 +1,5 @@
+import type { Json } from "@supabase/supabase-js";
+
 /**
  * Two-layer cache for public reads.
  *
