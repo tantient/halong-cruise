@@ -35,46 +35,6 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-/**
- * Edge HTML cache for public pages.
- *
- * Rendering a public page costs several seconds of database work on a cold
- * worker instance, and the per-instance in-memory data cache rarely hits on
- * serverless. Public content changes rarely, so a short-lived edge cache of
- * the rendered HTML absorbs that cost: the first visitor after each TTL
- * window pays it, everyone else gets a fast response. CMS edits still appear
- * within a minute. Browser caches stay disabled (preventStaleDocumentCache
- * below still strips them) — only the edge copy is cached.
- */
-const EDGE_HTML_TTL_SECONDS = 60;
-
-const NON_CACHEABLE_PREFIXES = ["/admin", "/auth", "/api", "/dev"];
-
-type WorkersCache = {
-  match: (request: Request) => Promise<Response | undefined>;
-  put: (request: Request, response: Response) => Promise<void>;
-};
-
-function edgeCache(): WorkersCache | undefined {
-  // Available on Cloudflare Workers; absent in the Node dev server.
-  const storage = (globalThis as { caches?: { default?: WorkersCache } }).caches;
-  return storage?.default;
-}
-
-function isCacheableRequest(request: Request): boolean {
-  if (request.method !== "GET") return false;
-  const url = new URL(request.url);
-  // Any query string (version checks, trackers, preview params) bypasses.
-  if (url.searchParams.size > 0) return false;
-  if (NON_CACHEABLE_PREFIXES.some((p) => url.pathname === p || url.pathname.startsWith(`${p}/`))) return false;
-  return true;
-}
-
-function isCacheableResponse(response: Response): boolean {
-  const contentType = response.headers.get("content-type") ?? "";
-  return response.status === 200 && contentType.includes("text/html");
-}
-
 /** Browser caches of HTML documents stay disabled (stale-tab protection). */
 function preventStaleDocumentCache(request: Request, response: Response): Response {
   const contentType = response.headers.get("content-type") ?? "";
@@ -91,14 +51,6 @@ function preventStaleDocumentCache(request: Request, response: Response): Respon
   });
 }
 
-/** Cache-copy headers: public + short TTL so the edge re-renders within a minute. */
-function edgeCacheHeaders(response: Response): Headers {
-  const headers = new Headers(response.headers);
-  headers.set("cache-control", `public, max-age=${EDGE_HTML_TTL_SECONDS}`);
-  headers.delete("set-cookie");
-  return headers;
-}
-
 function isH3SwallowedErrorBody(body: string): boolean {
   try {
     const payload = JSON.parse(body) as { unhandled?: unknown; message?: unknown };
@@ -110,25 +62,10 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
-    const cache = isCacheableRequest(request) ? edgeCache() : undefined;
     try {
-      if (cache) {
-        const hit = await cache.match(request);
-        if (hit) return preventStaleDocumentCache(request, hit);
-      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalizedResponse = await normalizeCatastrophicSsrResponse(response);
-      if (cache && isCacheableResponse(normalizedResponse)) {
-        // waitUntil keeps the put off the critical path; body cloned for the caller.
-        const executionCtx = ctx as { waitUntil?: (promise: Promise<unknown>) => void } | undefined;
-        executionCtx?.waitUntil?.(
-          cache.put(request, new Response(normalizedResponse.clone().body, {
-            status: 200,
-            headers: edgeCacheHeaders(normalizedResponse),
-          })),
-        );
-      }
       return preventStaleDocumentCache(request, normalizedResponse);
     } catch (error) {
       console.error(error);
