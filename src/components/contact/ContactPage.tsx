@@ -106,7 +106,7 @@ export function ContactPage({ bundle }: { bundle: PublicPageBundle }) {
                       <Icon className="h-4 w-4" />
                     </span>
                     <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-chronos-stone/70">{label}</p>
+                      <p className="text-xs font-medium uppercase tracking-[0.14em] text-chronos-stone/75">{label}</p>
                       {link ? (
                         <a
                           href={link}

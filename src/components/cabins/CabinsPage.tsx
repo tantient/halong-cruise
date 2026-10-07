@@ -92,7 +92,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
                   <div key={active.slug} className="animate-in fade-in slide-in-from-bottom-2 duration-500 motion-reduce:animate-none">
                     {active.code ? <p className="mb-3 text-xs uppercase tracking-[0.24em] text-chronos-gold">{active.code}</p> : null}
                     <h3 className="text-3xl tracking-[0.02em] text-card-foreground sm:text-4xl">{active.name}</h3>
-                    {active.summary ? <p className="mt-4 text-sm leading-relaxed text-chronos-stone/85">{active.summary}</p> : null}
+                    {active.summary ? <p className="mt-4 text-base leading-relaxed text-chronos-stone/85">{active.summary}</p> : null}
                     <dl className="mt-8 grid grid-cols-2 gap-x-7 gap-y-5 border-y border-chronos-ink/10 py-6">
                       {active.areaValue ? <Spec label={active.vip ? ui.totalPrivateArea : ui.area} value={active.areaValue} /> : null}
                       {active.maxGuests !== null ? <Spec label={ui.maxOccupancy} value={ui.guests(active.maxGuests)} /> : active.capacity ? <Spec label={ui.maxOccupancy} value={active.capacity} /> : null}
@@ -100,7 +100,7 @@ export function CabinsPage({ bundle }: { bundle: PublicCabinsBundle }) {
                       {active.deck ? <Spec label={ui.location} value={active.deck} /> : null}
                       {active.view ? <Spec label={ui.view} value={active.view} /> : null}
                     </dl>
-                    {active.highlights.length ? <ul className="mt-7 space-y-3">{active.highlights.slice(0, 3).map((highlight) => <li key={highlight} className="flex items-start gap-3 text-sm text-chronos-stone/85"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />{highlight}</li>)}</ul> : null}
+                    {active.highlights.length ? <ul className="mt-7 space-y-3">{active.highlights.slice(0, 3).map((highlight) => <li key={highlight} className="flex items-start gap-3 text-base text-chronos-stone/85"><span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-chronos-gold" />{highlight}</li>)}</ul> : null}
                   </div>
                   <div className="mt-9 flex flex-wrap gap-3">
                     <Button asChild className="btn-sheen rounded-none bg-chronos-gold px-6 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ink hover:bg-chronos-gold/90"><LocalLink path={`/cabins/${active.slug}`}>{ui.exploreSuite}<ArrowRight className="ml-2 h-4 w-4" /></LocalLink></Button>
@@ -147,5 +147,5 @@ export function CabinCompareDialog({ cabin, open, onClose, ui, quoteLink }: { ca
 }
 
 function Spec({ label, value }: { label: string; value: string }) {
-  return <div className="min-w-0"><dt className="text-[11px] uppercase tracking-[0.18em] text-chronos-stone/65">{label}</dt><dd className="mt-1 break-words text-sm text-card-foreground">{value}</dd></div>;
+  return <div className="min-w-0"><dt className="text-xs font-medium uppercase tracking-[0.12em] text-chronos-stone/70">{label}</dt><dd className="mt-1 break-words text-base text-card-foreground">{value}</dd></div>;
 }

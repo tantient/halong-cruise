@@ -183,22 +183,22 @@ export function ChapterLife({
 
           <div className="relative z-10 flex h-full flex-col justify-end p-6 sm:p-10 lg:p-14">
             <div className="max-w-2xl">
-              <span className="text-[0.62rem] uppercase tracking-[0.42em] text-white/85">{current.kind}</span>
+              <span className="text-xs font-medium uppercase tracking-[0.18em] text-white/85">{current.kind}</span>
               <h3 className="mt-4 font-display text-3xl leading-[1.05] font-normal text-white sm:text-5xl lg:text-6xl">
                 {current.title}
               </h3>
               {current.meta ? (
-                <p className="mt-3 text-[0.68rem] uppercase tracking-[0.3em] text-white/85">{current.meta}</p>
+                <p className="mt-3 text-xs font-medium uppercase tracking-[0.16em] text-white/85">{current.meta}</p>
               ) : null}
               {current.body ? (
-                <p className="mt-5 max-w-xl text-sm leading-[1.85] font-normal text-white/85 sm:text-base">
+                <p className="mt-5 max-w-xl text-base leading-[1.75] font-normal text-white/85">
                   {current.body}
                 </p>
               ) : null}
               <div className="mt-7">
                 <LocalLink
                   path={current.href}
-                  className="inline-flex items-center gap-3 border border-white/45 px-6 py-3.5 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
+                  className="inline-flex items-center gap-3 border border-white/45 px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
                 >
                   {textOf(section, "cta") || ui.viewAll}
                   <span aria-hidden>&rarr;</span>
@@ -215,7 +215,7 @@ export function ChapterLife({
                   onFocus={() => setActive(i)}
                   onClick={() => setActive(i)}
                   aria-current={i === index}
-                  className={`text-[0.66rem] uppercase tracking-[0.3em] transition-colors duration-300 ${
+                  className={`text-xs font-medium uppercase tracking-[0.14em] transition-colors duration-300 ${
                     i === index ? "text-white" : "text-white/85 hover:text-white/90"
                   }`}
                 >

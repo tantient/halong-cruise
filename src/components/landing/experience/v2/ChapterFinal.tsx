@@ -39,7 +39,7 @@ export function ChapterFinal({
         </SceneReveal>
         {textOf(section, "body") ? (
           <SceneReveal variant="fade" delay={300}>
-            <p className="mx-auto mt-5 max-w-md text-[0.68rem] uppercase tracking-[0.4em] text-white/85">
+            <p className="mx-auto mt-5 max-w-md text-xs font-medium uppercase leading-relaxed tracking-[0.16em] text-white/85">
               {textOf(section, "body")}
             </p>
           </SceneReveal>

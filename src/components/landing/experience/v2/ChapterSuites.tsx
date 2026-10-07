@@ -70,7 +70,7 @@ export function ChapterSuites({
                 </div>
               ))}
             </div>
-            <p className="mt-4 text-[0.66rem] uppercase tracking-[0.34em] text-[color:var(--amb-muted)]">
+            <p className="mt-4 text-xs font-medium uppercase tracking-[0.16em] text-[color:var(--amb-muted)]">
               {current.name}
             </p>
           </SceneReveal>
@@ -97,7 +97,7 @@ export function ChapterSuites({
                           {c.name}
                         </span>
                         {meta(c) ? (
-                          <span className="mt-2 block text-[0.64rem] uppercase tracking-[0.32em] text-[color:var(--amb-muted)]">
+                          <span className="mt-2 block text-xs font-medium uppercase tracking-[0.14em] text-[color:var(--amb-muted)]">
                             {meta(c)}
                           </span>
                         ) : null}

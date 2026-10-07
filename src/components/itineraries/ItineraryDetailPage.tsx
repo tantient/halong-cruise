@@ -225,7 +225,7 @@ function OverviewSection({ it, ui }: { it: ItineraryView; ui: ItineraryUi }) {
         <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
           {facts.map((f) => (
             <div key={f.label}>
-              <dt className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-chronos-ink/55">
+              <dt className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-chronos-ink/65">
                 {f.label}
               </dt>
               <dd className="text-lg tracking-[0.01em] text-chronos-ink">{f.value}</dd>
@@ -260,7 +260,7 @@ function DayBlock({
         className="absolute left-0 top-2 h-4 w-4 rounded-full border-2 border-chronos-gold bg-chronos-ivory"
       />
       <div className="mb-8 flex flex-wrap items-baseline gap-4">
-        <span className="text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-chronos-gold">
+        <span className="text-xs font-semibold uppercase tracking-[0.16em] text-chronos-gold">
           {String(day.dayNumber).padStart(2, "0")}
         </span>
         <h3 className="text-2xl tracking-[0.02em] text-chronos-ink sm:text-3xl">{heading}</h3>
