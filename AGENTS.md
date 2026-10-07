@@ -11,4 +11,6 @@
 
 - Do not cache rendered HTML in `src/server.ts` via the Workers Cache API — it took the production site down with 500s; browser HTML caching also stays disabled for stale-tab protection.
 
+- Public read caching is two-layer in `src/lib/platform/cache.server.ts`: per-instance memory (60s) plus a shared `public.content_cache` table row (60s TTL, service-role only, best-effort with silent fallback). Never cache rendered HTML; data-level JSON bundles only.
+
 - Contact maps render the saved Google place as an iframe, preserving its feature ID and actual place coordinates rather than drawing a separate branded marker; this keeps Google's place name and pin consistent with the directions link.
