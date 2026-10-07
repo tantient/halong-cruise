@@ -39,7 +39,7 @@ export function Eyebrow({
       {index ? <span className="font-display text-sm italic">{index}</span> : null}
       <span className={`h-px w-10 ${line}`} />
       {label ? (
-        <span className="text-[0.66rem] font-semibold uppercase tracking-[0.42em]">{label}</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em]">{label}</span>
       ) : null}
     </div>
   );
@@ -82,7 +82,7 @@ export function AmbientLink({
   variant?: "outline" | "solid" | "text";
 }) {
   const base =
-    "inline-flex items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.28em] transition-all duration-500";
+    "inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] transition-all duration-500";
   const style =
     variant === "text"
       ? tone === "onImage"

@@ -42,7 +42,7 @@ export function ChapterArrival({
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 sm:pb-24 lg:px-8 lg:pb-28">
         {tagline ? (
           <SceneReveal variant="fade" delay={150} duration={1400}>
-            <span className="image-copy-shadow block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-chronos-ivory">
+            <span className="image-copy-shadow block text-xs font-semibold uppercase tracking-[0.2em] text-chronos-ivory">
               {tagline}
             </span>
           </SceneReveal>
@@ -69,7 +69,7 @@ export function ChapterArrival({
                 {cta ? (
                   <a
                     href={`#${nextId}`}
-                    className="image-copy-shadow inline-flex items-center gap-3 border border-chronos-ivory/75 px-7 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-chronos-ivory transition-all duration-500 hover:border-chronos-ivory hover:bg-chronos-deep/15"
+                    className="image-copy-shadow inline-flex items-center gap-3 border border-chronos-ivory/75 px-7 py-4 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ivory transition-all duration-500 hover:border-chronos-ivory hover:bg-chronos-deep/15"
                   >
                     {cta}
                     <span aria-hidden>&darr;</span>
@@ -78,7 +78,7 @@ export function ChapterArrival({
                 {ctaSecondary ? (
                   <LocalLink
                     path="/itineraries"
-                    className="image-copy-shadow inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-chronos-ivory underline decoration-chronos-ivory/60 underline-offset-8 transition-colors duration-500 hover:decoration-chronos-ivory"
+                    className="image-copy-shadow inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ivory underline decoration-chronos-ivory/60 underline-offset-8 transition-colors duration-500 hover:decoration-chronos-ivory"
                   >
                     {ctaSecondary}
                     <span aria-hidden>&rarr;</span>
@@ -92,7 +92,7 @@ export function ChapterArrival({
       </div>
 
       <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2">
-        <span className="image-copy-shadow text-[0.58rem] font-semibold uppercase tracking-[0.4em] text-chronos-ivory">{ui.scroll}</span>
+        <span className="image-copy-shadow text-xs font-semibold uppercase tracking-[0.16em] text-chronos-ivory">{ui.scroll}</span>
         <span className="scroll-thread h-10 w-px" />
       </div>
     </section>

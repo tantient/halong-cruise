@@ -73,7 +73,7 @@ export function ChapterJourney({
 
           {textOf(section, "note") ? (
             <SceneReveal variant="fade" delay={420} className="mt-6">
-              <p className="text-[0.66rem] uppercase tracking-[0.4em] text-[color:var(--amb-muted)]">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-[color:var(--amb-muted)]">
                 {textOf(section, "note")}
               </p>
             </SceneReveal>
@@ -108,7 +108,7 @@ export function ChapterJourney({
                     background: i === active ? "var(--amb-accent)" : "var(--amb-bg)",
                   }}
                 />
-                <span className="text-[0.62rem] uppercase tracking-[0.4em] text-[color:var(--amb-muted)]">
+                <span className="text-xs font-medium uppercase tracking-[0.16em] text-[color:var(--amb-muted)]">
                   {duration(it)}
                   {it.departurePoint ? ` · ${it.departurePoint}` : ""}
                 </span>
@@ -116,7 +116,7 @@ export function ChapterJourney({
                   {it.name}
                 </h3>
                 {it.summary ? (
-                  <p className="mt-3 max-w-lg text-sm leading-[1.85] font-normal text-[color:var(--amb-muted)] sm:text-base">
+                  <p className="mt-3 max-w-lg text-base leading-[1.75] font-normal text-[color:var(--amb-muted)]">
                     {it.summary}
                   </p>
                 ) : null}
