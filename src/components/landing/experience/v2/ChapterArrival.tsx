@@ -37,17 +37,18 @@ export function ChapterArrival({
   return (
     <section className="relative flex h-[100svh] min-h-[560px] w-full items-end overflow-hidden">
       <AmbientStage media={section?.media} alt={shipName} priority zoom raw scrim={false} />
+      <div aria-hidden className="hero-readable-scrim pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-20 sm:pb-24 lg:px-8 lg:pb-28">
         {tagline ? (
           <SceneReveal variant="fade" delay={150} duration={1400}>
-            <span className="block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-white/85">
+            <span className="image-copy-shadow block text-[0.66rem] font-semibold uppercase tracking-[0.5em] text-chronos-ivory">
               {tagline}
             </span>
           </SceneReveal>
         ) : null}
         <SceneReveal variant="up" delay={350} duration={1500}>
-          <h1 className="mt-8 font-display text-2xl font-normal uppercase leading-[1.25] tracking-[0.1em] text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-3xl sm:tracking-[0.18em] lg:text-5xl">
+          <h1 className="image-copy-shadow mt-8 font-display text-2xl font-semibold uppercase leading-[1.25] tracking-[0.1em] text-chronos-ivory sm:text-3xl sm:tracking-[0.18em] lg:text-5xl">
             <span className="block whitespace-nowrap">{title}</span>
             {accent ? <span className="block whitespace-nowrap">{accent}</span> : null}
           </h1>
@@ -55,7 +56,7 @@ export function ChapterArrival({
         <div className="mt-8 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           {subtitle ? (
             <SceneReveal variant="up" delay={620} duration={1400}>
-              <p className="max-w-md text-sm font-normal leading-relaxed text-white/85 sm:text-base">
+              <p className="image-copy-shadow max-w-md text-sm font-medium leading-relaxed text-chronos-ivory sm:text-base">
                 {subtitle}
               </p>
             </SceneReveal>
@@ -68,7 +69,7 @@ export function ChapterArrival({
                 {cta ? (
                   <a
                     href={`#${nextId}`}
-                    className="inline-flex items-center gap-3 border border-white/45 px-7 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-white transition-all duration-500 hover:border-white hover:bg-white/10"
+                    className="image-copy-shadow inline-flex items-center gap-3 border border-chronos-ivory/75 px-7 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-chronos-ivory transition-all duration-500 hover:border-chronos-ivory hover:bg-chronos-deep/15"
                   >
                     {cta}
                     <span aria-hidden>&darr;</span>
@@ -77,7 +78,7 @@ export function ChapterArrival({
                 {ctaSecondary ? (
                   <LocalLink
                     path="/itineraries"
-                    className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/90 underline decoration-white/30 underline-offset-8 transition-colors duration-500 hover:text-white hover:decoration-white/70"
+                    className="image-copy-shadow inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-chronos-ivory underline decoration-chronos-ivory/60 underline-offset-8 transition-colors duration-500 hover:decoration-chronos-ivory"
                   >
                     {ctaSecondary}
                     <span aria-hidden>&rarr;</span>
@@ -91,7 +92,7 @@ export function ChapterArrival({
       </div>
 
       <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2">
-        <span className="text-[0.58rem] uppercase tracking-[0.4em] text-white/85">{ui.scroll}</span>
+        <span className="image-copy-shadow text-[0.58rem] font-semibold uppercase tracking-[0.4em] text-chronos-ivory">{ui.scroll}</span>
         <span className="scroll-thread h-10 w-px" />
       </div>
     </section>
