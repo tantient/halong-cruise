@@ -9,4 +9,6 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
+- Public GET pages without a query string are edge-cached as rendered HTML in `src/server.ts` (60s TTL; `/admin`, `/auth`, `/api`, `/dev` bypassed) — SSR costs seconds of DB work per cold worker, and browser HTML caching must stay disabled for stale-tab protection, so the edge cache is the only freshness/fast-response mechanism.
+
 - Contact maps render the saved Google place as an iframe, preserving its feature ID and actual place coordinates rather than drawing a separate branded marker; this keeps Google's place name and pin consistent with the directions link.
