@@ -50,9 +50,15 @@ const EDGE_HTML_TTL_SECONDS = 60;
 
 const NON_CACHEABLE_PREFIXES = ["/admin", "/auth", "/api", "/dev"];
 
-function edgeCache(): Cache | undefined {
+type WorkersCache = {
+  match: (request: Request) => Promise<Response | undefined>;
+  put: (request: Request, response: Response) => Promise<void>;
+};
+
+function edgeCache(): WorkersCache | undefined {
   // Available on Cloudflare Workers; absent in the Node dev server.
-  return typeof caches !== "undefined" ? caches.default : undefined;
+  const storage = (globalThis as { caches?: { default?: WorkersCache } }).caches;
+  return storage?.default;
 }
 
 function isCacheableRequest(request: Request): boolean {
