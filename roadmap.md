@@ -23,3 +23,5 @@
 - [x] 13_P_Poker: poker-1 (cover Poker Room, thay poker-01 cũ) + poker-2 (gallery venue)
 - [x] 14_P_Cigar_Whisky — cigar-1 (cover) + cigar-2 (gallery) thay ảnh Cigar & Whisky Lounge
 - [x] 15_P_Karaoke — karaoke-1 (cover) + karaoke-2 (gallery) thay ảnh Karaoke Room
+
+- [x] Giữ trang chủ sáng; tăng độ rõ chữ mà không phủ tối ảnh.

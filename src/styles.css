@@ -414,6 +414,23 @@
     );
 }
 
+/* Bright hero protection: adds contrast only behind navigation and copy,
+ * leaving the ship, sea and most of the photograph visually untouched. */
+@utility hero-readable-scrim {
+  background:
+    radial-gradient(
+      ellipse 72% 58% at 16% 86%,
+      color-mix(in oklab, var(--chronos-deep) 38%, transparent) 0%,
+      color-mix(in oklab, var(--chronos-deep) 14%, transparent) 48%,
+      transparent 76%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--chronos-deep) 12%, transparent) 0%,
+      transparent 22%
+    );
+}
+
 @utility image-copy-shadow {
   text-shadow: 0 2px 14px color-mix(in oklab, var(--chronos-deep) 58%, transparent);
 }
