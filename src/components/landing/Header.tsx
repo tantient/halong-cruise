@@ -187,17 +187,42 @@ export function Header({ lang, setLang, t }: HeaderProps) {
           </Button>
         </div>
 
-        <button
-          className="2xl:hidden"
+        <div className="flex items-center gap-2 md:hidden">
+          <Button
+            asChild
+            size="sm"
+            className="btn-sheen rounded-none bg-chronos-sand-500 px-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-chronos-ivory hover:bg-chronos-sand-700"
+          >
+            <a href={bookingLink} target="_blank" rel="noopener noreferrer">
+              {t.nav.book}
+            </a>
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen((s) => !s)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            className={scrolled ? "text-chronos-sand-900" : "text-chronos-ivory hover:bg-chronos-ivory/10"}
+          >
+            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => setMobileOpen((s) => !s)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileOpen}
+          className={`hidden md:inline-flex 2xl:hidden ${
+            scrolled ? "text-chronos-sand-900" : "text-chronos-ivory hover:bg-chronos-ivory/10"
+          }`}
         >
-          {mobileOpen ? (
-            <X className={`h-6 w-6 ${scrolled ? "text-chronos-sand-900" : "text-chronos-ivory"}`} />
-          ) : (
-            <Menu className={`h-6 w-6 ${scrolled ? "text-chronos-sand-900" : "text-chronos-ivory"}`} />
-          )}
-        </button>
+          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </Button>
       </div>
 
       {mobileOpen && (
