@@ -110,25 +110,10 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
-    const cache = isCacheableRequest(request) ? edgeCache() : undefined;
     try {
-      if (cache) {
-        const hit = await cache.match(request);
-        if (hit) return preventStaleDocumentCache(request, hit);
-      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       const normalizedResponse = await normalizeCatastrophicSsrResponse(response);
-      if (cache && isCacheableResponse(normalizedResponse)) {
-        // waitUntil keeps the put off the critical path; body cloned for the caller.
-        const executionCtx = ctx as { waitUntil?: (promise: Promise<unknown>) => void } | undefined;
-        executionCtx?.waitUntil?.(
-          cache.put(request, new Response(normalizedResponse.clone().body, {
-            status: 200,
-            headers: edgeCacheHeaders(normalizedResponse),
-          })),
-        );
-      }
       return preventStaleDocumentCache(request, normalizedResponse);
     } catch (error) {
       console.error(error);
