@@ -84,7 +84,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                       </span>
                     ) : null}
                     {job.employmentType ? (
-                      <span className="text-[12px] text-muted-foreground">{job.employmentType}</span>
+                      <span className="text-sm text-muted-foreground">{job.employmentType}</span>
                     ) : null}
                   </div>
                   <h3 className="mb-3 text-2xl tracking-[0.02em] text-card-foreground">{job.title}</h3>
@@ -132,7 +132,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                     <Clock className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-card-foreground/80">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-card-foreground/80">
                       {tc.processLabel}
                     </p>
                     <p className="mt-1 text-chronos-stone/85">{str(page, "process_text")}</p>
@@ -143,7 +143,7 @@ export function CareersPage({ bundle }: { bundle: PublicCareersBundle }) {
                     <MapPin className="h-4 w-4" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-semibold uppercase tracking-[0.18em] text-card-foreground/80">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-card-foreground/80">
                       {tc.locationLabel}
                     </p>
                     <p className="mt-1 text-chronos-stone/85">
