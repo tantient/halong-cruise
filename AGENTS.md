@@ -14,3 +14,5 @@
 - Public read caching is two-layer in `src/lib/platform/cache.server.ts`: per-instance memory (60s) plus a shared `public.content_cache` table row (60s TTL, service-role only, best-effort with silent fallback). Never cache rendered HTML; data-level JSON bundles only.
 
 - Contact maps render the saved Google place as an iframe, preserving its feature ID and actual place coordinates rather than drawing a separate branded marker; this keeps Google's place name and pin consistent with the directions link.
+
+- Public typography uses the global Tailwind type scale in `src/styles.css`: body copy is at least 16px, public labels/buttons are at least 13px, and uppercase tracking stays restrained for readability across mobile and desktop.
