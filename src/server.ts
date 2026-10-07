@@ -115,7 +115,8 @@ export default {
       const normalizedResponse = await normalizeCatastrophicSsrResponse(response);
       if (cache && isCacheableResponse(normalizedResponse)) {
         // waitUntil keeps the put off the critical path; body cloned for the caller.
-        ctx?.waitUntil?.(
+        const executionCtx = ctx as { waitUntil?: (promise: Promise<unknown>) => void } | undefined;
+        executionCtx?.waitUntil?.(
           cache.put(request, new Response(normalizedResponse.clone().body, {
             status: 200,
             headers: edgeCacheHeaders(normalizedResponse),
