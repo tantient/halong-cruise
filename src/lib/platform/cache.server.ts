@@ -1,4 +1,4 @@
-import type { Json } from "@supabase/supabase-js";
+import type { Json } from "@/integrations/supabase/types";
 
 /**
  * Two-layer cache for public reads.
@@ -43,13 +43,13 @@ async function readShared(key: string): Promise<unknown> {
   }
 }
 
-async function writeShared(key: string, value: unknown): Promise<void> {
+async function writeShared(key: string, payload: unknown): Promise<void> {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const expiresAt = new Date(Date.now() + SHARED_TTL_SECONDS * 1000).toISOString();
     await supabaseAdmin
       .from("content_cache")
-      .upsert({ cache_key: key, value: computed as Json, expires_at: expiresAt }, { onConflict: "cache_key" });
+      .upsert({ cache_key: key, value: payload as Json, expires_at: expiresAt }, { onConflict: "cache_key" });
   } catch {
     // Best-effort only — the in-memory layer still serves this instance.
   }
