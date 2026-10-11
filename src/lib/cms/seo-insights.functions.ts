@@ -87,7 +87,7 @@ async function querySearch(siteUrl: string, query: string, days: number): Promis
     rowLimit: 100,
   };
   if (query) {
-    body.dimensionFilterGroups = [{ filters: [{ dimension: "query", operator: "contains", expression: query }] }];
+    body["dimensionFilterGroups"] = [{ filters: [{ dimension: "query", operator: "contains", expression: query }] }];
   }
   const res = await fetch(`${GSC}/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`, {
     method: "POST",
