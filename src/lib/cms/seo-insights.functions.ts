@@ -38,8 +38,8 @@ export type SeoInsightResult =
     };
 
 function gscHeaders() {
-  const lovable = process.env.LOVABLE_API_KEY;
-  const conn = process.env.GOOGLE_SEARCH_CONSOLE_API_KEY;
+  const lovable = process.env["LOVABLE_API_KEY"];
+  const conn = process.env["GOOGLE_SEARCH_CONSOLE_API_KEY"];
   if (!lovable || !conn) throw new Error("Chưa kết nối Google Search Console.");
   return { Authorization: `Bearer ${lovable}`, "X-Connection-Api-Key": conn };
 }
@@ -69,7 +69,7 @@ async function resolveSite(selected?: string) {
     return { status: "selected" as const, siteUrl: hit.siteUrl };
   }
   if (matches.length === 0) throw new Error("Chưa có trang Search Console đã xác minh cho chronoscruise.com.");
-  if (matches.length === 1) return { status: "selected" as const, siteUrl: matches[0].siteUrl };
+  if (matches.length === 1) return { status: "selected" as const, siteUrl: matches[0]!.siteUrl };
   return { status: "selection_required" as const, candidates: matches.map((m) => m.siteUrl) };
 }
 
@@ -100,8 +100,8 @@ async function querySearch(siteUrl: string, query: string, days: number): Promis
     rows?: { keys: string[]; clicks: number; impressions: number; ctr: number; position: number }[];
   };
   return (data.rows ?? []).map((r) => ({
-    query: r.keys[0],
-    page: r.keys[1],
+    query: r.keys[0] ?? "",
+    page: r.keys[1] ?? "",
     clicks: r.clicks,
     impressions: r.impressions,
     ctr: r.ctr,
@@ -133,7 +133,7 @@ const adviceSchema = {
 };
 
 async function analyse(query: string, rows: SeoRow[]) {
-  const key = process.env.LOVABLE_API_KEY;
+  const key = process.env["LOVABLE_API_KEY"];
   if (!key) throw new Error("Thiếu khoá AI.");
   const table = rows
     .slice(0, 80)
