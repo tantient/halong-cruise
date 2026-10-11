@@ -174,6 +174,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           : []),
         { name: "theme-color", content: themeColor },
         { name: "app-version", content: APP_VERSION },
+        { name: "google-site-verification", content: "1h2ssmgAZZKAE3zc94tVUbGXKhUDbFO48t-BbrZaL0I" },
         ...(locale ? [{ property: "og:locale", content: locale }] : []),
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
