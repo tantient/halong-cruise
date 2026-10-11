@@ -13,6 +13,7 @@ const NAV: { label: string; to?: string; soon?: boolean }[] = [
   { label: "Hải trình", to: "/admin/itineraries" },
   { label: "Địa điểm trên tàu", to: "/admin/venues" },
   { label: "Hồ sơ ứng tuyển", to: "/admin/applications" },
+  { label: "Phân tích SEO", to: "/admin/seo" },
   { label: "Dịch vụ", soon: true },
   { label: "Ưu đãi", soon: true },
   { label: "Trang nội dung", soon: true },
