@@ -25,19 +25,20 @@ const MAX_ENTRIES = 500;
 
 const store = new Map<string, { at: number; value: Promise<unknown> }>();
 
-async function readShared(key: string): Promise<unknown> {
+// `expires_at` marks when a shared row stops being FRESH. Stale rows are
+// still served instantly (stale-while-revalidate) while a background refresh
+// recomputes them, so a low-traffic site never makes a visitor wait for the
+// full query fan-out just because the previous visit was over a minute ago.
+async function readShared(key: string): Promise<{ value: unknown; stale: boolean } | undefined> {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data, error } = await supabaseAdmin
       .from("content_cache")
-      .select("value")
+      .select("value,expires_at")
       .eq("cache_key", key)
-      .gt("expires_at", new Date().toISOString())
       .maybeSingle();
-    if (error) return undefined;
-    // JSON null means "not cached" — recompute (cached read fns return
-    // null only for genuine misses, which are cheap to recompute).
-    return data?.value ?? undefined;
+    if (error || !data || data.value === null) return undefined;
+    return { value: data.value, stale: new Date(data.expires_at).getTime() <= Date.now() };
   } catch {
     return undefined;
   }
@@ -62,7 +63,12 @@ export function cached<T>(key: string, fn: () => Promise<T>): Promise<T> {
 
   const value: Promise<T> = (async () => {
     const shared = await readShared(key);
-    if (shared !== undefined) return shared as T;
+    if (shared && !shared.stale) return shared.value as T;
+    if (shared) {
+      // Serve stale immediately; refresh in the background (best-effort).
+      void fn().then((fresh) => writeShared(key, fresh)).catch(() => {});
+      return shared.value as T;
+    }
     const computed = await fn();
     // Fire-and-forget: persist so sibling instances skip the recompute.
     void writeShared(key, computed);
