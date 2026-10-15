@@ -15,10 +15,10 @@ export const GUIDE_SLUG = "ha-long-bay-guide";
 export const GUIDE_PATH = "/ha-long-bay-guide";
 
 /** Editorial travel guide; all copy comes from the `ha-long-bay-guide` page record. */
-export function GuidePage({ bundle }: { bundle: PublicPageBundle }) {
+export function GuidePage({ bundle, slug = GUIDE_SLUG, path = GUIDE_PATH }: { bundle: PublicPageBundle; slug?: string; path?: string }) {
   const { uiLang: lang, setLang, t, href } = useLanguage();
   const cta = journeyCtaUi(lang);
-  const { data } = useSuspenseQuery({ ...publicQueries.pageBundle(href(GUIDE_PATH), GUIDE_SLUG), initialData: bundle });
+  const { data } = useSuspenseQuery({ ...publicQueries.pageBundle(href(path), slug), initialData: bundle });
   const b = data ?? bundle;
   const page = (b.languages[lang] ?? b.languages[b.ship.defaultLanguage] ?? Object.values(b.languages)[0])?.page ?? null;
   const eyebrow = typeof page?.text["eyebrow"] === "string" ? (page.text["eyebrow"] as string) : "";
