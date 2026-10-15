@@ -51,7 +51,7 @@ export function GalleryPage({ bundle }: { bundle: PublicGalleryBundle }) {
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
-      <Header lang={lang} setLang={setLang} t={t} />
+      <Header lang={lang} setLang={setLang} t={t} solid />
 
       <main className="pt-32 pb-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
