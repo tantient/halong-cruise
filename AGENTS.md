@@ -16,3 +16,5 @@
 - Contact maps render the saved Google place as an iframe, preserving its feature ID and actual place coordinates rather than drawing a separate branded marker; this keeps Google's place name and pin consistent with the directions link.
 
 - Public typography uses the global Tailwind type scale in `src/styles.css`: body copy is at least 16px, public labels/buttons are at least 13px, and uppercase tracking stays restrained for readability across mobile and desktop.
+
+- The public site is light-only: `src/components/theme-provider.tsx` always resolves the theme to light (clears any stored dark preference), and the theme toggle is removed from the public header. Public pages hardcode light surfaces (`bg-chronos-ivory`), so applying the `.dark` token remap leaves light-on-light text — never re-enable dark mode on public routes.
