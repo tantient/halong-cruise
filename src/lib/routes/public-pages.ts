@@ -163,6 +163,7 @@ export function itineraryHead(bundle: PublicItinerariesBundle, slug: string) {
   const seo = buildSeo(ship, language.language, {
     path: `/itineraries/${slug}`,
     title: itinerary?.name ?? null,
+    seoTitle: itinerary?.seoTitle ?? null,
     description: itinerary?.summary ?? itinerary?.description ?? null,
     image: cover,
     type: "website",

@@ -9,7 +9,7 @@
  */
 
 import type { LanguageCode } from "@/lib/i18n/languages";
-import { localizeRow, localizeRows } from "@/lib/i18n/localize";
+import { localizeRow, localizeRows, localizedField } from "@/lib/i18n/localize";
 import { buildMediaIndex, emptyEntityMedia, groupMedia, mediaFor, toMediaItem, type EntityMediaRow, type MediaRow } from "./media";
 import { getPublicDb } from "./supabase-public.server";
 import type {
@@ -239,11 +239,12 @@ type ItinRow = {
   sort_order: number; translations: unknown;
 };
 
-function toItinerary(r: ItinRow, media: EntityMedia): PublicItinerary {
+function toItinerary(r: ItinRow, media: EntityMedia, language: LanguageCode, defaultLanguage: LanguageCode): PublicItinerary {
   return {
     id: r.id, slug: r.slug, name: r.name, days: r.days, nights: r.nights, departurePoint: r.departure_point,
     summary: r.summary, description: r.description, highlights: r.highlights as Json, priceFrom: r.price_from,
     currency: r.currency, sortOrder: r.sort_order, media,
+    seoTitle: localizedField<string>(r as unknown as Record<string, unknown> & { translations?: unknown }, "seo_title", language, defaultLanguage),
   };
 }
 
@@ -253,7 +254,7 @@ export async function listItineraries(scope: ReadScope): Promise<PublicItinerary
   if (error) throw error;
   const rows = localizeRows((data ?? []) as ItinRow[], scope.language, scope.defaultLanguage);
   const media = await loadEntityMedia(scope, "itinerary", rows.map((r) => r.id));
-  return rows.map((r) => toItinerary(r, mediaFor(media, r.id)));
+  return rows.map((r) => toItinerary(r, mediaFor(media, r.id), scope.language, scope.defaultLanguage));
 }
 
 const ITIN_DAY_COLUMNS = "id,itinerary_id,day_number,title,description,timeline,meals,sort_order,translations";
@@ -293,7 +294,7 @@ export async function listItinerariesFull(scope: ReadScope): Promise<PublicItine
     list.push(toItineraryDay(d));
     perItinerary.set(d.itinerary_id, list);
   }
-  return rows.map((r) => ({ ...toItinerary(r, mediaFor(media, r.id)), dayPlan: perItinerary.get(r.id) ?? [] }));
+  return rows.map((r) => ({ ...toItinerary(r, mediaFor(media, r.id), scope.language, scope.defaultLanguage), dayPlan: perItinerary.get(r.id) ?? [] }));
 }
 
 export async function getItinerary(scope: ReadScope, slug: string): Promise<PublicItineraryFull | null> {
@@ -311,7 +312,7 @@ export async function getItinerary(scope: ReadScope, slug: string): Promise<Publ
     id: d.id, dayNumber: d.day_number, title: d.title, description: d.description,
     timeline: Array.isArray(d.timeline) ? (d.timeline as Json[]) : [], meals: d.meals, sortOrder: d.sort_order,
   }));
-  return { ...toItinerary(row, media), dayPlan };
+  return { ...toItinerary(row, media, scope.language, scope.defaultLanguage), dayPlan };
 }
 
 /* --------------------------------------------------------------- services */
