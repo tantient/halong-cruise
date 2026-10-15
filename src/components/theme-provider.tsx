@@ -28,32 +28,29 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    let stored: Theme | null = null;
+    // Light-only site: clear any previously stored dark preference.
     try {
-      stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+      localStorage.removeItem(STORAGE_KEY);
     } catch {
-      stored = null;
+      /* ignore */
     }
-    // Chronos is intentionally light by default. Dark mode remains an explicit
-    // visitor choice rather than inheriting an OS setting that can dim the site
-    // during daytime browsing.
-    const initial: Theme = stored === "dark" ? "dark" : "light";
-    setThemeState(initial);
-    applyTheme(initial);
+    setThemeState("light");
+    applyTheme("light");
   }, []);
 
   const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    applyTheme(next);
+    // Dark is not supported on the public site; always resolve to light.
+    setThemeState("light");
+    applyTheme("light");
     try {
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(STORAGE_KEY, next === "dark" ? "light" : next);
     } catch {
       /* ignore */
     }
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    setTheme("light");
   }, [setTheme]);
 
   return (
