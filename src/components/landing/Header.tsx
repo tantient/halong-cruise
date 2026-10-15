@@ -5,7 +5,6 @@ import { ChevronDown, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChronosLogo } from "./ChronosLogo";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import { useServiceNav } from "@/lib/i18n/service-nav-context";
@@ -182,13 +181,6 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             ))}
           </div>
 
-          <ThemeToggle
-            className={
-              scrolled
-                ? "border-chronos-sand-900/20 text-chronos-sand-900 hover:bg-chronos-sand-900/5"
-                : "border-chronos-ivory/30 text-chronos-ivory hover:bg-chronos-ivory/10"
-            }
-          />
 
           <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
             <a href={bookingLink} target="_blank" rel="noopener noreferrer">
@@ -297,9 +289,8 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                   aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
                 >
                   {code.toUpperCase()}
-                </button>
+              </button>
               ))}
-              <ThemeToggle className="border-chronos-sand-900/15 text-chronos-sand-900 hover:bg-chronos-sand-900/5" />
             </div>
             <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
               <a href={bookingLink} target="_blank" rel="noopener noreferrer">
