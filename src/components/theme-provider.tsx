@@ -14,45 +14,43 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/** Inline script: applies the stored theme before paint to avoid a flash. */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||"light";var e=document.documentElement;e.classList.toggle("dark",t==="dark");e.style.colorScheme=t;}catch(_){}})();`;
+/** Inline script: Chronos is a light-only site — dark mode is never applied,
+ * so public pages keep their ivory background with dark, readable text. */
+export const themeInitScript = `(function(){try{localStorage.removeItem("${STORAGE_KEY}");}catch(_){}var e=document.documentElement;e.classList.remove("dark");e.style.colorScheme="light";})();`;
 
-function applyTheme(theme: Theme) {
+function applyTheme(_theme: Theme) {
   const el = document.documentElement;
-  el.classList.toggle("dark", theme === "dark");
-  el.style.colorScheme = theme;
+  el.classList.remove("dark");
+  el.style.colorScheme = "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
-    let stored: Theme | null = null;
+    // Light-only site: clear any previously stored dark preference.
     try {
-      stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+      localStorage.removeItem(STORAGE_KEY);
     } catch {
-      stored = null;
+      /* ignore */
     }
-    // Chronos is intentionally light by default. Dark mode remains an explicit
-    // visitor choice rather than inheriting an OS setting that can dim the site
-    // during daytime browsing.
-    const initial: Theme = stored === "dark" ? "dark" : "light";
-    setThemeState(initial);
-    applyTheme(initial);
+    setThemeState("light");
+    applyTheme("light");
   }, []);
 
   const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    applyTheme(next);
+    // Dark is not supported on the public site; always resolve to light.
+    setThemeState("light");
+    applyTheme("light");
     try {
-      localStorage.setItem(STORAGE_KEY, next);
+      localStorage.setItem(STORAGE_KEY, next === "dark" ? "light" : next);
     } catch {
       /* ignore */
     }
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    setTheme("light");
   }, [setTheme]);
 
   return (

@@ -5,7 +5,6 @@ import { ChevronDown, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChronosLogo } from "./ChronosLogo";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocalLink, useLanguage } from "@/lib/i18n/language-context";
 import { LANGUAGE_LABELS, type LanguageCode } from "@/lib/i18n/languages";
 import { useServiceNav } from "@/lib/i18n/service-nav-context";
@@ -39,10 +38,14 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Guide link label switches with the site language, same rule as the footer.
+  const guideLabel = t.nav.about === "Giới thiệu" ? "Cẩm nang" : "Guide";
+
   const navLinks = [
     { href: "/itineraries", label: t.nav.itineraries },
     { href: "/cabins", label: t.nav.cabins },
     { href: "/gallery", label: t.nav.gallery },
+    { href: "/ha-long-bay-guide", label: guideLabel },
     { href: "/careers", label: t.nav.careers },
     { href: "/contact", label: t.nav.contact },
   ];
@@ -133,6 +136,12 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             {t.nav.gallery}
           </LocalLink>
           <LocalLink
+            path="/ha-long-bay-guide"
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+          >
+            {guideLabel}
+          </LocalLink>
+          <LocalLink
             path="/careers"
             className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
@@ -172,13 +181,6 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             ))}
           </div>
 
-          <ThemeToggle
-            className={
-              scrolled
-                ? "border-chronos-sand-900/20 text-chronos-sand-900 hover:bg-chronos-sand-900/5"
-                : "border-chronos-ivory/30 text-chronos-ivory hover:bg-chronos-ivory/10"
-            }
-          />
 
           <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
             <a href={bookingLink} target="_blank" rel="noopener noreferrer">
@@ -287,9 +289,8 @@ export function Header({ lang, setLang, t }: HeaderProps) {
                   aria-label={LANGUAGE_LABELS[code as LanguageCode].native}
                 >
                   {code.toUpperCase()}
-                </button>
+              </button>
               ))}
-              <ThemeToggle className="border-chronos-sand-900/15 text-chronos-sand-900 hover:bg-chronos-sand-900/5" />
             </div>
             <Button asChild className="btn-sheen rounded-none bg-chronos-sand-500 text-[13px] font-semibold uppercase tracking-[0.18em] text-chronos-ivory hover:bg-chronos-sand-700">
               <a href={bookingLink} target="_blank" rel="noopener noreferrer">
