@@ -33,7 +33,7 @@ export function GuidePage({ bundle }: { bundle: PublicPageBundle }) {
 
   return (
     <div className="min-h-screen bg-chronos-ivory">
-      <Header lang={lang} setLang={setLang} t={t} />
+      <Header lang={lang} setLang={setLang} t={t} solid />
       <main className="pt-32 pb-20 lg:pt-40">
         <article className="mx-auto max-w-3xl px-6 lg:px-8">
           <p className="eyebrow mb-5 text-chronos-gold">{eyebrow}</p>
