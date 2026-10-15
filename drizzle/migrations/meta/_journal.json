@@ -22,6 +22,13 @@
       "when": 1791358610620,
       "tag": "0002_create_content_cache",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792082366391,
+      "tag": "0003_seo_keywords_home_guide",
+      "breakpoints": true
     }
   ]
 }
