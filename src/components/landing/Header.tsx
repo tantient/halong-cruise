@@ -39,10 +39,14 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Guide link label switches with the site language, same rule as the footer.
+  const guideLabel = t.nav.about === "Giới thiệu" ? "Cẩm nang" : "Guide";
+
   const navLinks = [
     { href: "/itineraries", label: t.nav.itineraries },
     { href: "/cabins", label: t.nav.cabins },
     { href: "/gallery", label: t.nav.gallery },
+    { href: "/ha-long-bay-guide", label: guideLabel },
     { href: "/careers", label: t.nav.careers },
     { href: "/contact", label: t.nav.contact },
   ];
