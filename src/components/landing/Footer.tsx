@@ -66,6 +66,7 @@ export function Footer({ t }: FooterProps) {
   const guideLabel = t.nav.about === "Giới thiệu" ? "Cẩm nang Hạ Long" : "Ha Long Bay Guide";
   const links = [
     ...quickLinks.slice(0, 7),
+    { label: t.nav.about === "Giới thiệu" ? "Du thuyền Hạ Long" : "Halong Bay Cruise", to: "/du-thuyen-ha-long" },
     { label: guideLabel, to: "/ha-long-bay-guide" },
     { label: t.nav.careers, to: "/careers" },
     ...quickLinks.slice(7),
