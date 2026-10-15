@@ -18,9 +18,11 @@ interface HeaderProps {
   t: {
     nav: { about: string; cabins: string; gallery: string; services: string; experiences: string; ship: string; itineraries: string; offers: string; careers: string; quote: string; book: string; contact: string; more: string; spaces: string };
   };
+  /** Page has no dark hero image under the header: always use the solid light header. */
+  solid?: boolean;
 }
 
-export function Header({ lang, setLang, t }: HeaderProps) {
+export function Header({ lang, setLang, t, solid = false }: HeaderProps) {
   // Languages come from the resolved ship, so the switcher works for any tenant.
   const { languages } = useLanguage();
   const site = useSite();
@@ -28,7 +30,8 @@ export function Header({ lang, setLang, t }: HeaderProps) {
   const bookingLink = site
     ? enquiryUrl(site.settings, { shipName: site.ship.displayName, language: lang })
     : "#";
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolledState, setScrolled] = useState(false);
+  const scrolled = solid || scrolledState;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -37,6 +40,7 @@ export function Header({ lang, setLang, t }: HeaderProps) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
 
   // Guide link label switches with the site language, same rule as the footer.
   const guideLabel = t.nav.about === "Giới thiệu" ? "Cẩm nang" : "Guide";
