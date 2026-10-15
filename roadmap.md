@@ -24,3 +24,5 @@
 - [ ] Ảnh quầy lễ tân (chronos/public/reception-1.jpg) đang chờ user chọn vị trí hiển thị
 - [ ] Thư mục ảnh 16, 18, 19 (nếu có) chưa nhận
 - [ ] Google Maps (hồ sơ doanh nghiệp): chờ user gửi giới thiệu + giờ mở cửa mới
+
+- [ ] Tối ưu các trang còn lại cho "du thuyền Hạ Long", "vịnh Hạ Long", "cruise vịnh Hạ Long"
