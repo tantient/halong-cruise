@@ -14,13 +14,14 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/** Inline script: applies the stored theme before paint to avoid a flash. */
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||"light";var e=document.documentElement;e.classList.toggle("dark",t==="dark");e.style.colorScheme=t;}catch(_){}})();`;
+/** Inline script: Chronos is a light-only site — dark mode is never applied,
+ * so public pages keep their ivory background with dark, readable text. */
+export const themeInitScript = `(function(){try{localStorage.removeItem("${STORAGE_KEY}");}catch(_){}var e=document.documentElement;e.classList.remove("dark");e.style.colorScheme="light";})();`;
 
-function applyTheme(theme: Theme) {
+function applyTheme(_theme: Theme) {
   const el = document.documentElement;
-  el.classList.toggle("dark", theme === "dark");
-  el.style.colorScheme = theme;
+  el.classList.remove("dark");
+  el.style.colorScheme = "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
