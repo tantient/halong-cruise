@@ -137,6 +137,12 @@ export function Header({ lang, setLang, t }: HeaderProps) {
             {t.nav.gallery}
           </LocalLink>
           <LocalLink
+            path="/ha-long-bay-guide"
+            className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
+          >
+            {guideLabel}
+          </LocalLink>
+          <LocalLink
             path="/careers"
             className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${linkClasses}`}
           >
