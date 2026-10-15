@@ -13,6 +13,8 @@
 - [x] Chuẩn hóa hệ thống kiểu chữ: nội dung ≥16px, nhãn/nút ≥13px, khoảng dòng cân đối; kiểm tra điện thoại/tablet/máy tính
 - [x] Gỡ 5 hạng phòng cũ khỏi hệ thống (Premier Double/Twin/Triple Suite, Grand Suite, Grand Suite Corner); ảnh cũ giữ nguyên trong thư viện; URL cũ vẫn tự chuyển về danh mục phòng
 
+- [x] SEO tiếng Việt theo "du thuyền Hạ Long" + trang cẩm nang Hạ Long (EN/VI)
+
 ## In progress
 - [ ] Full public website audit (chronoscruise.com + preview), EN/VI, desktop/mobile — REPORT ONLY, không sửa code/DB, không publish
 
@@ -21,3 +23,4 @@
 - [ ] Business Center: đã có 1 ảnh, chưa vào Gallery
 - [ ] Ảnh quầy lễ tân (chronos/public/reception-1.jpg) đang chờ user chọn vị trí hiển thị
 - [ ] Thư mục ảnh 16, 18, 19 (nếu có) chưa nhận
+- [ ] Google Maps (hồ sơ doanh nghiệp): chờ user gửi giới thiệu + giờ mở cửa mới

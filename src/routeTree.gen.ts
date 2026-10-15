@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as HaLongBayGuideRouteImport } from './routes/ha-long-bay-guide'
 import { Route as OffersRouteImport } from './routes/offers'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -26,6 +27,7 @@ import { Route as LangAboutRouteImport } from './routes/$lang.about'
 import { Route as LangCareersRouteImport } from './routes/$lang.careers'
 import { Route as LangContactRouteImport } from './routes/$lang.contact'
 import { Route as LangGalleryRouteImport } from './routes/$lang.gallery'
+import { Route as LangHaLongBayGuideRouteImport } from './routes/$lang.ha-long-bay-guide'
 import { Route as LangOffersRouteImport } from './routes/$lang.offers'
 import { Route as LangTheShipRouteImport } from './routes/$lang.the-ship'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -98,6 +100,11 @@ const GalleryRoute = GalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HaLongBayGuideRoute = HaLongBayGuideRouteImport.update({
+  id: '/ha-long-bay-guide',
+  path: '/ha-long-bay-guide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OffersRoute = OffersRouteImport.update({
   id: '/offers',
   path: '/offers',
@@ -141,6 +148,11 @@ const LangContactRoute = LangContactRouteImport.update({
 const LangGalleryRoute = LangGalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangHaLongBayGuideRoute = LangHaLongBayGuideRouteImport.update({
+  id: '/ha-long-bay-guide',
+  path: '/ha-long-bay-guide',
   getParentRoute: () => LangRoute,
 } as any)
 const LangOffersRoute = LangOffersRouteImport.update({
@@ -320,6 +332,7 @@ export interface FileRoutesByFullPath {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/ha-long-bay-guide': typeof HaLongBayGuideRoute
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -328,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
+  '/$lang/ha-long-bay-guide': typeof LangHaLongBayGuideRoute
   '/$lang/offers': typeof LangOffersRoute
   '/$lang/the-ship': typeof LangTheShipRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -369,6 +383,7 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/ha-long-bay-guide': typeof HaLongBayGuideRoute
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -377,6 +392,7 @@ export interface FileRoutesByTo {
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
+  '/$lang/ha-long-bay-guide': typeof LangHaLongBayGuideRoute
   '/$lang/offers': typeof LangOffersRoute
   '/$lang/the-ship': typeof LangTheShipRoute
   '/admin/login': typeof AdminLoginRoute
@@ -420,6 +436,7 @@ export interface FileRoutesById {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
+  '/ha-long-bay-guide': typeof HaLongBayGuideRoute
   '/offers': typeof OffersRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -428,6 +445,7 @@ export interface FileRoutesById {
   '/$lang/careers': typeof LangCareersRoute
   '/$lang/contact': typeof LangContactRoute
   '/$lang/gallery': typeof LangGalleryRoute
+  '/$lang/ha-long-bay-guide': typeof LangHaLongBayGuideRoute
   '/$lang/offers': typeof LangOffersRoute
   '/$lang/the-ship': typeof LangTheShipRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -472,6 +490,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/gallery'
+    | '/ha-long-bay-guide'
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -480,6 +499,7 @@ export interface FileRouteTypes {
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
+    | '/$lang/ha-long-bay-guide'
     | '/$lang/offers'
     | '/$lang/the-ship'
     | '/admin'
@@ -521,6 +541,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/gallery'
+    | '/ha-long-bay-guide'
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -529,6 +550,7 @@ export interface FileRouteTypes {
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
+    | '/$lang/ha-long-bay-guide'
     | '/$lang/offers'
     | '/$lang/the-ship'
     | '/admin/login'
@@ -571,6 +593,7 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/gallery'
+    | '/ha-long-bay-guide'
     | '/offers'
     | '/robots.txt'
     | '/sitemap.xml'
@@ -579,6 +602,7 @@ export interface FileRouteTypes {
     | '/$lang/careers'
     | '/$lang/contact'
     | '/$lang/gallery'
+    | '/$lang/ha-long-bay-guide'
     | '/$lang/offers'
     | '/$lang/the-ship'
     | '/_authenticated/admin'
@@ -623,6 +647,7 @@ export interface RootRouteChildren {
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   GalleryRoute: typeof GalleryRoute
+  HaLongBayGuideRoute: typeof HaLongBayGuideRoute
   OffersRoute: typeof OffersRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -698,6 +723,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalleryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ha-long-bay-guide': {
+      id: '/ha-long-bay-guide'
+      path: '/ha-long-bay-guide'
+      fullPath: '/ha-long-bay-guide'
+      preLoaderRoute: typeof HaLongBayGuideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/offers': {
       id: '/offers'
       path: '/offers'
@@ -759,6 +791,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/$lang/gallery'
       preLoaderRoute: typeof LangGalleryRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/ha-long-bay-guide': {
+      id: '/$lang/ha-long-bay-guide'
+      path: '/ha-long-bay-guide'
+      fullPath: '/$lang/ha-long-bay-guide'
+      preLoaderRoute: typeof LangHaLongBayGuideRouteImport
       parentRoute: typeof LangRoute
     }
     '/$lang/offers': {
@@ -1033,6 +1072,7 @@ interface LangRouteChildren {
   LangCareersRoute: typeof LangCareersRoute
   LangContactRoute: typeof LangContactRoute
   LangGalleryRoute: typeof LangGalleryRoute
+  LangHaLongBayGuideRoute: typeof LangHaLongBayGuideRoute
   LangOffersRoute: typeof LangOffersRoute
   LangTheShipRoute: typeof LangTheShipRoute
   LangIndexRoute: typeof LangIndexRoute
@@ -1051,6 +1091,7 @@ const LangRouteChildren: LangRouteChildren = {
   LangCareersRoute: LangCareersRoute,
   LangContactRoute: LangContactRoute,
   LangGalleryRoute: LangGalleryRoute,
+  LangHaLongBayGuideRoute: LangHaLongBayGuideRoute,
   LangOffersRoute: LangOffersRoute,
   LangTheShipRoute: LangTheShipRoute,
   LangIndexRoute: LangIndexRoute,
@@ -1075,6 +1116,7 @@ const rootRouteChildren: RootRouteChildren = {
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   GalleryRoute: GalleryRoute,
+  HaLongBayGuideRoute: HaLongBayGuideRoute,
   OffersRoute: OffersRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

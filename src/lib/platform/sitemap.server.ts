@@ -35,6 +35,7 @@ export const STATIC_PUBLIC_PATHS: Array<{ path: string; changefreq: SitemapUrl["
   { path: "/about", changefreq: "monthly", priority: "0.7" },
   { path: "/contact", changefreq: "monthly", priority: "0.7" },
   { path: "/careers", changefreq: "weekly", priority: "0.6" },
+  { path: "/ha-long-bay-guide", changefreq: "monthly", priority: "0.7" },
 ];
 
 /** Builds every public URL (all enabled languages) for a ship. */
