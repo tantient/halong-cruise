@@ -63,7 +63,13 @@ export function Footer({ t }: FooterProps) {
   const email = site?.settings.email ?? null;
 
   const address = site?.settings.address ?? null;
-  const links = [...quickLinks.slice(0, 7), { label: t.nav.careers, to: "/careers" }, ...quickLinks.slice(7)];
+  const guideLabel = t.nav.about === "Giới thiệu" ? "Cẩm nang Hạ Long" : "Ha Long Bay Guide";
+  const links = [
+    ...quickLinks.slice(0, 7),
+    { label: guideLabel, to: "/ha-long-bay-guide" },
+    { label: t.nav.careers, to: "/careers" },
+    ...quickLinks.slice(7),
+  ];
   const heading = "mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-chronos-sand-500";
 
   return (
