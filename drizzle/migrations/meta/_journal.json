@@ -29,6 +29,13 @@
       "when": 1792082366391,
       "tag": "0003_seo_keywords_home_guide",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792746000000,
+      "tag": "0004_voyage_seo_titles",
+      "breakpoints": true
     }
   ]
 }
