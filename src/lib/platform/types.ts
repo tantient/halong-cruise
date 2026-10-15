@@ -178,6 +178,8 @@ export interface PublicItinerary {
   priceFrom: number | null;
   currency: string | null;
   sortOrder: number;
+  /** Complete per-language SEO title for the detail page (no template). */
+  seoTitle: string | null;
   media: EntityMedia;
 }
 
