@@ -16,6 +16,7 @@
 - [x] SEO tiếng Việt theo "du thuyền Hạ Long" + trang cẩm nang Hạ Long (EN/VI)
 
 ## In progress
+- [x] Thêm ảnh kayak vào hải trình PDF và hai ảnh toàn cảnh vịnh mới vào phần điểm đến/hải trình; xuất PDF bản 5, kiểm tra 57 trang, giữ bản cũ.
 - [ ] Full public website audit (chronoscruise.com + preview), EN/VI, desktop/mobile — REPORT ONLY, không sửa code/DB, không publish
 
 ## Open / blocked
