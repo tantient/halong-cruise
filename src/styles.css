@@ -113,14 +113,27 @@
   --color-chronos-sand-900: var(--chronos-sand-900);
   --font-display: var(--font-display);
   --font-body: var(--font-body);
-  --text-xs: 0.8125rem;
-  --text-xs--line-height: 1.25rem;
-  --text-sm: 0.9375rem;
-  --text-sm--line-height: 1.5rem;
-  --text-base: 1rem;
-  --text-base--line-height: 1.7rem;
-  --text-lg: 1.125rem;
-  --text-lg--line-height: 1.85rem;
+  /* Global type scale: small text ≥14px, body 17px mobile / 18px desktop */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.35rem;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.6rem;
+  --text-base: var(--fs-base);
+  --text-base--line-height: 1.65;
+  --text-lg: var(--fs-lg);
+  --text-lg--line-height: 1.65;
+  --text-xl: 1.3125rem;
+  --text-2xl: 1.5625rem;
+  --text-3xl: 1.9375rem;
+  --text-4xl: 2.375rem;
+  --text-5xl: 3.1875rem;
+  --text-6xl: 3.9375rem;
+  --text-7xl: 4.75rem;
+  /* No hairline weights: thin/extralight/light render as regular */
+  --font-weight-thin: 400;
+  --font-weight-extralight: 400;
+  --font-weight-light: 400;
+  --tracking-widest: 0.12em;
 
 }
 
@@ -235,15 +248,35 @@
     scroll-behavior: smooth;
   }
 
+  :root {
+    --fs-base: 1.0625rem;
+    --fs-lg: 1.1875rem;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --fs-base: 1.125rem;
+      --fs-lg: 1.25rem;
+    }
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: var(--fs-base);
+    font-weight: 400;
+    line-height: 1.65;
     letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  button,
+  nav a,
+  label {
+    font-weight: 500;
   }
 
   p {
@@ -343,10 +376,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.35rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 
   &::before {
@@ -564,4 +597,61 @@
 .chronos-map-pin {
   background: transparent;
   border: 0;
+}
+
+/* Global legibility: cap uppercase tracking at 0.12em (shared tracking classes) */
+[class~="tracking-[0.14em]"],
+[class~="tracking-[0.15em]"],
+[class~="tracking-[0.16em]"],
+[class~="tracking-[0.18em]"],
+[class~="tracking-[0.2em]"],
+[class~="tracking-[0.22em]"],
+[class~="tracking-[0.24em]"],
+[class~="tracking-[0.26em]"],
+[class~="tracking-[0.28em]"],
+[class~="tracking-[0.3em]"],
+[class~="tracking-[0.5em]"] {
+  letter-spacing: 0.12em;
+}
+
+/* Global legibility: lift faded text so it stays ≥4.5:1 */
+[class~="text-chronos-stone/50"],
+[class~="text-chronos-stone/65"],
+[class~="text-chronos-stone/70"],
+[class~="text-chronos-stone/75"],
+[class~="text-chronos-stone/80"],
+[class~="text-chronos-stone/85"] {
+  color: color-mix(in oklab, var(--chronos-stone) 92%, transparent);
+}
+[class~="text-chronos-ink/65"],
+[class~="text-chronos-ink/70"],
+[class~="text-chronos-ink/80"],
+[class~="text-chronos-ink/85"] {
+  color: color-mix(in oklab, var(--chronos-ink) 92%, transparent);
+}
+[class~="text-chronos-ivory/70"],
+[class~="text-chronos-ivory/75"],
+[class~="text-chronos-ivory/80"],
+[class~="text-chronos-ivory/85"] {
+  color: color-mix(in oklab, var(--chronos-ivory) 92%, transparent);
+}
+[class~="text-white/40"],
+[class~="text-white/85"] {
+  color: color-mix(in oklab, #fff 92%, transparent);
+}
+[class~="text-chronos-sand-900/70"],
+[class~="text-chronos-sand-900/75"] {
+  color: color-mix(in oklab, var(--chronos-sand-900) 92%, transparent);
+}
+[class~="text-chronos-sand-700/70"] {
+  color: color-mix(in oklab, var(--chronos-sand-700) 92%, transparent);
+}
+[class~="text-chronos-sand-300/50"] {
+  color: color-mix(in oklab, var(--chronos-sand-300) 92%, transparent);
+}
+[class~="text-muted-foreground/50"] {
+  color: color-mix(in oklab, var(--color-muted-foreground) 92%, transparent);
+}
+[class~="text-card-foreground/80"] {
+  color: color-mix(in oklab, var(--color-card-foreground) 92%, transparent);
 }
